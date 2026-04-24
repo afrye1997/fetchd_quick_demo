@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>NWA School for Dogs — Bookings</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1403,6 +1403,58 @@ body {
   80% { transform: rotate(4deg); }
 }
 .bell-btn.shaking { animation: nwa-bell-shake 0.4s; }
+
+/* ═══════════════════════════════════════════════════════════
+   REAL DEVICE MODE — strip mockup chrome, fill real viewport
+   ═══════════════════════════════════════════════════════════ */
+html, body {
+  background: var(--bg, #eef1f8) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+body {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+.device-frame {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  background: var(--bg, #eef1f8) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.dynamic-island {
+  display: none !important;
+}
+.device-screen {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  border-radius: 0 !important;
+  background: var(--bg, #eef1f8) !important;
+}
+.device-screen-inner {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+}
+/* Respect real iPhone safe areas */
+.header {
+  padding-top: max(env(safe-area-inset-top, 18px), 48px) !important;
+}
+.nav {
+  padding-bottom: max(env(safe-area-inset-bottom, 18px), 18px) !important;
+}
+
 </style>
 </head>
 <body>
