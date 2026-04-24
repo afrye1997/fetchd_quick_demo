@@ -383,30 +383,25 @@ body {
   transition: transform 0.18s ease;
 }
 
-/* Color tokens per class type */
+/* Color tokens per class type — dots always stay in category color */
 .type-chip[data-type="school"] .type-chip-dot { background: var(--navy); }
 .type-chip[data-type="daycare"] .type-chip-dot { background: var(--accent-gold); }
 .type-chip[data-type="private"] .type-chip-dot { background: var(--accent-purple); }
 .type-chip[data-type="boardtrain"] .type-chip-dot { background: #c47a5a; }
 .type-chip[data-type="groupclass"] .type-chip-dot { background: #5a9a9a; }
 
-/* Active state — tinted background in category color */
+/* Active state — uniform navy fill across ALL types.
+   The colored dot stays in its category color as the legend. */
 .type-chip.active {
+  background: var(--navy);
   color: white;
-  border-color: transparent;
+  border-color: var(--navy);
 }
 
 .type-chip.active .type-chip-dot {
-  background: white;
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
-
-.type-chip[data-type="school"].active { background: var(--navy); }
-.type-chip[data-type="daycare"].active { background: var(--accent-gold); color: #4a3816; }
-.type-chip[data-type="daycare"].active .type-chip-dot { background: #4a3816; }
-.type-chip[data-type="private"].active { background: var(--accent-purple); }
-.type-chip[data-type="boardtrain"].active { background: #c47a5a; }
-.type-chip[data-type="groupclass"].active { background: #5a9a9a; }
 
 .type-chip:active { transform: scale(0.97); }
 

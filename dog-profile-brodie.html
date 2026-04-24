@@ -69,6 +69,9 @@ body {
 }
 .header-logo { height: 44px; flex-shrink: 0; display: flex; align-items: center; }
 .header-logo img { height: 100%; width: auto; display: block; }
+.logo-text { display: flex; flex-direction: column; justify-content: center; line-height: 1; }
+.logo-nwa { font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800; color: #21356A; letter-spacing: 0.12em; }
+.logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; font-weight: 500; color: #2d4a8a; letter-spacing: 0.01em; margin-top: 2px; }
 .header-date {
   flex: 1; font-size: 10px; font-weight: 600; color: var(--muted);
   letter-spacing: 0.12em; text-transform: uppercase;
@@ -395,6 +398,43 @@ body {
   flex-shrink: 0;
 }
 .current-link:active { opacity: 0.6; }
+.current-report-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: rgba(33, 53, 106, 0.08);
+  border: 1px solid rgba(33, 53, 106, 0.15);
+  color: var(--navy);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+  align-self: flex-start;
+}
+.current-report-link:active {
+  transform: scale(0.97);
+  background: rgba(33, 53, 106, 0.14);
+}
+.current-report-link svg {
+  width: 12px; height: 12px;
+  stroke: currentColor; stroke-width: 2;
+  fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.current-report-link .arrow {
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.6;
+  margin-left: 2px;
+}
 
 /* Button row (Report Cards + Manage) */
 .btn-row {
@@ -417,6 +457,36 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .btn-ghost:active { transform: scale(0.97); background: #e4eaf4; }
+
+/* Small circular icon buttons for add/remove (school + daycare) */
+.btn-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 16px; font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  flex-shrink: 0;
+}
+.btn-icon:active { transform: scale(0.92); }
+.btn-icon-add {
+  color: var(--accent-green);
+  border-color: rgba(74, 138, 106, 0.3);
+}
+.btn-icon-add:active { background: rgba(74, 138, 106, 0.1); }
+.btn-icon-remove {
+  color: var(--accent-red);
+  border-color: rgba(224, 69, 69, 0.25);
+}
+.btn-icon-remove:active { background: rgba(224, 69, 69, 0.08); }
 
 /* Private Lessons & Group Lessons info rows */
 .info-rows {
@@ -1274,10 +1344,6 @@ body {
   cursor: default;
 }
 
-
-.logo-text { display: flex; flex-direction: column; justify-content: center; line-height: 1; }
-.logo-nwa { font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800; color: #21356A; letter-spacing: 0.12em; }
-.logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; font-weight: 500; color: #2d4a8a; letter-spacing: 0.01em; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -1365,6 +1431,11 @@ body {
               <div class="current-dot"></div>
               <div class="current-body">
                 <div class="current-title">Current: Advanced</div>
+                <button class="current-report-link" id="latest-report-btn">
+                  <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+                  Latest report card
+                  <span class="arrow">→</span>
+                </button>
               </div>
               <button class="current-link">See more</button>
             </div>
@@ -1378,7 +1449,8 @@ body {
       </div>
             <div class="btn-row">
               <button class="btn-ghost" id="report-cards-btn">Report Cards</button>
-              <button class="btn-ghost">Manage</button>
+              <button class="btn-icon btn-icon-add" aria-label="Add school session" title="Add school session">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove school session" title="Remove school session">−</button>
             </div>
           </div>
         </div>
@@ -1428,7 +1500,8 @@ body {
                 <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-9 9"/></svg>
                 Photos
               </button>
-              <button class="daycare-photos-btn">Manage</button>
+              <button class="btn-icon btn-icon-add" aria-label="Add daycare session" title="Add daycare session">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove daycare session" title="Remove daycare session">−</button>
             </div>
           </div>
         </div>
@@ -1934,13 +2007,21 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // ══════════════════════════════════════════
-// Report Cards button → random variant
+// Report Cards buttons → random variant
+// (covers both the inline "Latest report card →" link
+//  in the Current row and the main "Report Cards" button)
 // ══════════════════════════════════════════
-document.getElementById('report-cards-btn').addEventListener('click', () => {
+(function() {
   const variants = ['foundation', 'advanced', 'looseleash', 'housemanners', 'cgc'];
-  const pick = variants[Math.floor(Math.random() * variants.length)];
-  location.href = 'report-card-all.html#' + pick;
-});
+  function goToRandom() {
+    const pick = variants[Math.floor(Math.random() * variants.length)];
+    location.href = 'report-card-all.html#' + pick;
+  }
+  const mainBtn = document.getElementById('report-cards-btn');
+  if (mainBtn) mainBtn.addEventListener('click', goToRandom);
+  const latestBtn = document.getElementById('latest-report-btn');
+  if (latestBtn) latestBtn.addEventListener('click', goToRandom);
+})();
 
 // ══════════════════════════════════════════
 // Modals (care notes forms)
