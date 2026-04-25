@@ -22,6 +22,8 @@
   --accent-green: #4a8a6a;
   --accent-red: #e04545;
   --accent-purple: #7a5bc4;
+  --accent-terracotta: #c47a5a;
+  --accent-terracotta-dark: #8a4a2a;
   --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
   --shadow-md: 0 4px 16px rgba(33, 53, 106, 0.08);
 }
@@ -252,6 +254,8 @@ body {
 .section.group .section-head-label { color: var(--accent-green); }
 .section.daycare .section-icon { background: rgba(212, 166, 74, 0.18); color: var(--accent-gold-dark); }
 .section.daycare .section-head-label { color: var(--accent-gold-dark); }
+.section.boardtrain .section-icon { background: rgba(196, 122, 90, 0.18); color: var(--accent-terracotta-dark); }
+.section.boardtrain .section-head-label { color: var(--accent-terracotta-dark); }
 
 .section-link {
   font-size: 11px; font-weight: 600;
@@ -291,6 +295,7 @@ body {
 .section.private .card::before { background: #9b7ed4; }
 .section.group .card::before   { background: var(--accent-green); }
 .section.daycare .card::before { background: var(--accent-gold); }
+.section.boardtrain .card::before { background: var(--accent-terracotta); }
 
 /* School Progress */
 .school-progress {
@@ -542,26 +547,44 @@ body {
 .daycare-dates.deleting .daycare-date-chip:nth-child(3n) {
   animation-delay: -0.07s;
 }
-/* Red minus badge — top-right corner of each chip in delete mode */
+/* Red minus badge — top-right corner of each chip in delete mode.
+   Unselected (default): hollow outlined circle.
+   Selected (marked-for-delete): solid red with white minus + chip dims. */
 .prev-chips.deleting .chip::before,
 .daycare-dates.deleting .daycare-date-chip::before {
-  content: "−";
+  content: "";
   position: absolute;
   top: -7px; right: -7px;
   width: 18px; height: 18px;
   border-radius: 50%;
+  background: white;
+  border: 1.5px solid var(--accent-red);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  pointer-events: none;
+  transition: all 0.18s ease;
+}
+.prev-chips.deleting .chip.marked-for-delete::before,
+.daycare-dates.deleting .daycare-date-chip.marked-for-delete::before {
+  content: "−";
   background: var(--accent-red);
+  border-color: var(--accent-red);
   color: white;
   font-family: 'Instrument Sans', sans-serif;
   font-size: 14px;
   font-weight: 800;
-  line-height: 16px;
+  line-height: 15px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-  z-index: 2;
-  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(224, 69, 69, 0.4);
 }
-/* In delete mode, tapping the chip means "delete this one" */
+.prev-chips.deleting .chip.marked-for-delete,
+.daycare-dates.deleting .daycare-date-chip.marked-for-delete {
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-color: var(--accent-red);
+  text-decoration-thickness: 1.5px;
+}
+/* In delete mode, tapping the chip toggles marked-for-delete */
 .prev-chips.deleting .chip,
 .daycare-dates.deleting .daycare-date-chip {
   cursor: pointer;
@@ -571,19 +594,55 @@ body {
   display: none;
 }
 
-/* Confirm-delete modal styles inherit from .modal-backdrop / .modal-card */
+/* Confirm-delete modal — list of items to delete */
 .confirm-delete-msg {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: var(--navy);
   line-height: 1.45;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   text-align: center;
   padding: 0 8px;
 }
 .confirm-delete-msg strong {
   font-weight: 700;
+}
+.confirm-delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 18px 0;
+  -webkit-overflow-scrolling: touch;
+}
+.confirm-delete-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+.confirm-delete-list-item::before {
+  content: "−";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 14px;
+  flex-shrink: 0;
 }
 .modal-btn-delete {
   background: var(--accent-red);
@@ -592,6 +651,11 @@ body {
 .modal-btn-delete:active {
   transform: scale(0.97);
   background: #b8383b;
+}
+.modal-btn-delete:disabled {
+  background: #c8c8c8;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Button row (Report Cards + Manage) */
@@ -644,6 +708,61 @@ body {
   /* same styling — both navy now */
 }
 
+/* Wider request/signup button — replaces + on Private, Group, Board & Train */
+.btn-request {
+  width: auto;
+  height: 32px;
+  border-radius: 16px;
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Board & Train empty state */
+.bt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 6px 0 4px;
+  text-align: center;
+}
+.bt-empty-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+  text-align: center;
+}
+.btn-request-wide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border-radius: 18px;
+  padding: 0 18px;
+  border: 1px solid rgba(33, 53, 106, 0.25);
+  background: var(--bg);
+  color: var(--navy);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-request-wide:active {
+  transform: scale(0.97);
+  background: rgba(33, 53, 106, 0.08);
+}
+
 /* Private Lessons & Group Lessons info rows */
 .info-rows {
   display: flex;
@@ -669,6 +788,7 @@ body {
 }
 .info-value.green { color: var(--accent-green); }
 .info-value.lavender { color: var(--accent-purple); font-weight: 700; }
+.info-value.terra { color: var(--accent-terracotta-dark); font-weight: 700; }
 a.info-link {
   text-decoration: none;
   cursor: pointer;
@@ -1921,10 +2041,8 @@ body {
           </button>
         </div>
       </div>
-            <div class="btn-row" data-target=".section.private .prev-chips">
-              <button class="btn-icon btn-icon-add" aria-label="Add private lesson">+</button>
-              <button class="btn-icon btn-icon-remove" aria-label="Remove private lesson">−</button>
-              <button class="btn-done" style="display:none;">Done</button>
+            <div class="btn-row">
+              <button class="btn-request-wide" type="button">Request Private Lessons</button>
             </div>
           </div>
         </div>
@@ -1963,10 +2081,24 @@ body {
           </button>
         </div>
       </div>
-            <div class="btn-row" data-target=".section.group .prev-chips">
-              <button class="btn-icon btn-icon-add" aria-label="Add group lesson">+</button>
-              <button class="btn-icon btn-icon-remove" aria-label="Remove group lesson">−</button>
-              <button class="btn-done" style="display:none;">Done</button>
+            <div class="btn-row">
+              <button class="btn-request-wide" type="button">Sign Up for Group Lessons</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOARD & TRAIN -->
+        <div class="section boardtrain">
+          <div class="section-label-row">
+            <div class="section-head">
+              <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/><circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+              <div class="section-head-label">Board &amp; Train</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="bt-empty">
+              <div class="bt-empty-text">Live-in training with a personal plan. Available on request.</div>
+              <button class="btn-request-wide" type="button">Request Info</button>
             </div>
           </div>
         </div>
@@ -2429,16 +2561,17 @@ body {
 
 <!-- Confirm delete (filled by JS each time) -->
 <div class="modal-backdrop" data-modal="confirmDeleteModal">
-  <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 320px;">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 340px;">
     <div class="modal-header">
-      <div class="modal-title"><em>Delete</em> session?</div>
+      <div class="modal-title"><em>Delete</em> sessions?</div>
       <button class="modal-close" data-close-modal aria-label="Close">
         <svg viewBox="0 0 12 12"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
       </button>
     </div>
     <div class="confirm-delete-msg" id="confirmDeleteMsg">
-      Are you sure you want to delete this session?
+      The following sessions will be removed:
     </div>
+    <div class="confirm-delete-list" id="confirmDeleteList"></div>
     <div class="modal-actions">
       <button class="modal-btn modal-btn-cancel" data-close-modal>Cancel</button>
       <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">Delete</button>
@@ -2480,16 +2613,20 @@ document.querySelectorAll('.tab').forEach(tab => {
 })();
 
 // ══════════════════════════════════════════
-// Jiggle/delete mode for chip rows
-//   − button → puts chips into wiggle mode w/ red badges
-//   tap a chip → confirm modal "Delete [date]?"
-//   Done button → exits wiggle mode
+// Jiggle/delete mode for chip rows (multi-select)
+//   − button → puts chips into wiggle mode
+//   tap chip → marks it for delete (toggle); chip dims w/ red badge
+//   tap chip again → unmarks
+//   Done → if any marked, opens confirm modal w/ list; else exits
+//   Confirm → animates out all marked chips; exits
+//   Cancel → keeps user in jiggle mode (marks remain)
 // ══════════════════════════════════════════
 (function() {
-  let pendingDeleteChip = null;
   const confirmModal = document.querySelector('.modal-backdrop[data-modal="confirmDeleteModal"]');
   const confirmMsg = document.getElementById('confirmDeleteMsg');
+  const confirmList = document.getElementById('confirmDeleteList');
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  let activeChipContainer = null;
 
   document.querySelectorAll('.btn-row, .daycare-btn-row').forEach(row => {
     const targetSel = row.dataset.target;
@@ -2509,36 +2646,88 @@ document.querySelectorAll('.tab').forEach(tab => {
     }
     function exitDeleteMode() {
       chipContainer.classList.remove('deleting');
+      // Clear any leftover marks
+      chipContainer.querySelectorAll('.marked-for-delete').forEach(c => c.classList.remove('marked-for-delete'));
       doneBtn.style.display = 'none';
       minusBtn.style.display = '';
       plusBtn.style.display = '';
     }
 
     minusBtn.addEventListener('click', enterDeleteMode);
-    doneBtn.addEventListener('click', exitDeleteMode);
 
+    // Plus button on school/daycare → navigate to booking flow
+    // (private/group plus buttons stay as no-op for now)
+    const section = chipContainer.closest('.section');
+    if (section && (section.classList.contains('school') || section.classList.contains('daycare'))) {
+      plusBtn.addEventListener('click', () => {
+        location.href = 'booking-flow.html';
+      });
+    }
+
+    doneBtn.addEventListener('click', () => {
+      const marked = chipContainer.querySelectorAll('.marked-for-delete');
+      if (marked.length === 0) {
+        // Nothing selected → just exit
+        exitDeleteMode();
+        return;
+      }
+      // Build the list and open the confirmation modal
+      activeChipContainer = chipContainer;
+      const items = Array.from(marked).map(c => (c.textContent || '').trim());
+      const count = items.length;
+      confirmMsg.textContent = count === 1
+        ? 'The following session will be removed:'
+        : 'The following ' + count + ' sessions will be removed:';
+      confirmList.innerHTML = items
+        .map(t => '<div class="confirm-delete-list-item">' + t + '</div>')
+        .join('');
+      confirmModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Tap chip while in deleting mode → toggle mark
     chipContainer.addEventListener('click', (e) => {
       if (!chipContainer.classList.contains('deleting')) return;
       const chip = e.target.closest('.chip, .daycare-date-chip');
       if (!chip || chip.classList.contains('prev-arrow')) return;
-      pendingDeleteChip = chip;
-      const dateText = (chip.textContent || '').trim();
-      confirmMsg.innerHTML = 'Are you sure you want to delete <strong>' + dateText + '</strong>?';
-      confirmModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      chip.classList.toggle('marked-for-delete');
     });
   });
 
+  // Confirm Delete — animate out all marked chips then exit jiggle
   if (confirmDeleteBtn) {
     confirmDeleteBtn.addEventListener('click', () => {
-      if (pendingDeleteChip) {
-        pendingDeleteChip.style.transition = 'all 0.25s ease';
-        pendingDeleteChip.style.transform = 'scale(0.5)';
-        pendingDeleteChip.style.opacity = '0';
-        const chipToRemove = pendingDeleteChip;
-        setTimeout(() => chipToRemove.remove(), 250);
+      if (!activeChipContainer) {
+        confirmModal.classList.remove('open');
+        document.body.style.overflow = '';
+        return;
       }
-      pendingDeleteChip = null;
+      const marked = activeChipContainer.querySelectorAll('.marked-for-delete');
+      marked.forEach(chip => {
+        chip.style.transition = 'all 0.25s ease';
+        chip.style.transform = 'scale(0.5)';
+        chip.style.opacity = '0';
+        setTimeout(() => chip.remove(), 250);
+      });
+      // After animations, exit jiggle mode for that container
+      const container = activeChipContainer;
+      setTimeout(() => {
+        container.classList.remove('deleting');
+        // Find the parent row and reset buttons
+        const section = container.closest('.section');
+        if (section) {
+          const row = section.querySelector('.btn-row, .daycare-btn-row');
+          if (row) {
+            const m = row.querySelector('.btn-icon-remove');
+            const p = row.querySelector('.btn-icon-add');
+            const d = row.querySelector('.btn-done');
+            if (d) d.style.display = 'none';
+            if (m) m.style.display = '';
+            if (p) p.style.display = '';
+          }
+        }
+      }, 280);
+      activeChipContainer = null;
       confirmModal.classList.remove('open');
       document.body.style.overflow = '';
     });

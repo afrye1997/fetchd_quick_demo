@@ -21,6 +21,8 @@
   --accent-gold: #d4a64a;
   --accent-green: #4a8a6a;
   --accent-purple: #9b7ed4;
+  --accent-terracotta: #c47a5a;
+  --accent-terracotta-dark: #8a4a2a;
   --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
   --shadow-md: 0 4px 16px rgba(33, 53, 106, 0.08);
   --shadow-lg: 0 12px 32px rgba(33, 53, 106, 0.12);
@@ -985,6 +987,14 @@ body {
   flex-shrink: 0;
 }
 
+/* Sheet option icon variants — use program category colors */
+.sheet-option-icon.school    { background: var(--navy); }
+.sheet-option-icon.daycare   { background: var(--accent-gold, #d4a64a); }
+.sheet-option-icon.combo     { background: linear-gradient(135deg, var(--navy) 0%, var(--navy) 50%, var(--accent-gold, #d4a64a) 50%, var(--accent-gold, #d4a64a) 100%); }
+.sheet-option-icon.private   { background: var(--accent-purple, #7a5bc4); }
+.sheet-option-icon.group     { background: var(--accent-green, #4a8a6a); }
+.sheet-option-icon.boardtrain { background: var(--accent-terracotta, #c47a5a); }
+
 .sheet-option-icon svg { width: 22px; height: 22px; stroke: white; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
 .sheet-option-text { flex: 1; }
@@ -1547,7 +1557,7 @@ body {
 
 <!-- BOOK BUTTON -->
 <div class="book-cta">
-  <button class="book-btn" onclick="location.href='booking-flow.html'">
+  <button class="book-btn" onclick="openSheet()">
     <span class="book-btn-label">
       <span class="book-btn-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1595,45 +1605,60 @@ body {
     <div class="sheet-title">What kind of <em>session</em>?</div>
     <div class="sheet-sub">Pick the type of visit you want to book.</div>
 
-    <div class="sheet-option">
-      <div class="sheet-option-icon">
+    <div class="sheet-option" data-action="bookings">
+      <div class="sheet-option-icon combo">
         <svg viewBox="0 0 24 24">
-          <path d="M12 2C8 2 5 5 5 9c0 2 .8 3.8 2 5l.5 4h9l.5-4c1.2-1.2 2-3 2-5 0-4-3-7-7-7z"/>
-          <path d="M9 13h6"/>
+          <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/>
+          <path d="M9 21V12h6v9"/>
         </svg>
       </div>
       <div class="sheet-option-text">
-        <div class="sheet-option-name">A day at school</div>
-        <div class="sheet-option-desc">Day School or Daycare — we'll pick based on your dog</div>
+        <div class="sheet-option-name">Day School &amp; Daycare</div>
+        <div class="sheet-option-desc">Book single days or recurring visits</div>
       </div>
       <span class="sheet-option-arrow">›</span>
     </div>
 
-    <div class="sheet-option">
-      <div class="sheet-option-icon">
+    <div class="sheet-option" data-action="private">
+      <div class="sheet-option-icon private">
         <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M5 21v-1a7 7 0 0114 0v1"/>
+          <circle cx="12" cy="8" r="3.5"/>
+          <path d="M5 20c0-3.5 3.2-6 7-6s7 2.5 7 6"/>
         </svg>
       </div>
       <div class="sheet-option-text">
-        <div class="sheet-option-name">A private lesson</div>
+        <div class="sheet-option-name">Private Lesson</div>
         <div class="sheet-option-desc">One-on-one time with a trainer</div>
       </div>
       <span class="sheet-option-arrow">›</span>
     </div>
 
-    <div class="sheet-option">
-      <div class="sheet-option-icon">
+    <div class="sheet-option" data-action="group">
+      <div class="sheet-option-icon group">
         <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
+          <circle cx="9" cy="8" r="3"/>
+          <circle cx="17" cy="9" r="2.5"/>
+          <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/>
+          <path d="M15 19c0-2.5 2-4 4-4"/>
         </svg>
       </div>
       <div class="sheet-option-text">
-        <div class="sheet-option-name">Something else</div>
-        <div class="sheet-option-desc">Group class, Board &amp; Train, or a custom plan</div>
+        <div class="sheet-option-name">Group Session</div>
+        <div class="sheet-option-desc">Sign up for a group class</div>
+      </div>
+      <span class="sheet-option-arrow">›</span>
+    </div>
+
+    <div class="sheet-option" data-action="boardtrain">
+      <div class="sheet-option-icon boardtrain">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/>
+          <circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="sheet-option-text">
+        <div class="sheet-option-name">Board &amp; Train</div>
+        <div class="sheet-option-desc">Live-in training with a personal plan</div>
       </div>
       <span class="sheet-option-arrow">›</span>
     </div>
@@ -1650,6 +1675,22 @@ function closeSheet() {
   document.getElementById('sheet').classList.remove('open');
   setTimeout(() => document.getElementById('backdrop').classList.remove('open'), 250);
 }
+
+// Wire sheet option clicks
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sheet-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const action = opt.dataset.action;
+      if (action === 'bookings') {
+        // Day School / Daycare → booking flow
+        location.href = 'booking-flow.html';
+      } else {
+        // private / group / boardtrain — no-op for now, just close the sheet
+        closeSheet();
+      }
+    });
+  });
+});
 
 // Ensure the dogs row starts at the leftmost scroll position on page load,
 // so the first 3 dogs are visible and centered in the viewport.
@@ -1680,7 +1721,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </span>
       <span class="notif-body">
         <span class="notif-row-title"><em>Waffles</em> has a new report card!</span>
-        <span class="notif-row-sub">Donavan · Foundation Skills · 12 min ago</span>
+        <span class="notif-row-sub">Donavan · Foundations · 12 min ago</span>
       </span>
       <span class="notif-chevron">
         <svg viewBox="0 0 10 10"><polyline points="3.5 2 6.5 5 3.5 8"/></svg>
