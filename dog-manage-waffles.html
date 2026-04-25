@@ -914,6 +914,38 @@ body {
    DOG MANAGE PAGE
    ═══════════════════════════════════════════════════════════ */
 
+/* Page header with back button (shared with payment-methods) */
+.acc-page-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 2px;
+  margin-left: -8px;
+}
+.acc-back-btn {
+  width: 36px; height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.acc-back-btn:active { background: rgba(33, 53, 106, 0.08); transform: scale(0.94); }
+.acc-back-btn svg {
+  width: 22px; height: 22px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+.acc-page-title-inline { margin: 0; font-size: 24px; }
+
+
+
 .dm-hero {
   background: white;
   border: 1px solid var(--border);
