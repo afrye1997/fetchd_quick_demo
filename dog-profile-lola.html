@@ -461,11 +461,36 @@ body {
   opacity: 0.6;
   margin-left: 2px;
 }
-.current-report-chips {
+/* "Reports" block — replaces old "Current:" line in School Progress card */
+.reports-block {
+  padding: 14px 0 6px 0;
+  border-top: 1px solid var(--border-soft);
+}
+.reports-label-row {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-bottom: 10px;
+}
+.mini-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-gold-dark);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* In School Progress card, mini-label uses navy not gold */
+.section.school .mini-label {
+  color: var(--navy);
+}
+.reports-btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.reports-btn-row .current-report-link {
+  margin-top: 0;
 }
 .current-report-link-secondary {
   background: transparent;
@@ -475,53 +500,98 @@ body {
   background: rgba(33, 53, 106, 0.06);
 }
 
-/* Combo +/- button — single control for managing sessions */
-.btn-combo {
+/* "Done" button — appears when user enters jiggle/delete mode */
+.btn-done {
   display: inline-flex;
   align-items: center;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  padding: 7px 18px;
+  background: var(--navy);
+  border: 1px solid var(--navy);
   border-radius: 999px;
-  padding: 0;
-  overflow: hidden;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: white;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: all 0.15s;
+}
+.btn-done:active {
+  transform: scale(0.96);
+  background: var(--navy-mid);
+}
+
+/* Jiggle/delete mode — chips wiggle, get a red badge top-right */
+@keyframes chip-jiggle {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(1.2deg); }
+}
+.prev-chips.deleting .chip,
+.daycare-dates.deleting .daycare-date-chip {
+  animation: chip-jiggle 0.22s ease-in-out infinite;
+  position: relative;
+}
+/* Stagger so chips don't all jiggle in sync */
+.prev-chips.deleting .chip:nth-child(2n),
+.daycare-dates.deleting .daycare-date-chip:nth-child(2n) {
+  animation-delay: -0.11s;
+}
+.prev-chips.deleting .chip:nth-child(3n),
+.daycare-dates.deleting .daycare-date-chip:nth-child(3n) {
+  animation-delay: -0.07s;
+}
+/* Red minus badge — top-right corner of each chip in delete mode */
+.prev-chips.deleting .chip::before,
+.daycare-dates.deleting .daycare-date-chip::before {
+  content: "−";
+  position: absolute;
+  top: -7px; right: -7px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  color: white;
   font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  pointer-events: none;
 }
-.btn-combo:active {
-  transform: scale(0.97);
+/* In delete mode, tapping the chip means "delete this one" */
+.prev-chips.deleting .chip,
+.daycare-dates.deleting .daycare-date-chip {
+  cursor: pointer;
 }
-.btn-combo-plus,
-.btn-combo-minus {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 30px;
-  font-size: 17px;
+/* Hide the See-all arrow inside prev-chips while deleting */
+.prev-chips.deleting .prev-arrow {
+  display: none;
+}
+
+/* Confirm-delete modal styles inherit from .modal-backdrop / .modal-card */
+.confirm-delete-msg {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.45;
+  margin-bottom: 18px;
+  text-align: center;
+  padding: 0 8px;
+}
+.confirm-delete-msg strong {
   font-weight: 700;
-  line-height: 1;
-  user-select: none;
-  transition: background 0.15s;
 }
-.btn-combo-plus {
-  color: var(--accent-green);
+.modal-btn-delete {
+  background: var(--accent-red);
+  color: white;
 }
-.btn-combo-minus {
-  color: var(--accent-red);
-}
-.btn-combo:hover .btn-combo-plus {
-  background: rgba(74, 138, 106, 0.08);
-}
-.btn-combo:hover .btn-combo-minus {
-  background: rgba(224, 69, 69, 0.06);
-}
-.btn-combo-divider {
-  width: 1px;
-  height: 18px;
-  background: var(--border);
-  flex-shrink: 0;
+.modal-btn-delete:active {
+  transform: scale(0.97);
+  background: #b8383b;
 }
 
 /* Button row (Report Cards + Manage) */
@@ -546,12 +616,13 @@ body {
 }
 .btn-ghost:active { transform: scale(0.97); background: #e4eaf4; }
 
-/* Small circular icon buttons for add/remove (school + daycare) */
+/* Small circular icon buttons for add/remove (school + daycare + private + group) */
 .btn-icon {
   width: 32px; height: 32px;
   border-radius: 50%;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(33, 53, 106, 0.25);
   background: var(--bg);
+  color: var(--navy);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -564,17 +635,14 @@ body {
   padding: 0;
   flex-shrink: 0;
 }
-.btn-icon:active { transform: scale(0.92); }
-.btn-icon-add {
-  color: var(--accent-green);
-  border-color: rgba(74, 138, 106, 0.3);
+.btn-icon:active {
+  transform: scale(0.92);
+  background: rgba(33, 53, 106, 0.08);
 }
-.btn-icon-add:active { background: rgba(74, 138, 106, 0.1); }
+.btn-icon-add,
 .btn-icon-remove {
-  color: var(--accent-red);
-  border-color: rgba(224, 69, 69, 0.25);
+  /* same styling — both navy now */
 }
-.btn-icon-remove:active { background: rgba(224, 69, 69, 0.08); }
 
 /* Private Lessons & Group Lessons info rows */
 .info-rows {
@@ -600,6 +668,7 @@ body {
   letter-spacing: -0.005em;
 }
 .info-value.green { color: var(--accent-green); }
+.info-value.lavender { color: var(--accent-purple); font-weight: 700; }
 a.info-link {
   text-decoration: none;
   cursor: pointer;
@@ -1699,14 +1768,14 @@ body {
           <div class="step-label">Canine Good Citizen</div>
         </div>
             </div>
-            <div class="current-program">
-              <div class="current-title-row">
-                <div class="current-title">Current: Leash Skills</div>
-                <button class="current-info-btn" data-open-modal="curriculumModal" aria-label="What's being learned in Leash Skills" title="What's being learned">
+            <div class="reports-block">
+              <div class="reports-label-row">
+                <div class="mini-label">Reports</div>
+                <button class="current-info-btn" data-open-modal="curriculumModal" aria-label="What's being learned in Leash Skills" title="What's being learned in Leash Skills">
                   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 </button>
               </div>
-              <div class="current-report-chips">
+              <div class="reports-btn-row">
                 <button class="current-report-link" id="latest-report-btn">
                   <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
                   Latest report card
@@ -1726,12 +1795,10 @@ body {
           
         </div>
       </div>
-            <div class="btn-row">
-              <button class="btn-combo" aria-label="Add or remove school session" title="Add or remove school session">
-                <span class="btn-combo-plus">+</span>
-                <span class="btn-combo-divider"></span>
-                <span class="btn-combo-minus">−</span>
-              </button>
+            <div class="btn-row" data-target=".section.school .prev-chips">
+              <button class="btn-icon btn-icon-add" aria-label="Add school session">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove school session">−</button>
+              <button class="btn-done" style="display:none;">Done</button>
             </div>
           </div>
         </div>
@@ -1743,7 +1810,7 @@ body {
               <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/></svg></div>
               <div class="section-head-label">Day Care</div>
             </div>
-            <button class="section-link">See all</button>
+            <button class="section-link">Full history</button>
           </div>
           <div class="card">
             <div class="daycare-top">
@@ -1753,8 +1820,8 @@ body {
               </div>
               <div class="daycare-meta">
                 <div class="daycare-meta-row">
-                  <span class="daycare-meta-label">This month</span>
-                  <span class="daycare-meta-value">6 visits</span>
+                  <span class="daycare-meta-label">Credits</span>
+                  <span class="daycare-meta-value">6 visits left</span>
                 </div>
                 <div class="daycare-meta-row">
                   <span class="daycare-meta-label">Plan</span>
@@ -1776,12 +1843,10 @@ body {
         </div>
               </div>
             </div>
-            <div class="daycare-btn-row">
-              <button class="btn-combo" aria-label="Add or remove daycare session" title="Add or remove daycare session">
-                <span class="btn-combo-plus">+</span>
-                <span class="btn-combo-divider"></span>
-                <span class="btn-combo-minus">−</span>
-              </button>
+            <div class="daycare-btn-row" data-target=".section.daycare .daycare-dates">
+              <button class="btn-icon btn-icon-add" aria-label="Add daycare session">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove daycare session">−</button>
+              <button class="btn-done" style="display:none;">Done</button>
             </div>
             <div class="daycare-photo-section">
               <div class="daycare-photo-section-label">Recent daycare pics</div>
@@ -1824,19 +1889,22 @@ body {
 
         <!-- PRIVATE LESSONS -->
         <div class="section private">
-          <div class="section-head">
-            <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.2-6 7-6s7 2.5 7 6"/></svg></div>
-            <div class="section-head-label">Private Lessons</div>
+          <div class="section-label-row">
+            <div class="section-head">
+              <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.2-6 7-6s7 2.5 7 6"/></svg></div>
+              <div class="section-head-label">Private Lessons</div>
+            </div>
+            <button class="section-link">Full history</button>
           </div>
           <div class="card">
             <div class="info-rows">
               <div class="info-row">
-                <span class="info-label">Upcoming</span>
-                <span class="info-value">Apr 10 with Rachel</span>
+                <span class="info-label">Focus</span>
+                <span class="info-value lavender">Loose leash walking</span>
               </div>
               <div class="info-row">
-                <span class="info-label">Focus</span>
-                <span class="info-value">Loose leash walking</span>
+                <span class="info-label">Upcoming</span>
+                <span class="info-value">Apr 10 with Rachel</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Where</span>
@@ -1853,15 +1921,22 @@ body {
           </button>
         </div>
       </div>
-            <button class="btn-manage">Manage Private Lessons</button>
+            <div class="btn-row" data-target=".section.private .prev-chips">
+              <button class="btn-icon btn-icon-add" aria-label="Add private lesson">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove private lesson">−</button>
+              <button class="btn-done" style="display:none;">Done</button>
+            </div>
           </div>
         </div>
 
         <!-- GROUP LESSONS -->
         <div class="section group">
-          <div class="section-head">
-            <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M15 19c0-2.5 2-4 4-4"/></svg></div>
-            <div class="section-head-label">Group Lessons</div>
+          <div class="section-label-row">
+            <div class="section-head">
+              <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M15 19c0-2.5 2-4 4-4"/></svg></div>
+              <div class="section-head-label">Group Lessons</div>
+            </div>
+            <button class="section-link">Full history</button>
           </div>
           <div class="card">
             <div class="info-rows">
@@ -1888,7 +1963,11 @@ body {
           </button>
         </div>
       </div>
-            <button class="btn-manage">Manage Group Lessons</button>
+            <div class="btn-row" data-target=".section.group .prev-chips">
+              <button class="btn-icon btn-icon-add" aria-label="Add group lesson">+</button>
+              <button class="btn-icon btn-icon-remove" aria-label="Remove group lesson">−</button>
+              <button class="btn-done" style="display:none;">Done</button>
+            </div>
           </div>
         </div>
 
@@ -2348,6 +2427,25 @@ body {
   </div>
 </div>
 
+<!-- Confirm delete (filled by JS each time) -->
+<div class="modal-backdrop" data-modal="confirmDeleteModal">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 320px;">
+    <div class="modal-header">
+      <div class="modal-title"><em>Delete</em> session?</div>
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg viewBox="0 0 12 12"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
+      </button>
+    </div>
+    <div class="confirm-delete-msg" id="confirmDeleteMsg">
+      Are you sure you want to delete this session?
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" data-close-modal>Cancel</button>
+      <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════
 // Tab switching
@@ -2379,6 +2477,72 @@ document.querySelectorAll('.tab').forEach(tab => {
   if (allBtn) allBtn.addEventListener('click', () => {
     location.href = 'bookings-page.html#past';
   });
+})();
+
+// ══════════════════════════════════════════
+// Jiggle/delete mode for chip rows
+//   − button → puts chips into wiggle mode w/ red badges
+//   tap a chip → confirm modal "Delete [date]?"
+//   Done button → exits wiggle mode
+// ══════════════════════════════════════════
+(function() {
+  let pendingDeleteChip = null;
+  const confirmModal = document.querySelector('.modal-backdrop[data-modal="confirmDeleteModal"]');
+  const confirmMsg = document.getElementById('confirmDeleteMsg');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+  document.querySelectorAll('.btn-row, .daycare-btn-row').forEach(row => {
+    const targetSel = row.dataset.target;
+    if (!targetSel) return;
+    const chipContainer = document.querySelector(targetSel);
+    if (!chipContainer) return;
+    const minusBtn = row.querySelector('.btn-icon-remove');
+    const plusBtn = row.querySelector('.btn-icon-add');
+    const doneBtn = row.querySelector('.btn-done');
+    if (!minusBtn || !plusBtn || !doneBtn) return;
+
+    function enterDeleteMode() {
+      chipContainer.classList.add('deleting');
+      minusBtn.style.display = 'none';
+      plusBtn.style.display = 'none';
+      doneBtn.style.display = '';
+    }
+    function exitDeleteMode() {
+      chipContainer.classList.remove('deleting');
+      doneBtn.style.display = 'none';
+      minusBtn.style.display = '';
+      plusBtn.style.display = '';
+    }
+
+    minusBtn.addEventListener('click', enterDeleteMode);
+    doneBtn.addEventListener('click', exitDeleteMode);
+
+    chipContainer.addEventListener('click', (e) => {
+      if (!chipContainer.classList.contains('deleting')) return;
+      const chip = e.target.closest('.chip, .daycare-date-chip');
+      if (!chip || chip.classList.contains('prev-arrow')) return;
+      pendingDeleteChip = chip;
+      const dateText = (chip.textContent || '').trim();
+      confirmMsg.innerHTML = 'Are you sure you want to delete <strong>' + dateText + '</strong>?';
+      confirmModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  if (confirmDeleteBtn) {
+    confirmDeleteBtn.addEventListener('click', () => {
+      if (pendingDeleteChip) {
+        pendingDeleteChip.style.transition = 'all 0.25s ease';
+        pendingDeleteChip.style.transform = 'scale(0.5)';
+        pendingDeleteChip.style.opacity = '0';
+        const chipToRemove = pendingDeleteChip;
+        setTimeout(() => chipToRemove.remove(), 250);
+      }
+      pendingDeleteChip = null;
+      confirmModal.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
 })();
 
 // ══════════════════════════════════════════
