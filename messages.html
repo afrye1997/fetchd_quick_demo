@@ -1863,16 +1863,15 @@ body {
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Tabs scrollable wrapper — fixes iOS overflow chain */
+/* Tabs scrollable wrapper — keep width within viewport, let inner scroll */
 .mp-tabs-wrap {
   flex-shrink: 0;
   width: 100%;
-  overflow: hidden;
+  max-width: 100%;
 }
 .mp-tabs {
-  width: max-content;
-  min-width: 100%;
   flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 
@@ -1881,6 +1880,22 @@ body {
   align-items: stretch !important;
   justify-content: flex-start !important;
   text-align: left !important;
+}
+
+
+/* Per-category pill colors (inactive state) — match icon colors */
+.mp-tab[data-category="sessions"]    { color: var(--navy); }
+.mp-tab[data-category="billing"]     { color: var(--accent-green); }
+.mp-tab[data-category="enrollment"]  { color: var(--accent-gold-dark); }
+.mp-tab[data-category="other"]       { color: var(--accent-purple); }
+.mp-tab[data-category="all"]         { color: var(--navy); }
+
+/* Active state overrides all category colors with navy bg + white text */
+.mp-tab.active,
+.mp-tab.active[data-category] {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
 }
 
 </style>
