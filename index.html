@@ -1687,8 +1687,11 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (action === 'private') {
         // Private Lesson → intake form
         location.href = 'book-private.html';
+      } else if (action === 'group') {
+        // Group Session → group enrollment
+        location.href = 'book-group.html';
       } else {
-        // group / boardtrain — no-op for now, just close the sheet
+        // boardtrain — no-op for now, just close the sheet
         closeSheet();
       }
     });
