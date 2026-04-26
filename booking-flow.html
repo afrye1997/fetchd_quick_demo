@@ -1355,6 +1355,173 @@ body {
 .logo-text { display: flex; flex-direction: column; justify-content: center; line-height: 1; }
 .logo-nwa { font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800; color: #21356A; letter-spacing: 0.12em; }
 .logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; font-weight: 500; color: #2d4a8a; letter-spacing: 0.01em; margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════════════════
+   PAY-AS-YOU-GO inline view (credits modal)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Purchase / PAYG view fade swap */
+#purchaseView, #paygView {
+  animation: payg-fade-in 0.24s ease both;
+}
+@keyframes payg-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Invoice info card */
+.payg-info-card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.payg-info-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(33, 53, 106, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+}
+.payg-info-icon svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.payg-info-text { flex: 1; min-width: 0; }
+.payg-info-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+.payg-info-desc {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+/* PAYG section label */
+.payg-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 2px 10px;
+}
+
+/* PAYG card list */
+.payg-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.payg-card-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.18s, background 0.18s, transform 0.08s;
+}
+.payg-card-row:active { transform: scale(0.99); }
+.payg-card-row.selected {
+  border-color: var(--navy);
+  background: rgba(33, 53, 106, 0.03);
+}
+.payg-card-icon {
+  width: 38px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.payg-card-icon svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+.payg-card-icon.visa svg rect { fill: #1a1f71; stroke: none; }
+.payg-card-icon.visa svg text { fill: white; }
+.payg-card-icon.mc svg rect { fill: #f8f9fc; stroke: var(--border); }
+.payg-card-text { flex: 1; min-width: 0; }
+.payg-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.payg-card-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+.payg-card-default-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(33, 53, 106, 0.1);
+  color: var(--navy);
+  line-height: 1;
+}
+.payg-card-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.payg-card-radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: white;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.18s, background 0.18s;
+}
+.payg-card-row.selected .payg-card-radio {
+  border-color: var(--navy);
+  background: var(--navy);
+}
+.payg-card-row.selected .payg-card-radio::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 </style>
 </head>
 <body>
@@ -1522,22 +1689,77 @@ body {
           </div>
         </div>
         <div class="modal-body">
-          <div class="pkg-type-toggle" id="pkgTypeToggle">
-            <button class="pkg-type-btn active" data-type="school" onclick="setPkgType('school')">
-              <span class="pkg-type-dot" style="background: var(--navy)"></span>
-              School
-            </button>
-            <button class="pkg-type-btn" data-type="daycare" onclick="setPkgType('daycare')">
-              <span class="pkg-type-dot" style="background: var(--accent-gold)"></span>
-              Daycare
-            </button>
+          <!-- PURCHASE VIEW: package picker (default) -->
+          <div id="purchaseView">
+            <div class="pkg-type-toggle" id="pkgTypeToggle">
+              <button class="pkg-type-btn active" data-type="school" onclick="setPkgType('school')">
+                <span class="pkg-type-dot" style="background: var(--navy)"></span>
+                School
+              </button>
+              <button class="pkg-type-btn" data-type="daycare" onclick="setPkgType('daycare')">
+                <span class="pkg-type-dot" style="background: var(--accent-gold)"></span>
+                Daycare
+              </button>
+            </div>
+            <div class="packages" id="packages"></div>
           </div>
-          <div class="packages" id="packages"></div>
+
+          <!-- PAYG VIEW: inline expansion when "Pay as you go" is tapped -->
+          <div id="paygView" style="display: none;">
+            <!-- Invoice info card -->
+            <div class="payg-info-card">
+              <div class="payg-info-icon">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+              </div>
+              <div class="payg-info-text">
+                <div class="payg-info-title">Invoiced after each visit</div>
+                <div class="payg-info-desc">You'll get an invoice by email after every booked day, charged to the card you select.</div>
+              </div>
+            </div>
+
+            <!-- Card list -->
+            <div class="payg-section-label">Charge to</div>
+            <div class="payg-card-list">
+              <button class="payg-card-row selected" data-card="card-1" type="button" onclick="selectPaygCard('card-1')">
+                <div class="payg-card-icon visa">
+                  <svg viewBox="0 0 32 20"><rect x="0.5" y="0.5" width="31" height="19" rx="2.5"/><text x="16" y="14" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="9" font-weight="700" fill="currentColor" stroke="none">VISA</text></svg>
+                </div>
+                <div class="payg-card-text">
+                  <div class="payg-card-title-row">
+                    <div class="payg-card-title">Visa &middot;&middot;&middot;&middot; 4821</div>
+                    <span class="payg-card-default-badge">Default</span>
+                  </div>
+                  <div class="payg-card-sub">Expires 09/27</div>
+                </div>
+                <div class="payg-card-radio"></div>
+              </button>
+              <button class="payg-card-row" data-card="card-2" type="button" onclick="selectPaygCard('card-2')">
+                <div class="payg-card-icon mc">
+                  <svg viewBox="0 0 32 20"><rect x="0.5" y="0.5" width="31" height="19" rx="2.5"/><circle cx="13" cy="10" r="4.5" fill="#eb001b" stroke="none" opacity="0.85"/><circle cx="19" cy="10" r="4.5" fill="#f79e1b" stroke="none" opacity="0.85"/></svg>
+                </div>
+                <div class="payg-card-text">
+                  <div class="payg-card-title-row">
+                    <div class="payg-card-title">Mastercard &middot;&middot;&middot;&middot; 8203</div>
+                  </div>
+                  <div class="payg-card-sub">Expires 03/26</div>
+                </div>
+                <div class="payg-card-radio"></div>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="modal-actions">
-          <button class="modal-btn modal-btn-primary" onclick="confirmPurchase()">Purchase & Add Credits</button>
-          <button class="modal-btn modal-btn-payg" onclick="payAsYouGo()">Pay as you go</button>
-          <button class="modal-btn modal-btn-secondary" onclick="closeCreditsModalAndRevert()">Cancel</button>
+          <!-- Purchase view actions (default) -->
+          <div id="purchaseActions">
+            <button class="modal-btn modal-btn-primary" onclick="confirmPurchase()">Purchase &amp; Add Credits</button>
+            <button class="modal-btn modal-btn-payg" onclick="showPaygView()">Pay as you go</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeCreditsModalAndRevert()">Cancel</button>
+          </div>
+          <!-- PAYG view actions -->
+          <div id="paygActions" style="display: none;">
+            <button class="modal-btn modal-btn-primary" onclick="confirmPayg()">Use pay-as-you-go</button>
+            <button class="modal-btn modal-btn-secondary" onclick="showPurchaseView()">Back</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1659,6 +1881,10 @@ let creditsModalState = {
   pendingMonth: null,  // which month the pending day belongs to
   selectedPkg: '8'
 };
+
+// PAYG card selection (per-(dogId:type), shared across bookings)
+let paygCard = {};                  // { 'd1:school': 'card-1', ... }
+let selectedPaygCardId = 'card-1';  // current modal selection
 
 // Recurring panel state
 let selectedWeekdays = new Set();
@@ -2087,6 +2313,13 @@ function openCreditsModal(dogId, type, pendingDay) {
   document.getElementById('modalDogPhoto').querySelector('img').src = `data:image/jpeg;base64,${dog.photo}`;
 
   setPkgType(type);
+  // Always open in Purchase view; reset PAYG selection to default (or recall last)
+  showPurchaseView();
+  const recalled = paygCard[`${dogId}:${type}`];
+  selectedPaygCardId = recalled || 'card-1';
+  document.querySelectorAll('.payg-card-row').forEach(r => {
+    r.classList.toggle('selected', r.dataset.card === selectedPaygCardId);
+  });
   document.getElementById('creditsModal').classList.add('open');
 }
 
@@ -2149,10 +2382,51 @@ function confirmPurchase() {
   renderCalendar();
 }
 
-function payAsYouGo() {
-  // Mark this dog+type as pay-as-you-go — booking stays, negative credits accepted
+// PAYG: switch the modal body to the inline pay-as-you-go view
+// (does NOT yet commit — user must confirm card + tap "Use pay-as-you-go")
+function showPaygView() {
+  document.getElementById('purchaseView').style.display = 'none';
+  document.getElementById('paygView').style.display = '';
+  document.getElementById('purchaseActions').style.display = 'none';
+  document.getElementById('paygActions').style.display = '';
+  // Update modal title/subtitle to reflect the new context
+  const dog = dogs.find(d => d.id === creditsModalState.dogId);
+  if (dog) {
+    document.getElementById('modalTitle').innerHTML = `Pay as you go for <em>${dog.name}</em>`;
+    document.getElementById('modalSubtitle').textContent =
+      'Skip buying a package — pay per visit instead.';
+  }
+}
+
+// PAYG: switch back to the purchase (package picker) view
+function showPurchaseView() {
+  document.getElementById('purchaseView').style.display = '';
+  document.getElementById('paygView').style.display = 'none';
+  document.getElementById('purchaseActions').style.display = '';
+  document.getElementById('paygActions').style.display = 'none';
+  // Restore original modal title/subtitle
+  const dog = dogs.find(d => d.id === creditsModalState.dogId);
+  if (dog) {
+    document.getElementById('modalTitle').innerHTML = `<em>${dog.name}</em> needs more credits`;
+    const typeLabel = creditsModalState.type === 'school' ? 'school' : 'daycare';
+    document.getElementById('modalSubtitle').innerHTML =
+      `Pick a ${typeLabel} package below and it will be charged to your card on file.`;
+  }
+}
+
+// PAYG: select which card to use for invoicing
+function selectPaygCard(cardId) {
+  selectedPaygCardId = cardId;
+  document.querySelectorAll('.payg-card-row').forEach(r => {
+    r.classList.toggle('selected', r.dataset.card === cardId);
+  });
+}
+
+// PAYG: commit — mark this dog+type as pay-as-you-go and remember the card
+function confirmPayg() {
   const { dogId, type } = creditsModalState;
   payg.add(`${dogId}:${type}`);
+  paygCard[`${dogId}:${type}`] = selectedPaygCardId;
   document.getElementById('creditsModal').classList.remove('open');
   creditsModalState = { dogId: null, type: 'school', pendingDay: null, pendingMonth: null, selectedPkg: '8' };
   renderReviewCards();
@@ -2305,6 +2579,7 @@ function resetToBooking() {
   selectedDogIds = ['waffles', 'lola', 'brodie'];
   selectedWeekdays = new Set();
   payg = new Set();
+  paygCard = {};
   document.querySelectorAll('.weekday-pill').forEach(p => p.classList.remove('active'));
   document.getElementById('recurApply').disabled = true;
   document.getElementById('viewConfirmed').classList.remove('active');
