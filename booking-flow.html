@@ -2297,11 +2297,6 @@ function goToConfirmed() {
 
   document.getElementById('viewBooking').classList.remove('active');
   document.getElementById('viewConfirmed').classList.add('active');
-
-  // Auto-return to Bookings page after 3 seconds for demo flow
-  setTimeout(() => {
-    location.href = 'bookings-page.html';
-  }, 3000);
 }
 
 function resetToBooking() {

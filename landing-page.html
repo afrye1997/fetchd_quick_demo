@@ -1684,8 +1684,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (action === 'bookings') {
         // Day School / Daycare → booking flow
         location.href = 'booking-flow.html';
+      } else if (action === 'private') {
+        // Private Lesson → intake form
+        location.href = 'book-private.html';
       } else {
-        // private / group / boardtrain — no-op for now, just close the sheet
+        // group / boardtrain — no-op for now, just close the sheet
         closeSheet();
       }
     });
