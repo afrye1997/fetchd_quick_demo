@@ -1676,6 +1676,84 @@ body {
 .logo-text { display: flex; flex-direction: column; justify-content: center; line-height: 1; }
 .logo-nwa { font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 800; color: #21356A; letter-spacing: 0.12em; }
 .logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; font-weight: 500; color: #2d4a8a; letter-spacing: 0.01em; margin-top: 2px; }
+
+/* Bookings page title bar — matches Messages and Account header style */
+.bookings-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px;
+  background: var(--bg, #eef1f8);
+  flex-shrink: 0;
+}
+.bookings-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy, #21356A);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.bookings-compose-btn {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--border, #d4dcec);
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy, #21356A);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s, transform 0.08s, border-color 0.12s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.bookings-compose-btn:active {
+  background: var(--bg, #eef1f8);
+  transform: scale(0.94);
+  border-color: var(--navy-pale, #b8c8e8);
+}
+.bookings-compose-btn svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+
+/* In-flow + button at bottom of schedule list (scrolls with content) */
+.schedule-book-row {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 28px;
+}
+.schedule-book-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--navy, #21356A);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(33, 53, 106, 0.30);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+  padding: 0;
+}
+.schedule-book-btn:active {
+  transform: scale(0.94);
+  box-shadow: 0 4px 14px rgba(33, 53, 106, 0.30);
+}
+.schedule-book-btn svg {
+  width: 24px; height: 24px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
 </style>
 </head>
 <body>
@@ -1698,6 +1776,11 @@ body {
     </svg>
     <span class="bell-badge">5</span>
   </button>
+</div>
+
+<!-- BOOKINGS TITLE BAR -->
+<div class="bookings-title-bar">
+  <div class="bookings-title">Bookings</div>
 </div>
 
 <!-- FILTERS -->
@@ -2089,6 +2172,13 @@ body {
     </div>
   </div>
 
+  <!-- BOOK NEW BUTTON — at bottom of schedule list, scrolls with content -->
+  <div class="schedule-book-row">
+    <button class="schedule-book-btn" onclick="location.href='booking-flow.html'" aria-label="Book a new session">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+  </div>
+
 </div>
 
 <!-- PAST VIEW — reports feed -->
@@ -2258,14 +2348,6 @@ body {
   </div>
 
 </div>
-
-<!-- FLOATING BOOK BUTTON -->
-<button class="fab" title="Book a new session" onclick="location.href='booking-flow.html'">
-  <svg viewBox="0 0 24 24">
-    <line x1="12" y1="5" x2="12" y2="19"/>
-    <line x1="5" y1="12" x2="19" y2="12"/>
-  </svg>
-</button>
 
 <!-- BOTTOM NAV -->
 <div class="nav">
