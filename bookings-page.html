@@ -3905,20 +3905,24 @@ function closeSessionTypeSheet() {
   setTimeout(() => document.getElementById('bkBackdrop').classList.remove('open'), 250);
 }
 
-// Wire each option's tap to its destination flow
-document.querySelectorAll('.bk-sheet-option').forEach(opt => {
-  opt.addEventListener('click', () => {
-    const action = opt.dataset.action;
-    if (action === 'bookings') {
-      location.href = 'booking-flow.html';
-    } else if (action === 'private') {
-      location.href = 'book-private.html';
-    } else if (action === 'group') {
-      location.href = 'book-group.html';
-    } else {
-      // boardtrain — no flow yet, just close the sheet
-      closeSessionTypeSheet();
-    }
+// Wire each option's tap to its destination flow.
+// Wrapped in DOMContentLoaded because the .bk-sheet-option buttons are rendered
+// in the DOM AFTER this script tag, so we need to wait for the parser to finish.
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.bk-sheet-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const action = opt.dataset.action;
+      if (action === 'bookings') {
+        location.href = 'booking-flow.html';
+      } else if (action === 'private') {
+        location.href = 'book-private.html';
+      } else if (action === 'group') {
+        location.href = 'book-group.html';
+      } else {
+        // boardtrain — no flow yet, just close the sheet
+        closeSessionTypeSheet();
+      }
+    });
   });
 });
 </script>
