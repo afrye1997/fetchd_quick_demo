@@ -3231,6 +3231,16 @@ function scrollToTop() {
 // Init on load
 document.addEventListener('DOMContentLoaded', () => {
   initDogSelector();
+  // If we arrived via a deep link like ?class=puppy, skip the class chooser
+  // and land directly on the cohort picker for that class.
+  const params = new URLSearchParams(window.location.search);
+  const deepClass = params.get('class');
+  if (deepClass && CLASSES[deepClass]) {
+    selectClass(deepClass);
+    // Hide the back arrow on the cohort step — they came from an article,
+    // not the class chooser, so backing into class select would be confusing.
+    document.getElementById('viewCohortSelect').classList.add('gc-no-back');
+  }
 });
 </script>
 
@@ -3242,6 +3252,9 @@ document.addEventListener('DOMContentLoaded', () => {
   60% { transform: translateX(-3px); }
   80% { transform: translateX(2px); }
 }
+/* Hide the cohort-step back button when arriving via deep link
+   (?class=puppy etc.) — the user came from an article, not class select. */
+.view.gc-no-back .pl-back-row { display: none; }
 </style>
 
 <!-- NOTIFICATIONS BACKDROP -->
