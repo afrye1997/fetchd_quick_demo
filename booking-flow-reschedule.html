@@ -1565,16 +1565,22 @@ body {
 .rs-header {
   padding: 16px 22px 18px;
 }
-.rs-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
-  font-weight: 500;
-  color: var(--navy);
-  letter-spacing: -0.015em;
-  line-height: 1.1;
-  margin: 0 0 8px;
+.rs-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
 }
-.rs-title em { font-style: italic; }
+.rs-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+}
 .rs-sub {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 14px;
@@ -1751,17 +1757,10 @@ body {
   transition: opacity 0.18s, transform 0.18s;
 }
 /* Show minus only inside the rs-jiggling container (edit mode) */
-.rs-jiggling .rs-chip-minus,
-.rs-jiggling .rs-credit-minus {
+.rs-jiggling .rs-chip-minus {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
-}
-.rs-credit-minus {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.6);
-  transition: opacity 0.18s, transform 0.18s;
 }
 .rs-chip-minus svg {
   width: 12px; height: 12px;
@@ -2039,215 +2038,214 @@ body {
 }
 .rs-cta-text:hover { color: var(--navy); }
 
-/* Credits view */
-.rs-credits-list {
-  padding: 0 22px;
+
+/* ─── After-School view ───────────────────────────────── */
+.rs-ast-dogs {
+  padding: 0 18px;
   display: flex; flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
-.rs-credit-card {
-  position: relative;
+.rs-ast-dog-card {
   background: white;
   border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 16px;
+  border-radius: 16px;
+  padding: 14px 16px 12px;
+  box-shadow: var(--shadow-sm);
+}
+.rs-ast-dog-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: opacity 0.2s, border-style 0.18s;
+  gap: 10px;
+  margin-bottom: 10px;
 }
-.rs-credit-card.removed {
-  opacity: 0.45;
-  border-style: dashed;
-  border-color: rgba(224, 69, 69, 0.4);
-  text-decoration: line-through;
-  text-decoration-color: rgba(224, 69, 69, 0.6);
-  text-decoration-thickness: 2px;
-}
-.rs-credit-card.added {
-  background: rgba(74, 138, 106, 0.06);
-  border-color: rgba(74, 138, 106, 0.4);
-}
-.rs-credit-icon {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  background: rgba(33, 53, 106, 0.08);
-  color: var(--navy);
-  display: flex; align-items: center; justify-content: center;
+.rs-ast-dog-photo {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
   flex-shrink: 0;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
 }
-.rs-credit-icon.daycare {
-  background: rgba(212, 166, 74, 0.16);
-  color: #b88a30;
-}
-.rs-credit-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.rs-credit-text { flex: 1; min-width: 0; }
-.rs-credit-title {
+.rs-ast-dog-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rs-ast-dog-name {
+  flex: 1;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 500;
   color: var(--navy);
-  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.rs-ast-dog-count {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.rs-ast-empty {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  font-style: italic;
+  padding: 8px 0;
   letter-spacing: -0.005em;
 }
-.rs-credit-sub {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--muted);
-  margin-top: 2px;
+.rs-ast-rows {
+  display: flex; flex-direction: column;
+  gap: 6px;
 }
-.rs-credit-price {
+.rs-ast-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 4px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, transform 0.06s;
+}
+.rs-ast-row:active { transform: scale(0.99); }
+.rs-ast-row + .rs-ast-row {
+  border-top: 1px solid var(--border-soft);
+  border-radius: 0;
+}
+.rs-ast-row-text { flex: 1; min-width: 0; }
+.rs-ast-row-day {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--navy);
+  letter-spacing: -0.005em;
 }
-
-/* The credit card minus button — same visual language as chip minus */
-.rs-credit-minus {
-  position: absolute;
-  top: -7px; right: -7px;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: #e04545;
-  border: 2px solid white;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 2px 8px rgba(224, 69, 69, 0.36);
-  padding: 0;
-}
-.rs-credit-minus svg {
-  width: 12px; height: 12px;
-  stroke: white; stroke-width: 3;
-  stroke-linecap: round;
-  fill: none;
-}
-.rs-credit-minus:active { transform: scale(0.88); }
-.rs-credit-card.removed .rs-credit-minus {
-  background: var(--accent-green, #4a8a6a);
-  box-shadow: 0 2px 8px rgba(74, 138, 106, 0.4);
-}
-.rs-credit-card.removed .rs-credit-minus::before {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 12px; height: 3px;
-  background: white;
-  border-radius: 1.5px;
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-/* Jiggle on the credit cards too */
-.rs-jiggling .rs-credit-card {
-  animation: rs-jiggle-1 0.34s ease-in-out infinite;
-  transform-origin: center;
-}
-.rs-jiggling .rs-credit-card:nth-child(2n) {
-  animation-name: rs-jiggle-2;
-  animation-duration: 0.31s;
-}
-
-/* "Add a package" options — non-jiggling cards w/ + button */
-.rs-credits-options {
-  padding: 0 22px;
-  display: flex; flex-direction: column;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.rs-credit-add {
-  background: white;
-  border: 1.5px dashed var(--border);
-  border-radius: 14px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.18s, border-color 0.18s;
-}
-.rs-credit-add:hover { border-color: var(--navy); background: rgba(33, 53, 106, 0.02); }
-.rs-credit-add-plus {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: white;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.rs-credit-add-plus::before, .rs-credit-add-plus::after {
-  content: ''; position: absolute; background: white; border-radius: 1px;
-}
-.rs-credit-add-plus { position: relative; }
-.rs-credit-add-plus::before { width: 10px; height: 2px; }
-.rs-credit-add-plus::after  { width: 2px; height: 10px; }
-
-/* PAYG card (toggle to switch to no-credits) */
-.rs-payg-card {
-  margin: 0 22px 10px;
-  background: white;
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.rs-payg-card.active {
-  background: rgba(33, 53, 106, 0.04);
-  border-color: var(--navy);
-}
-.rs-payg-icon {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  background: rgba(33, 53, 106, 0.08);
-  color: var(--navy);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.rs-payg-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.rs-payg-text { flex: 1; min-width: 0; }
-.rs-payg-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--navy);
-  line-height: 1.1;
-}
-.rs-payg-desc {
+.rs-ast-row-sub {
   font-family: 'Instrument Sans', sans-serif;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--muted);
   margin-top: 2px;
+  letter-spacing: -0.005em;
 }
-/* iOS-style toggle */
-.rs-payg-toggle {
+.rs-ast-row.on .rs-ast-row-sub {
+  color: var(--accent-green, #4a8a6a);
+  font-weight: 600;
+}
+
+/* iOS-style toggle on each row */
+.rs-ast-row-toggle {
   width: 44px; height: 26px;
   background: var(--border);
-  border: none;
   border-radius: 14px;
   position: relative;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.22s;
   flex-shrink: 0;
-  padding: 0;
+  transition: background 0.22s;
 }
-.rs-payg-toggle.on { background: var(--accent-green, #4a8a6a); }
-.rs-toggle-knob {
+.rs-ast-row.on .rs-ast-row-toggle {
+  background: var(--accent-green, #4a8a6a);
+}
+.rs-ast-row-knob {
   position: absolute;
   top: 2px; left: 2px;
   width: 22px; height: 22px;
   background: white;
   border-radius: 50%;
-  transition: transform 0.22s;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.22s;
 }
-.rs-payg-toggle.on .rs-toggle-knob { transform: translateX(18px); }
+.rs-ast-row.on .rs-ast-row-knob {
+  transform: translateX(18px);
+}
 
-/* Diff view */
+/* ─── Confirmation chips (booking-flow style, with red removed variant) ── */
+.rs-conf-chip-section + .rs-conf-chip-section {
+  margin-top: 8px;
+}
+.rs-conf-chip-section-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.rs-conf-chip-section-label.removed { color: #e04545; }
+.rs-conf-chip-section-label.added   { color: var(--accent-green, #4a8a6a); }
+
+.rs-conf-chips {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-bottom: 4px;
+}
+.rs-conf-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px;
+  background: var(--navy);
+  border: 1px solid var(--navy);
+  border-radius: 999px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px; font-weight: 600;
+  color: white;
+  letter-spacing: -0.003em;
+  line-height: 1.1;
+}
+.rs-conf-chip.daycare {
+  background: var(--accent-gold, #d4a64a);
+  border-color: var(--accent-gold, #d4a64a);
+  color: #5a3e14;
+}
+/* Red variant for removed dates */
+.rs-conf-chip.removed {
+  background: #e04545;
+  border-color: #e04545;
+  color: white;
+}
+.rs-conf-chip.removed.daycare {
+  /* Removed daycare: still red, but we keep semantic meaning */
+  background: #e04545;
+  border-color: #e04545;
+  color: white;
+}
+/* Bone icon inside the chip when after-school is on */
+.rs-conf-chip-divider {
+  display: inline-block;
+  width: 1px;
+  height: 9px;
+  background: currentColor;
+  opacity: 0.4;
+  margin: 0 3px 0 4px;
+}
+.rs-conf-chip-bone {
+  width: 11px;
+  height: 11px;
+  fill: currentColor;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* After-school grouped block on confirmation: per-dog mini-section */
+.rs-conf-ast-dog + .rs-conf-ast-dog {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+.rs-conf-ast-dog-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--navy);
+  font-style: italic;
+  letter-spacing: -0.005em;
+  margin-bottom: 8px;
+}
+
+
+/* Diff view container */
 .rs-diff {
   padding: 0 22px;
   display: flex; flex-direction: column;
@@ -2401,14 +2399,16 @@ body {
     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
   </button>
   <span class="rs-step-pill" id="rsStepPill">Sessions · Step 1 of 3</span>
-  <button class="rs-edit-btn" id="rsEditBtn" onclick="toggleEditMode()" aria-pressed="false" type="button">Edit</button>
 </div>
 
 <!-- VIEW 1 — EDIT SESSIONS -->
 <div class="view active" id="viewSessions">
   <div class="rs-header">
-    <h1 class="rs-title">Edit your <em>schedule</em></h1>
-    <p class="rs-sub">Tap <strong>Edit</strong> to remove sessions or toggle after-school training. Use the calendar below to add new days.</p>
+    <div class="rs-header-row">
+      <h1 class="rs-title">Edit your schedule</h1>
+      <button class="rs-edit-btn" id="rsEditBtn" onclick="toggleEditMode()" aria-pressed="false" type="button">Edit</button>
+    </div>
+    <p class="rs-sub">Tap <strong>Edit</strong> to remove sessions. Use the calendar below to add new days.</p>
   </div>
 
   <!-- Per-dog cards w/ jiggling chips of current bookings -->
@@ -2450,40 +2450,21 @@ body {
 
   <!-- CTA row -->
   <div class="rs-cta-row">
-    <button class="rs-cta" onclick="goToCredits()">Continue to credits</button>
+    <button class="rs-cta" onclick="goToAfterSchool()">Continue to after-school</button>
   </div>
 
   <div style="height: 30px;"></div>
 </div>
 
-<!-- VIEW 2 — EDIT CREDITS -->
-<div class="view" id="viewCredits">
+<!-- VIEW 2 — AFTER-SCHOOL TRAINING -->
+<div class="view" id="viewAfterSchool">
   <div class="rs-header">
-    <h1 class="rs-title">Edit your <em>credits</em></h1>
-    <p class="rs-sub">Tap <strong>Edit</strong> to remove a current package. Add new ones below.</p>
+    <h1 class="rs-title">After-school training</h1>
+    <p class="rs-sub">For each school day, choose whether your dog stays for after-school training.</p>
   </div>
 
-  <!-- Existing credit packages with jiggle/minus -->
-  <div class="rs-section-label" style="padding-left: 22px;">Current packages</div>
-  <div class="rs-credits-list" id="rsCreditsList"></div>
-
-  <!-- Add new packages -->
-  <div class="rs-section-label" style="padding-left: 22px; padding-top: 18px;">Add a package</div>
-  <div class="rs-credits-options" id="rsCreditsOptions"></div>
-
-  <!-- Or PAYG -->
-  <div class="rs-payg-card" id="rsPaygCard">
-    <div class="rs-payg-icon">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3 3 0 00-5.7 1c0 1.5 1.4 2.5 2.7 3 1.4.5 2.7 1.5 2.7 3a3 3 0 01-5.7 1"/><line x1="12" y1="6" x2="12" y2="7.5"/><line x1="12" y1="16.5" x2="12" y2="18"/></svg>
-    </div>
-    <div class="rs-payg-text">
-      <div class="rs-payg-title">Pay as you go</div>
-      <div class="rs-payg-desc">Skip credits — invoiced after each visit</div>
-    </div>
-    <button class="rs-payg-toggle" id="rsPaygToggle" onclick="togglePayg()" type="button">
-      <span class="rs-toggle-knob"></span>
-    </button>
-  </div>
+  <!-- Per-dog list of school days with toggles -->
+  <div class="rs-ast-dogs" id="rsAstDogs"></div>
 
   <div class="rs-cta-row">
     <button class="rs-cta" onclick="goToConfirm()">Review changes</button>
@@ -2830,26 +2811,12 @@ const INITIAL_BOOKINGS = [
   { dogId: 'brodie',  type: 'school',  month: 4, day: 29, dow: 'Tue' },
   { dogId: 'brodie',  type: 'school',  month: 5, day: 1,  dow: 'Thu' },
 ];
-const INITIAL_CREDITS = [
-  { id: 'c1', kind: 'school',  count: 8, label: '8-pack School',  price: 240 },
-  { id: 'c2', kind: 'daycare', count: 5, label: '5-pack Daycare', price: 150 },
-];
-const ADD_PACKAGES = [
-  { kind: 'school',  count: 4,  price: 120 },
-  { kind: 'school',  count: 8,  price: 240 },
-  { kind: 'school',  count: 16, price: 460 },
-  { kind: 'daycare', count: 5,  price: 150 },
-  { kind: 'daycare', count: 10, price: 290 },
-];
 const MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
 const MONTH_SHORT = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // Working state — clones of initial that we mutate as user edits
 let bookings = INITIAL_BOOKINGS.map(b => ({ ...b, status: 'kept', afterSchoolStart: !!b.afterSchool, afterSchool: !!b.afterSchool }));
-let removedCreditIds = new Set();
-let addedCredits = [];   // full package objects pushed in
-let paygActive = false;
 let activeAddDog = 'waffles';
 let activeAddType = 'school';
 let editMode = false;
@@ -2892,12 +2859,8 @@ function renderDogs() {
       const astHtml = (b.type === 'school' && b.afterSchool && b.status !== 'removed')
         ? `<div class="rs-chip-ast" aria-label="After-school training">${BONE_SVG}</div>`
         : '';
-      // Body click toggles after-school — but ONLY for school chips, ONLY in edit mode, ONLY when not removed
-      const bodyClick = (b.type === 'school' && b.status !== 'removed')
-        ? ` onclick="onChipBodyTap('${bookingKey(b)}', event)"`
-        : '';
       return `
-        <div class="${cls}" data-key="${bookingKey(b)}"${bodyClick}>
+        <div class="${cls}" data-key="${bookingKey(b)}">
           <button class="rs-chip-minus" type="button" onclick="toggleBooking('${bookingKey(b)}', event)" aria-label="${b.status === 'removed' ? 'Restore' : 'Remove'}">
             ${minusIcon}
           </button>
@@ -2919,15 +2882,6 @@ function renderDogs() {
     `;
   }).join('');
   document.getElementById('rsDogs').innerHTML = html;
-}
-
-function onChipBodyTap(key, ev) {
-  if (ev) ev.stopPropagation();
-  if (!editMode) return;  // No-op outside edit mode
-  const b = bookings.find(x => bookingKey(x) === key);
-  if (!b || b.type !== 'school' || b.status === 'removed') return;
-  b.afterSchool = !b.afterSchool;
-  renderDogs();
 }
 
 function toggleBooking(key, ev) {
@@ -3122,171 +3076,212 @@ function addBooking(month, day) {
   renderCal();
 }
 
-// ─── Credits view ───────────────────────────────────────────
-function renderCredits() {
-  const listHtml = INITIAL_CREDITS.map(c => {
-    const removed = removedCreditIds.has(c.id);
-    const iconCls = c.kind === 'daycare' ? 'rs-credit-icon daycare' : 'rs-credit-icon';
-    const iconSvg = c.kind === 'daycare'
-      ? '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0z"/><circle cx="12" cy="12" r="3"/></svg>'
-      : '<svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5 3.5 9 9 9s9-4 9-9V7l-9-5z"/></svg>';
-    return `
-      <div class="rs-credit-card ${removed ? 'removed' : ''}" data-id="${c.id}">
-        <button class="rs-credit-minus" type="button" onclick="toggleCredit('${c.id}')" aria-label="${removed ? 'Restore' : 'Remove'}">
-          ${removed ? '' : '<svg viewBox="0 0 24 24"><line x1="6" y1="12" x2="18" y2="12"/></svg>'}
-        </button>
-        <div class="${iconCls}">${iconSvg}</div>
-        <div class="rs-credit-text">
-          <div class="rs-credit-title">${c.label}</div>
-          <div class="rs-credit-sub">${c.count} ${c.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
+// ─── After-School view ──────────────────────────────────────
+function renderAfterSchool() {
+  const html = DOGS_DATA.map(dog => {
+    // Only school days, only those that aren't removed (you can't add after-school
+    // training to a session you're about to remove)
+    const schoolDays = bookings.filter(b =>
+      b.dogId === dog.id && b.type === 'school' && b.status !== 'removed'
+    );
+    if (schoolDays.length === 0) {
+      return `
+        <div class="rs-ast-dog-card">
+          <div class="rs-ast-dog-header">
+            <div class="rs-ast-dog-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
+            <div class="rs-ast-dog-name">${dog.name}</div>
+          </div>
+          <div class="rs-ast-empty">No school days scheduled</div>
         </div>
-        <div class="rs-credit-price">$${c.price}</div>
+      `;
+    }
+    const rowsHtml = schoolDays.map(b => {
+      const checked = !!b.afterSchool;
+      const key = bookingKey(b);
+      return `
+        <button class="rs-ast-row ${checked ? 'on' : ''}" type="button" onclick="toggleAfterSchool('${key}')">
+          <div class="rs-ast-row-text">
+            <div class="rs-ast-row-day">${b.dow}, ${MONTH_SHORT[b.month]} ${b.day}</div>
+            <div class="rs-ast-row-sub">${checked ? 'After-school training included' : 'School only'}</div>
+          </div>
+          <div class="rs-ast-row-toggle">
+            <span class="rs-ast-row-knob"></span>
+          </div>
+        </button>
+      `;
+    }).join('');
+    return `
+      <div class="rs-ast-dog-card">
+        <div class="rs-ast-dog-header">
+          <div class="rs-ast-dog-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
+          <div class="rs-ast-dog-name">${dog.name}</div>
+          <div class="rs-ast-dog-count">${schoolDays.length} school day${schoolDays.length !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="rs-ast-rows">${rowsHtml}</div>
       </div>
     `;
   }).join('');
-  // Append "added" packages too — those use the removed-style undo on click
-  const addedHtml = addedCredits.map((c, idx) => `
-    <div class="rs-credit-card added" data-added-idx="${idx}">
-      <button class="rs-credit-minus" type="button" onclick="undoAddedCredit(${idx})" aria-label="Undo add">
-        <svg viewBox="0 0 24 24"><line x1="6" y1="12" x2="18" y2="12"/></svg>
-      </button>
-      <div class="rs-credit-icon ${c.kind === 'daycare' ? 'daycare' : ''}">
-        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5 3.5 9 9 9s9-4 9-9V7l-9-5z"/></svg>
-      </div>
-      <div class="rs-credit-text">
-        <div class="rs-credit-title">${c.count}-pack ${c.kind === 'daycare' ? 'Daycare' : 'School'}</div>
-        <div class="rs-credit-sub">+${c.count} ${c.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
-      </div>
-      <div class="rs-credit-price">$${c.price}</div>
-    </div>
-  `).join('');
-  document.getElementById('rsCreditsList').innerHTML = `<div class="${editMode ? 'rs-jiggling' : ''}" style="display:flex;flex-direction:column;gap:10px;">${listHtml + addedHtml}</div>`;
+  document.getElementById('rsAstDogs').innerHTML = html;
 }
 
-function toggleCredit(id) {
-  if (removedCreditIds.has(id)) removedCreditIds.delete(id);
-  else removedCreditIds.add(id);
-  renderCredits();
-}
-function undoAddedCredit(idx) {
-  addedCredits.splice(idx, 1);
-  renderCredits();
-}
-
-function renderAddOptions() {
-  const html = ADD_PACKAGES.map((p, idx) => `
-    <button class="rs-credit-add" type="button" onclick="addCreditPackage(${idx})">
-      <div class="rs-credit-add-plus"></div>
-      <div class="rs-credit-text">
-        <div class="rs-credit-title">${p.count}-pack ${p.kind === 'daycare' ? 'Daycare' : 'School'}</div>
-        <div class="rs-credit-sub">${p.count} ${p.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
-      </div>
-      <div class="rs-credit-price">$${p.price}</div>
-    </button>
-  `).join('');
-  document.getElementById('rsCreditsOptions').innerHTML = html;
-}
-
-function addCreditPackage(idx) {
-  addedCredits.push({ ...ADD_PACKAGES[idx] });
-  renderCredits();
-}
-
-function togglePayg() {
-  paygActive = !paygActive;
-  const t = document.getElementById('rsPaygToggle');
-  t.classList.toggle('on', paygActive);
-  document.getElementById('rsPaygCard').classList.toggle('active', paygActive);
+function toggleAfterSchool(key) {
+  const b = bookings.find(x => bookingKey(x) === key);
+  if (!b || b.type !== 'school' || b.status === 'removed') return;
+  b.afterSchool = !b.afterSchool;
+  renderAfterSchool();
 }
 
 // ─── Diff render ─────────────────────────────────────────────
 function buildDiff() {
   const out = [];
-  // Per-dog session diff (and after-school diff)
+  // Per-dog session diff
   DOGS_DATA.forEach(dog => {
     const removed = bookings.filter(b => b.dogId === dog.id && b.status === 'removed');
     const added   = bookings.filter(b => b.dogId === dog.id && b.status === 'added');
-    // After-school changes: kept-status school chips whose afterSchool flipped from start
-    // Plus added chips that have afterSchool on (those count as "added with after-school")
-    const astAdded = bookings.filter(b =>
-      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
-      b.afterSchool === true && b.afterSchoolStart === false
-    );
-    const astRemoved = bookings.filter(b =>
-      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
-      b.afterSchool === false && b.afterSchoolStart === true
-    );
-    if (removed.length === 0 && added.length === 0 && astAdded.length === 0 && astRemoved.length === 0) return;
+    if (removed.length === 0 && added.length === 0) return;
     out.push({
       kind: 'dog',
       dog,
-      removedDates: removed.map(b => fmtDate(b)),
-      addedDates: added.map(b => fmtDate(b)),
-      astAddedDates: astAdded.map(b => fmtDate(b)),
-      astRemovedDates: astRemoved.map(b => fmtDate(b)),
+      removed,
+      added,
     });
   });
-  // Credits diff
-  const creditsRemoved = INITIAL_CREDITS.filter(c => removedCreditIds.has(c.id));
-  if (creditsRemoved.length || addedCredits.length || paygActive) {
-    out.push({
-      kind: 'credits',
-      removed: creditsRemoved,
-      added: addedCredits,
-      payg: paygActive,
-    });
+  // Per-dog after-school summary (grouped state, not diff)
+  // Show this section if ANY dog has at least one school day either with or without after-school
+  // Skipping the section entirely when no school days exist for any dog
+  const hasAnySchoolDay = bookings.some(b => b.type === 'school' && b.status !== 'removed');
+  if (hasAnySchoolDay) {
+    out.push({ kind: 'afterSchool' });
   }
   return out;
+}
+
+function hasAnyChange() {
+  return bookings.some(b => b.status === 'removed' || b.status === 'added')
+    || bookings.some(b => b.type === 'school' && b.status !== 'removed' && (b.afterSchool !== b.afterSchoolStart));
+}
+
+// Render a single chip in the booking-flow review-chip style
+function renderConfChip(b, removed) {
+  const cls = ['rs-conf-chip'];
+  if (b.type === 'daycare') cls.push('daycare');
+  if (removed) cls.push('removed');
+  const label = `${b.dow} ${MONTH_SHORT[b.month]} ${b.day}`;
+  // Bone icon if after-school is on (only meaningful for school chips that aren't removed)
+  const showBone = b.type === 'school' && b.afterSchool && !removed;
+  const boneSvg = showBone
+    ? `<span class="rs-conf-chip-divider"></span><svg viewBox="0 0 24 24" class="rs-conf-chip-bone" aria-hidden="true"><circle cx="5" cy="8" r="3"/><circle cx="5" cy="14" r="3"/><circle cx="19" cy="8" r="3"/><circle cx="19" cy="14" r="3"/><rect x="5" y="9" width="14" height="4"/></svg>`
+    : '';
+  return `<span class="${cls.join(' ')}">${label}${boneSvg}</span>`;
 }
 
 function renderDiff(targetId) {
   const diff = buildDiff();
   const target = document.getElementById(targetId);
-  if (diff.length === 0) {
+  const reviewMode = (targetId === 'rsDiff');
+
+  // Empty state — nothing changed at all
+  if (!hasAnyChange()) {
     target.innerHTML = '';
-    if (targetId === 'rsDiff') {
+    if (reviewMode) {
       document.getElementById('rsDiffEmpty').style.display = '';
-      document.getElementById('rsConfirmBtn').disabled = true;
-      document.getElementById('rsConfirmBtn').style.opacity = '0.45';
+      const btn = document.getElementById('rsConfirmBtn');
+      btn.disabled = true;
+      btn.style.opacity = '0.45';
     }
     return;
   }
-  if (targetId === 'rsDiff') {
+  if (reviewMode) {
     document.getElementById('rsDiffEmpty').style.display = 'none';
-    document.getElementById('rsConfirmBtn').disabled = false;
-    document.getElementById('rsConfirmBtn').style.opacity = '1';
+    const btn = document.getElementById('rsConfirmBtn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
   }
-  target.innerHTML = diff.map(item => {
-    if (item.kind === 'dog') {
-      const lines = [];
-      if (item.removedDates.length) lines.push(`<div class="rs-diff-line removed"><strong>Removed</strong>${item.removedDates.join(', ')}</div>`);
-      if (item.addedDates.length)   lines.push(`<div class="rs-diff-line added"><strong>Added</strong>${item.addedDates.join(', ')}</div>`);
-      if (item.astAddedDates.length)   lines.push(`<div class="rs-diff-line added"><strong>+ After-school on</strong>${item.astAddedDates.join(', ')}</div>`);
-      if (item.astRemovedDates.length) lines.push(`<div class="rs-diff-line removed"><strong>− After-school off</strong>${item.astRemovedDates.join(', ')}</div>`);
-      return `
-        <div class="rs-diff-card">
-          <div class="rs-diff-header">
-            <div class="rs-diff-header-photo"><img src="data:image/jpeg;base64,${item.dog.photo}" alt="${item.dog.name}"></div>
-            <div class="rs-diff-header-title">${item.dog.name}</div>
-          </div>
-          ${lines.join('')}
+
+  // Build per-dog session cards
+  const dogCards = diff.filter(d => d.kind === 'dog').map(item => {
+    const sections = [];
+    if (item.removed.length) {
+      const chips = item.removed.map(b => renderConfChip(b, true)).join('');
+      sections.push(`
+        <div class="rs-conf-chip-section">
+          <div class="rs-conf-chip-section-label removed">Removed</div>
+          <div class="rs-conf-chips">${chips}</div>
         </div>
-      `;
-    } else {
-      const lines = [];
-      if (item.removed.length) lines.push(`<div class="rs-diff-line removed"><strong>Removed</strong>${item.removed.map(c => c.label).join(', ')}</div>`);
-      if (item.added.length)   lines.push(`<div class="rs-diff-line added"><strong>Added</strong>${item.added.map(c => `${c.count}-pack ${c.kind === 'daycare' ? 'Daycare' : 'School'}`).join(', ')}</div>`);
-      if (item.payg)           lines.push(`<div class="rs-diff-line added"><strong>Switched to</strong>Pay as you go</div>`);
-      return `
-        <div class="rs-diff-card">
-          <div class="rs-diff-header">
-            <div class="rs-diff-header-title">Credits</div>
-          </div>
-          ${lines.join('')}
-        </div>
-      `;
+      `);
     }
+    if (item.added.length) {
+      const chips = item.added.map(b => renderConfChip(b, false)).join('');
+      sections.push(`
+        <div class="rs-conf-chip-section">
+          <div class="rs-conf-chip-section-label added">Added</div>
+          <div class="rs-conf-chips">${chips}</div>
+        </div>
+      `);
+    }
+    return `
+      <div class="rs-diff-card">
+        <div class="rs-diff-header">
+          <div class="rs-diff-header-photo"><img src="data:image/jpeg;base64,${item.dog.photo}" alt="${item.dog.name}"></div>
+          <div class="rs-diff-header-title">${item.dog.name}</div>
+        </div>
+        ${sections.join('')}
+      </div>
+    `;
   }).join('');
+
+  // After-school grouped section (per dog: with vs. without)
+  let afterSchoolCard = '';
+  const wantsAst = diff.some(d => d.kind === 'afterSchool');
+  if (wantsAst) {
+    const dogBlocks = DOGS_DATA.map(dog => {
+      const schoolDays = bookings.filter(b =>
+        b.dogId === dog.id && b.type === 'school' && b.status !== 'removed'
+      );
+      if (schoolDays.length === 0) return '';
+      const withAst    = schoolDays.filter(b => b.afterSchool);
+      const withoutAst = schoolDays.filter(b => !b.afterSchool);
+      const withChips    = withAst.map(b => renderConfChip(b, false)).join('');
+      const withoutChips = withoutAst.map(b => {
+        // Render as a non-bone chip (school day, no after-school)
+        return `<span class="rs-conf-chip">${b.dow} ${MONTH_SHORT[b.month]} ${b.day}</span>`;
+      }).join('');
+      const sections = [];
+      if (withAst.length) {
+        sections.push(`
+          <div class="rs-conf-chip-section">
+            <div class="rs-conf-chip-section-label added">With after-school</div>
+            <div class="rs-conf-chips">${withChips}</div>
+          </div>
+        `);
+      }
+      if (withoutAst.length) {
+        sections.push(`
+          <div class="rs-conf-chip-section">
+            <div class="rs-conf-chip-section-label">School only</div>
+            <div class="rs-conf-chips">${withoutChips}</div>
+          </div>
+        `);
+      }
+      return `
+        <div class="rs-conf-ast-dog">
+          <div class="rs-conf-ast-dog-name">${dog.name}</div>
+          ${sections.join('')}
+        </div>
+      `;
+    }).filter(Boolean).join('');
+
+    afterSchoolCard = `
+      <div class="rs-diff-card">
+        <div class="rs-diff-header">
+          <div class="rs-diff-header-title">After-school training</div>
+        </div>
+        ${dogBlocks}
+      </div>
+    `;
+  }
+
+  target.innerHTML = dogCards + afterSchoolCard;
 }
 
 // ─── Edit mode toggle ──────────────────────────────────────
@@ -3295,16 +3290,16 @@ function toggleEditMode() {
   const btn = document.getElementById('rsEditBtn');
   btn.textContent = editMode ? 'Done' : 'Edit';
   btn.setAttribute('aria-pressed', editMode ? 'true' : 'false');
-  // Re-render the visible view so jiggle/minus visibility updates
+  // Re-render so jiggle/minus visibility updates (sessions only — only view with edit mode)
   const activeView = document.querySelector('.view.active').id;
   if (activeView === 'viewSessions') renderDogs();
-  if (activeView === 'viewCredits') renderCredits();
 }
 
-// Hide Edit button on review/done views (no editable list there)
+// Hide Edit button on after-school/review/done views (only sessions has Edit)
 function setEditBtnVisibility(viewId) {
   const btn = document.getElementById('rsEditBtn');
-  const showOnViews = ['viewSessions', 'viewCredits'];
+  if (!btn) return;
+  const showOnViews = ['viewSessions'];
   btn.classList.toggle('hidden', !showOnViews.includes(viewId));
 }
 
@@ -3314,26 +3309,28 @@ function switchView(toId) {
   document.getElementById(toId).classList.add('active');
   const screen = document.querySelector('.device-screen-inner');
   if (screen) screen.scrollTop = 0;
-  // When leaving an editable view, exit edit mode
-  if (toId !== 'viewSessions' && toId !== 'viewCredits' && editMode) {
+  // When leaving the sessions view, exit edit mode
+  if (toId !== 'viewSessions' && editMode) {
     editMode = false;
     const btn = document.getElementById('rsEditBtn');
-    btn.textContent = 'Edit';
-    btn.setAttribute('aria-pressed', 'false');
+    if (btn) {
+      btn.textContent = 'Edit';
+      btn.setAttribute('aria-pressed', 'false');
+    }
   }
   setEditBtnVisibility(toId);
 }
 
-function goToCredits() { switchView('viewCredits'); document.getElementById('rsStepPill').textContent = 'Credits · Step 2 of 3'; renderCredits(); renderAddOptions(); }
+function goToAfterSchool() { switchView('viewAfterSchool'); document.getElementById('rsStepPill').textContent = 'After-school · Step 2 of 3'; renderAfterSchool(); }
 function goBackToSessions() { switchView('viewSessions'); document.getElementById('rsStepPill').textContent = 'Sessions · Step 1 of 3'; renderDogs(); }
 function goToConfirm() { switchView('viewConfirm'); document.getElementById('rsStepPill').textContent = 'Review · Step 3 of 3'; renderDiff('rsDiff'); }
-function goBackToCredits() { switchView('viewCredits'); document.getElementById('rsStepPill').textContent = 'Credits · Step 2 of 3'; renderCredits(); }
+function goBackToAfterSchool() { switchView('viewAfterSchool'); document.getElementById('rsStepPill').textContent = 'After-school · Step 2 of 3'; renderAfterSchool(); }
 function confirmChanges() { switchView('viewDone'); document.getElementById('rsStepPill').style.display = 'none'; renderDiff('rsDoneDiff'); }
 function goBackOrHome() {
   const active = document.querySelector('.view.active').id;
   if (active === 'viewSessions') location.href = 'index.html';
-  else if (active === 'viewCredits') goBackToSessions();
-  else if (active === 'viewConfirm') goBackToCredits();
+  else if (active === 'viewAfterSchool') goBackToSessions();
+  else if (active === 'viewConfirm') goBackToAfterSchool();
   else if (active === 'viewDone') location.href = 'index.html';
 }
 
