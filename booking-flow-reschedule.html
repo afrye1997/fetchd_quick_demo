@@ -2892,17 +2892,23 @@ function renderDogs() {
 function toggleBooking(key, ev) {
   if (ev) ev.stopPropagation();
   const b = bookings.find(x => bookingKey(x) === key);
-  if (!b) return;
+  if (!b) { console.warn('[reschedule] toggleBooking: no booking found for key', key); return; }
+  console.log('[reschedule] toggleBooking', key, 'before:', b.status);
   if (b.status === 'added') {
     // Drop entirely (it was a new add — undo just removes it)
     bookings = bookings.filter(x => bookingKey(x) !== key);
+    console.log('[reschedule]   was added → dropped from array');
   } else if (b.status === 'removed') {
     // Restore
     b.status = 'kept';
+    console.log('[reschedule]   was removed → kept');
   } else {
     // Mark removed
     b.status = 'removed';
+    console.log('[reschedule]   was kept → removed');
   }
+  console.log('[reschedule]   total bookings now:', bookings.length, 'with statuses:',
+    bookings.filter(x => x.dogId === b.dogId).map(x => `${x.month}/${x.day} ${x.type}=${x.status}`).join(', '));
   renderDogs();
   renderCal();
 }
@@ -3057,11 +3063,13 @@ function nextRsMonth() {
 }
 
 function addBooking(month, day) {
+  console.log('[reschedule] addBooking', activeAddDog, activeAddType, month, day);
   // Don't add if already exists
   const exists = bookings.find(b =>
     b.dogId === activeAddDog && b.month === month && b.day === day && b.type === activeAddType
   );
   if (exists) {
+    console.log('[reschedule]   already exists with status:', exists.status, '— restoring/no-op');
     // If it's currently removed, restore instead
     if (exists.status === 'removed') exists.status = 'kept';
     renderDogs();
@@ -3077,6 +3085,7 @@ function addBooking(month, day) {
     afterSchool: false,
     afterSchoolStart: false,
   });
+  console.log('[reschedule]   pushed new added booking. Total bookings:', bookings.length);
   renderDogs();
   renderCal();
 }
@@ -3143,11 +3152,17 @@ function toggleAfterSchool(key) {
   const b = bookings.find(x => bookingKey(x) === key);
   if (!b || b.type !== 'school' || b.status === 'removed') return;
   b.afterSchool = !b.afterSchool;
+  console.log('[reschedule] toggleAfterSchool', key, '→', b.afterSchool, '(start was:', b.afterSchoolStart, ')');
   renderAfterSchool();
 }
 
 // ─── Diff render ─────────────────────────────────────────────
 function buildDiff() {
+  console.log('[reschedule] buildDiff called. Total bookings:', bookings.length);
+  console.log('[reschedule]   raw status counts:',
+    bookings.filter(b => b.status === 'kept').length, 'kept,',
+    bookings.filter(b => b.status === 'added').length, 'added,',
+    bookings.filter(b => b.status === 'removed').length, 'removed');
   const out = [];
   // Per-dog session diff
   DOGS_DATA.forEach(dog => {
@@ -3163,6 +3178,7 @@ function buildDiff() {
       b.afterSchool === false && b.afterSchoolStart === true
     );
     if (removed.length === 0 && added.length === 0 && astTurnedOn.length === 0 && astTurnedOff.length === 0) return;
+    console.log(`[reschedule]   ${dog.name}:`, removed.length, 'removed,', added.length, 'added,', astTurnedOn.length, 'ast-on,', astTurnedOff.length, 'ast-off');
     out.push({
       kind: 'dog',
       dog,
@@ -3172,6 +3188,7 @@ function buildDiff() {
       astTurnedOff,
     });
   });
+  console.log('[reschedule] buildDiff returning', out.length, 'dog cards');
   return out;
 }
 
