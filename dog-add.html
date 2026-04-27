@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>NWA · Add a dog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1f8;
+  --navy: #21356A;
+  --navy-mid: #2d4a8a;
+  --navy-pale: #b8c8e8;
+  --border: #d4dcec;
+  --border-soft: #e4eaf4;
+  --muted: #6a85b0;
+  --muted-soft: #8ea3c7;
+  --accent-green: #4a8a6a;
+  --accent-red: #e04545;
+  --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--navy);
+  background: #e8ecf3;
+}
+body {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 20px;
+}
+.device-frame {
+  width: 402px; max-width: 100%;
+  height: 874px; max-height: 95vh;
+  background: var(--bg);
+  border-radius: 48px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(33, 53, 106, 0.18), 0 8px 24px rgba(33, 53, 106, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+.device-screen { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+.back-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  margin: 4px 0 -8px -4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  transition: color 0.15s, transform 0.1s;
+}
+.back-link:active { transform: translateX(-2px); color: var(--navy); }
+.back-link svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.content { padding: 22px 20px 32px; display: flex; flex-direction: column; gap: 18px; }
+.page-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--navy); letter-spacing: -0.01em;
+  margin: 0;
+}
+.page-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 16px; font-weight: 500;
+  color: var(--muted); margin: -10px 0 0;
+}
+
+.section-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  opacity: 0.75;
+  margin: 4px 4px -6px;
+}
+
+/* Hero photo */
+.hero-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 18px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.hero-photo-wrap { position: relative; width: 96px; height: 96px; }
+.hero-photo {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 2px rgba(33, 53, 106, 0.10), 0 4px 14px rgba(33, 53, 106, 0.10);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted-soft);
+  transition: transform 0.15s;
+}
+.hero-photo:active { transform: scale(0.97); }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-photo svg.placeholder-icon { width: 44px; height: 44px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.hero-photo-badge {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--navy); color: white;
+  display: flex; align-items: center; justify-content: center;
+  border: 2.5px solid white;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(33, 53, 106, 0.20);
+}
+.hero-photo-badge svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-photo-input { display: none; }
+.hero-photo-help {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Field card */
+.field-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.10em; text-transform: uppercase;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 16px; font-weight: 500;
+  color: var(--navy);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field input:focus, .field select:focus { border-color: var(--navy); }
+.field input::placeholder { color: var(--muted-soft); font-weight: 400; }
+
+/* Field help / derived age */
+.field-help {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: -0.005em;
+}
+
+/* Tappable native date picker */
+.date-pick {
+  position: relative;
+  display: flex; align-items: center;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s;
+  min-height: 44px;
+}
+.date-pick:hover { border-color: var(--navy-pale); }
+.date-pick.has-value { border-color: var(--navy-pale); background: rgba(184, 200, 232, 0.08); }
+.date-pick-value {
+  flex: 1;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 16px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+}
+.date-pick-value:empty::before {
+  content: attr(data-empty);
+  color: var(--muted-soft);
+  font-weight: 400;
+}
+.date-pick-icon {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+.date-pick-icon svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+.date-pick-native {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  border: none; background: transparent;
+  pointer-events: none;
+  font-size: 16px;
+}
+
+/* Goal chips (multi-select) */
+.goal-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.goal-chip {
+  padding: 9px 14px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.08s;
+  letter-spacing: -0.005em;
+}
+.goal-chip:active { transform: scale(0.96); }
+.goal-chip.selected {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+
+/* Textarea cards (feeding / meds / notes) */
+.textarea-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+.textarea-help {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.dog-textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 72px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.5;
+  background: transparent;
+}
+.dog-textarea::placeholder {
+  color: var(--muted-soft);
+  font-weight: 500;
+}
+
+/* Structured row cards (feeding / meds) — mirrors vacc pattern */
+.struct-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.struct-empty {
+  padding: 22px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 15px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.struct-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  position: relative;
+}
+.struct-row + .struct-row { border-top: 1px solid var(--border-soft); }
+.struct-row-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.struct-row-icon.feeding {
+  background: rgba(212, 166, 74, 0.16);
+  color: #8a6a28;
+}
+.struct-row-icon.meds {
+  background: rgba(122, 91, 196, 0.14);
+  color: #5a3da0;
+}
+.struct-row-icon svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.struct-row-body {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.struct-row-name {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--navy);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.struct-row-meta {
+  font-size: 12px; color: var(--muted);
+  font-weight: 500;
+}
+.struct-row-delete {
+  width: 30px; height: 30px;
+  border: none; background: transparent;
+  color: var(--muted-soft);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.struct-row-delete:active { color: var(--accent-red); background: rgba(224, 69, 69, 0.08); }
+.struct-row-delete svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.struct-add-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 16px;
+  background: white;
+  border: none; border-top: 1px solid var(--border-soft);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--navy);
+  transition: background 0.15s;
+  width: 100%;
+}
+.struct-add-row:active { background: rgba(33, 53, 106, 0.04); }
+.struct-add-icon {
+  display: inline-flex;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--navy); color: white;
+  align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; line-height: 1;
+}
+
+/* Inline structured add form */
+.struct-add-form {
+  display: none;
+  padding: 14px;
+  border-top: 1px solid var(--border-soft);
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(184, 200, 232, 0.10);
+}
+.struct-add-form.is-open { display: flex; }
+.struct-add-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.struct-field { display: flex; flex-direction: column; gap: 5px; }
+.struct-field-wide { grid-column: span 2; }
+.struct-field-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 9.5px; font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.10em; text-transform: uppercase;
+}
+.struct-field input, .struct-field select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  color: var(--navy);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.struct-field input:focus, .struct-field select:focus { border-color: var(--navy); }
+.struct-field input::placeholder { color: var(--muted-soft); font-weight: 400; }
+
+.struct-add-form-actions {
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.struct-mini-btn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--muted);
+  transition: background 0.15s, transform 0.1s;
+}
+.struct-mini-btn.primary {
+  background: var(--navy); color: white;
+  border-color: var(--navy);
+}
+.struct-mini-btn:active { transform: scale(0.97); }
+
+/* Vaccine card */
+.vacc-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.vacc-empty {
+  padding: 22px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 15px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.vacc-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  position: relative;
+}
+.vacc-row + .vacc-row { border-top: 1px solid var(--border-soft); }
+.vacc-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(74, 138, 106, 0.12);
+  color: var(--accent-green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.vacc-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vacc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.vacc-name { font-family: 'Instrument Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--navy); }
+.vacc-meta { font-size: 12px; color: var(--muted); font-weight: 500; }
+.vacc-delete {
+  width: 30px; height: 30px;
+  border: none; background: transparent;
+  color: var(--muted-soft);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.vacc-delete:active { color: var(--accent-red); background: rgba(224, 69, 69, 0.08); }
+.vacc-delete svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vacc-add-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 16px;
+  background: white;
+  border: none; border-top: 1px solid var(--border-soft);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--navy);
+  transition: background 0.15s;
+  width: 100%;
+}
+.vacc-add-row:active { background: rgba(33, 53, 106, 0.04); }
+.vacc-add-icon {
+  display: inline-flex;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--navy); color: white;
+  align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; line-height: 1;
+}
+
+/* Inline vaccine add form */
+.vacc-add-form {
+  display: none;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border-soft);
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(184, 200, 232, 0.10);
+}
+.vacc-add-form.is-open { display: flex; }
+.vacc-add-form-row { display: flex; gap: 8px; }
+.vacc-add-form input[type="text"],
+.vacc-add-form input[type="date"] {
+  flex: 1;
+  padding: 9px 11px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  color: var(--navy);
+  outline: none;
+}
+.vacc-add-form input:focus { border-color: var(--navy); }
+.vacc-add-form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.vacc-mini-btn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--muted);
+  transition: background 0.15s, transform 0.1s;
+}
+.vacc-mini-btn.primary { background: var(--navy); color: white; border-color: var(--navy); }
+.vacc-mini-btn:active { transform: scale(0.97); }
+
+/* Save CTA */
+.save-cta {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 15px;
+  background: var(--navy);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 6px;
+}
+.save-cta:active { transform: scale(0.99); background: var(--navy-mid); }
+.save-cta svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.save-help {
+  font-size: 11.5px; color: var(--muted); line-height: 1.4;
+  text-align: center; padding: 0 12px; margin: 0;
+}
+</style>
+</head>
+<body>
+<div class="device-frame">
+  <div class="device-screen">
+
+    <div class="content">
+
+      <button class="back-link" onclick="location.href='account.html'" type="button">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Back</span>
+      </button>
+
+      <h1 class="page-title">Add a dog</h1>
+      <div class="page-subtitle">Tell us about your new pup.</div>
+
+      <!-- HERO PHOTO -->
+      <div class="hero-card">
+        <div class="hero-photo-wrap">
+          <div class="hero-photo" id="heroPhotoBtn">
+            <svg class="placeholder-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c0-4 3.1-6 7-6s7 2 7 6"/></svg>
+          </div>
+          <div class="hero-photo-badge">
+            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <input type="file" accept="image/*" class="hero-photo-input" id="heroPhotoInput">
+        </div>
+        <div class="hero-photo-help">Add a photo</div>
+      </div>
+
+      <!-- DOG INFO -->
+      <div class="section-label">Dog Info</div>
+      <div class="field-card">
+        <div class="field">
+          <label class="field-label" for="dogNameInput">Name</label>
+          <input type="text" id="dogNameInput" placeholder="Your dog's name" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="dogBreedInput">Breed</label>
+          <input type="text" id="dogBreedInput" placeholder="e.g. Golden Retriever" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label" for="dogBirthdayInput">Birthday</label>
+          <div class="date-pick" id="dogBirthdayPick">
+            <span class="date-pick-value" id="dogBirthdayValue" data-empty="Pick a date"></span>
+            <span class="date-pick-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+            </span>
+            <input type="date" id="dogBirthdayInput" class="date-pick-native">
+          </div>
+          <div class="field-help" id="dogAgeDisplay" style="display:none;"></div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="dogSexInput">Sex</label>
+          <select id="dogSexInput">
+            <option value="">Select…</option>
+            <option value="male">Male</option>
+            <option value="male-neutered">Male (neutered)</option>
+            <option value="female">Female</option>
+            <option value="female-spayed">Female (spayed)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- GOALS -->
+      <div class="section-label">Training goals</div>
+      <div class="goal-chip-grid" id="goalChips">
+        <button class="goal-chip" data-goal="house-manners" type="button">House manners</button>
+        <button class="goal-chip" data-goal="public-manners" type="button">Public manners</button>
+        <button class="goal-chip" data-goal="leash-reactivity" type="button">Leash reactivity</button>
+        <button class="goal-chip" data-goal="basic-obedience" type="button">Basic obedience</button>
+        <button class="goal-chip" data-goal="behavior-mod" type="button">Behavior modification</button>
+        <button class="goal-chip" data-goal="separation-anxiety" type="button">Separation anxiety</button>
+        <button class="goal-chip" data-goal="socialization" type="button">Socialization</button>
+        <button class="goal-chip" data-goal="other" type="button">Other</button>
+      </div>
+
+      <!-- FEEDING SCHEDULE -->
+      <div class="section-label">Feeding schedule</div>
+      <div class="struct-card" id="feedingCard">
+        <div class="struct-empty" id="feedingEmpty">No feeding info added yet.</div>
+        <button class="struct-add-row" id="feedingAddBtn" type="button">
+          <span class="struct-add-icon">+</span>
+          <span>Add Feeding</span>
+        </button>
+        <div class="struct-add-form" id="feedingAddForm">
+          <div class="struct-add-form-grid">
+            <div class="struct-field struct-field-wide">
+              <label class="struct-field-label">Brand</label>
+              <input type="text" id="feedingBrandInput" placeholder="e.g. Purina Pro Plan" autocomplete="off">
+            </div>
+            <div class="struct-field">
+              <label class="struct-field-label">Amount</label>
+              <input type="number" id="feedingAmountInput" placeholder="1" min="0" step="0.25">
+            </div>
+            <div class="struct-field">
+              <label class="struct-field-label">Unit</label>
+              <select id="feedingUnitInput">
+                <option value="cups">cups</option>
+                <option value="oz">oz</option>
+                <option value="g">grams</option>
+                <option value="scoops">scoops</option>
+              </select>
+            </div>
+            <div class="struct-field struct-field-wide">
+              <label class="struct-field-label">How often</label>
+              <select id="feedingFreqInput">
+                <option value="1x daily">1x daily</option>
+                <option value="2x daily" selected>2x daily</option>
+                <option value="3x daily">3x daily</option>
+                <option value="4x daily">4x daily</option>
+                <option value="every other day">Every other day</option>
+                <option value="as needed">As needed</option>
+              </select>
+            </div>
+          </div>
+          <div class="struct-add-form-actions">
+            <button class="struct-mini-btn" id="feedingCancelBtn" type="button">Cancel</button>
+            <button class="struct-mini-btn primary" id="feedingSaveBtn" type="button">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDICATIONS -->
+      <div class="section-label">Medications</div>
+      <div class="struct-card" id="medsCard">
+        <div class="struct-empty" id="medsEmpty">No medications added yet.</div>
+        <button class="struct-add-row" id="medsAddBtn" type="button">
+          <span class="struct-add-icon">+</span>
+          <span>Add Medication</span>
+        </button>
+        <div class="struct-add-form" id="medsAddForm">
+          <div class="struct-add-form-grid">
+            <div class="struct-field struct-field-wide">
+              <label class="struct-field-label">Name</label>
+              <input type="text" id="medsNameInput" placeholder="e.g. Apoquel" autocomplete="off">
+            </div>
+            <div class="struct-field">
+              <label class="struct-field-label">Amount</label>
+              <input type="number" id="medsAmountInput" placeholder="16" min="0" step="0.25">
+            </div>
+            <div class="struct-field">
+              <label class="struct-field-label">Unit</label>
+              <select id="medsUnitInput">
+                <option value="mg">mg</option>
+                <option value="ml">ml</option>
+                <option value="tablet">tablet</option>
+                <option value="tablets">tablets</option>
+                <option value="drops">drops</option>
+                <option value="puffs">puffs</option>
+              </select>
+            </div>
+            <div class="struct-field struct-field-wide">
+              <label class="struct-field-label">How often</label>
+              <select id="medsFreqInput">
+                <option value="1x daily" selected>1x daily</option>
+                <option value="2x daily">2x daily</option>
+                <option value="3x daily">3x daily</option>
+                <option value="every other day">Every other day</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="as needed">As needed</option>
+              </select>
+            </div>
+          </div>
+          <div class="struct-add-form-actions">
+            <button class="struct-mini-btn" id="medsCancelBtn" type="button">Cancel</button>
+            <button class="struct-mini-btn primary" id="medsSaveBtn" type="button">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES FOR STAFF -->
+      <div class="section-label">Notes for staff</div>
+      <div class="textarea-card">
+        <div class="textarea-help">Anything else our trainers should know? Quirks, fears, favorite treats, body language cues…</div>
+        <textarea id="notesInput" class="dog-textarea" maxlength="800" placeholder="e.g. Hates skateboards. Loves freeze-dried liver. Yawns when overwhelmed — that's our cue to give space."></textarea>
+      </div>
+
+      <!-- VACCINATIONS -->
+      <div class="section-label">Vaccinations</div>
+      <div class="vacc-card" id="vaccCard">
+        <div class="vacc-empty" id="vaccEmpty">No vaccines added yet.</div>
+        <button class="vacc-add-row" id="vaccAddBtn" type="button">
+          <span class="vacc-add-icon">+</span>
+          <span>Add Vaccine</span>
+        </button>
+        <div class="vacc-add-form" id="vaccAddForm">
+          <div class="vacc-add-form-row">
+            <input type="text" id="vaccNameInput" placeholder="Vaccine name (e.g. Rabies)">
+          </div>
+          <div class="vacc-add-form-row">
+            <input type="date" id="vaccDateInput">
+          </div>
+          <div class="vacc-add-form-actions">
+            <button class="vacc-mini-btn" id="vaccCancelBtn" type="button">Cancel</button>
+            <button class="vacc-mini-btn primary" id="vaccSaveBtn" type="button">Add</button>
+          </div>
+        </div>
+      </div>
+      <p class="save-help">You can upload proof of vaccination from this dog's profile after creating it.</p>
+
+      <!-- SAVE -->
+      <button class="save-cta" id="saveDogBtn" type="button">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Add to my dogs</span>
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Birthday picker → derived age display
+(function() {
+  var pickWrap = document.getElementById('dogBirthdayPick');
+  var input = document.getElementById('dogBirthdayInput');
+  var valueEl = document.getElementById('dogBirthdayValue');
+  var ageEl = document.getElementById('dogAgeDisplay');
+  if (!pickWrap || !input || !valueEl || !ageEl) return;
+
+  // Birthday must be in the past, max today
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var dd = String(today.getDate()).padStart(2, '0');
+  input.max = yyyy + '-' + mm + '-' + dd;
+
+  pickWrap.addEventListener('click', function() {
+    if (typeof input.showPicker === 'function') {
+      try { input.showPicker(); return; } catch (e) {}
+    }
+    input.focus();
+    input.click();
+  });
+
+  function computeAge(birthDate) {
+    var now = new Date();
+    var months = (now.getFullYear() - birthDate.getFullYear()) * 12 +
+                 (now.getMonth() - birthDate.getMonth());
+    if (now.getDate() < birthDate.getDate()) months -= 1;
+    if (months < 0) months = 0;
+    if (months < 12) {
+      if (months === 0) return 'Less than 1 month old';
+      if (months === 1) return '1 month old';
+      return months + ' months old';
+    }
+    var years = Math.floor(months / 12);
+    var remMonths = months % 12;
+    if (years === 1 && remMonths === 0) return '1 year old';
+    if (remMonths === 0) return years + ' years old';
+    if (years === 1) return '1 year, ' + remMonths + ' month' + (remMonths > 1 ? 's' : '') + ' old';
+    return years + ' years, ' + remMonths + ' month' + (remMonths > 1 ? 's' : '') + ' old';
+  }
+
+  input.addEventListener('change', function() {
+    if (!input.value) {
+      valueEl.textContent = '';
+      pickWrap.classList.remove('has-value');
+      ageEl.style.display = 'none';
+      return;
+    }
+    var dt = new Date(input.value + 'T00:00:00');
+    valueEl.textContent = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    pickWrap.classList.add('has-value');
+    ageEl.textContent = computeAge(dt);
+    ageEl.style.display = '';
+  });
+})();
+
+// Goal chips (multi-select)
+(function() {
+  var chips = document.querySelectorAll('#goalChips .goal-chip');
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chip.classList.toggle('selected');
+    });
+  });
+})();
+
+// Structured rows (feeding + meds) — shared handler
+function initStructuredSection(config) {
+  var card = document.getElementById(config.cardId);
+  var emptyMsg = document.getElementById(config.emptyId);
+  var addBtn = document.getElementById(config.addBtnId);
+  var form = document.getElementById(config.formId);
+  var cancelBtn = document.getElementById(config.cancelBtnId);
+  var saveBtn = document.getElementById(config.saveBtnId);
+  if (!card || !addBtn || !form) return;
+
+  var fields = {};
+  config.fields.forEach(function(f) { fields[f.key] = document.getElementById(f.id); });
+
+  function openForm() {
+    form.classList.add('is-open');
+    addBtn.style.display = 'none';
+    setTimeout(function() {
+      var firstField = fields[config.fields[0].key];
+      if (firstField) firstField.focus();
+    }, 50);
+  }
+  function closeForm() {
+    form.classList.remove('is-open');
+    addBtn.style.display = '';
+    config.fields.forEach(function(f) {
+      var el = fields[f.key];
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+        el.value = f.defaultValue || el.querySelector('option').value;
+      } else {
+        el.value = '';
+      }
+    });
+  }
+  function updateEmptyState() {
+    var hasRows = !!card.querySelector('.struct-row');
+    if (emptyMsg) emptyMsg.style.display = hasRows ? 'none' : '';
+  }
+  function addRow() {
+    var values = {};
+    var missingRequired = false;
+    config.fields.forEach(function(f) {
+      var val = fields[f.key] ? fields[f.key].value.trim() : '';
+      values[f.key] = val;
+      if (f.required && !val) missingRequired = true;
+    });
+    if (missingRequired) {
+      var firstRequired = config.fields.find(function(f) { return f.required && !values[f.key]; });
+      if (firstRequired && fields[firstRequired.key]) fields[firstRequired.key].focus();
+      return;
+    }
+
+    var meta = config.formatMeta(values);
+
+    var row = document.createElement('div');
+    row.className = 'struct-row';
+    row.innerHTML =
+      '<div class="struct-row-icon ' + config.iconClass + '">' + config.iconSvg + '</div>' +
+      '<div class="struct-row-body">' +
+        '<div class="struct-row-name"></div>' +
+        '<div class="struct-row-meta"></div>' +
+      '</div>' +
+      '<button class="struct-row-delete" type="button" aria-label="Remove">' +
+        '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>' +
+      '</button>';
+    row.querySelector('.struct-row-name').textContent = values[config.nameKey];
+    row.querySelector('.struct-row-meta').textContent = meta;
+    row.querySelector('.struct-row-delete').addEventListener('click', function() {
+      row.remove();
+      updateEmptyState();
+    });
+    card.insertBefore(row, addBtn);
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    closeForm();
+  }
+
+  addBtn.addEventListener('click', openForm);
+  cancelBtn.addEventListener('click', closeForm);
+  saveBtn.addEventListener('click', addRow);
+  // Enter on first text input submits
+  var firstField = fields[config.fields[0].key];
+  if (firstField && firstField.tagName === 'INPUT') {
+    firstField.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); addRow(); }
+    });
+  }
+}
+
+initStructuredSection({
+  cardId: 'feedingCard',
+  emptyId: 'feedingEmpty',
+  addBtnId: 'feedingAddBtn',
+  formId: 'feedingAddForm',
+  cancelBtnId: 'feedingCancelBtn',
+  saveBtnId: 'feedingSaveBtn',
+  iconClass: 'feeding',
+  iconSvg: '<svg viewBox="0 0 24 24"><path d="M3 3h7l1 7H4z"/><path d="M11 10h9a1 1 0 011 1v9a1 1 0 01-1 1h-7a1 1 0 01-1-1z"/><path d="M16 14v3"/></svg>',
+  nameKey: 'brand',
+  fields: [
+    { key: 'brand',  id: 'feedingBrandInput',  required: true },
+    { key: 'amount', id: 'feedingAmountInput', required: true },
+    { key: 'unit',   id: 'feedingUnitInput',   defaultValue: 'cups' },
+    { key: 'freq',   id: 'feedingFreqInput',   defaultValue: '2x daily' }
+  ],
+  formatMeta: function(v) { return v.amount + ' ' + v.unit + ' · ' + v.freq; }
+});
+
+initStructuredSection({
+  cardId: 'medsCard',
+  emptyId: 'medsEmpty',
+  addBtnId: 'medsAddBtn',
+  formId: 'medsAddForm',
+  cancelBtnId: 'medsCancelBtn',
+  saveBtnId: 'medsSaveBtn',
+  iconClass: 'meds',
+  iconSvg: '<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/></svg>',
+  nameKey: 'name',
+  fields: [
+    { key: 'name',   id: 'medsNameInput',   required: true },
+    { key: 'amount', id: 'medsAmountInput', required: true },
+    { key: 'unit',   id: 'medsUnitInput',   defaultValue: 'mg' },
+    { key: 'freq',   id: 'medsFreqInput',   defaultValue: '1x daily' }
+  ],
+  formatMeta: function(v) { return v.amount + ' ' + v.unit + ' · ' + v.freq; }
+});
+
+// Photo upload (preview only)
+(function() {
+  var photoBtn = document.getElementById('heroPhotoBtn');
+  var photoInput = document.getElementById('heroPhotoInput');
+  var photoHelp = document.querySelector('.hero-photo-help');
+  if (!photoBtn || !photoInput) return;
+  photoBtn.addEventListener('click', function() { photoInput.click(); });
+  photoInput.addEventListener('change', function(e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      photoBtn.innerHTML = '<img src="' + ev.target.result + '" alt="Dog photo">';
+      if (photoHelp) photoHelp.textContent = 'Tap to change';
+    };
+    reader.readAsDataURL(file);
+  });
+})();
+
+// Vaccine inline add
+(function() {
+  var card = document.getElementById('vaccCard');
+  var emptyMsg = document.getElementById('vaccEmpty');
+  var addBtn = document.getElementById('vaccAddBtn');
+  var form = document.getElementById('vaccAddForm');
+  var nameInput = document.getElementById('vaccNameInput');
+  var dateInput = document.getElementById('vaccDateInput');
+  var cancelBtn = document.getElementById('vaccCancelBtn');
+  var saveBtn = document.getElementById('vaccSaveBtn');
+  if (!card || !addBtn || !form) return;
+
+  function openForm() {
+    form.classList.add('is-open');
+    addBtn.style.display = 'none';
+    setTimeout(function() { if (nameInput) nameInput.focus(); }, 50);
+  }
+  function closeForm() {
+    form.classList.remove('is-open');
+    addBtn.style.display = '';
+    if (nameInput) nameInput.value = '';
+    if (dateInput) dateInput.value = '';
+  }
+  function formatDate(yyyymmdd) {
+    if (!yyyymmdd) return '';
+    var d = new Date(yyyymmdd + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+  function updateEmptyState() {
+    var hasRows = !!card.querySelector('.vacc-row');
+    if (emptyMsg) emptyMsg.style.display = hasRows ? 'none' : '';
+  }
+  function addVaccine() {
+    var name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    var dateLabel = formatDate(dateInput.value) || 'No date';
+
+    var row = document.createElement('div');
+    row.className = 'vacc-row';
+    row.innerHTML =
+      '<div class="vacc-icon">' +
+        '<svg viewBox="0 0 24 24"><path d="M12 2v6m0 0l-3-3m3 3l3-3"/><path d="M5 12h14"/><rect x="5" y="12" width="14" height="9" rx="2"/></svg>' +
+      '</div>' +
+      '<div class="vacc-body">' +
+        '<div class="vacc-name"></div>' +
+        '<div class="vacc-meta"></div>' +
+      '</div>' +
+      '<button class="vacc-delete" type="button" aria-label="Remove vaccine">' +
+        '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>' +
+      '</button>';
+    row.querySelector('.vacc-name').textContent = name;
+    row.querySelector('.vacc-meta').textContent = dateLabel;
+    row.querySelector('.vacc-delete').addEventListener('click', function() {
+      row.remove();
+      updateEmptyState();
+    });
+    card.insertBefore(row, addBtn);
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    closeForm();
+  }
+  addBtn.addEventListener('click', openForm);
+  cancelBtn.addEventListener('click', closeForm);
+  saveBtn.addEventListener('click', addVaccine);
+  if (nameInput) nameInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); addVaccine(); }
+  });
+})();
+
+// Save CTA (mockup → bounce back to account)
+(function() {
+  var btn = document.getElementById('saveDogBtn');
+  if (!btn) return;
+  btn.addEventListener('click', function() {
+    btn.style.transform = 'scale(0.97)';
+    setTimeout(function() { location.href = 'account.html'; }, 220);
+  });
+})();
+</script>
+</body>
+</html>
