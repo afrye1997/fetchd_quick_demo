@@ -1527,6 +1527,183 @@ body {
 }
 
 
+
+/* ═══════════════════════════════════════════════════════════
+   AFTER-SCHOOL TRAINING OPT-IN VIEW
+   ═══════════════════════════════════════════════════════════ */
+.ast-back-row {
+  padding: 10px 12px 0;
+}
+.ast-back-btn {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--navy);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.ast-back-btn:hover { background: rgba(33, 53, 106, 0.08); }
+.ast-back-btn:active { transform: scale(0.94); }
+.ast-back-btn svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Per-dog cards */
+.ast-cards {
+  display: flex; flex-direction: column;
+  gap: 12px;
+  padding: 0 18px;
+}
+.ast-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.ast-card-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.ast-card-photo {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+}
+.ast-card-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ast-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.ast-card-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+  margin-top: 3px;
+}
+
+/* Chip row — wraps */
+.ast-chips {
+  display: flex; flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Each chip is a button (Aria role: checkbox via aria-checked) */
+.ast-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 12px 7px 8px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, border-color 0.18s, transform 0.08s, color 0.18s;
+}
+.ast-chip:active { transform: scale(0.97); }
+.ast-chip.checked {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+
+/* Round check indicator inside chip */
+.ast-check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s, border-color 0.18s;
+}
+.ast-chip.checked .ast-check {
+  background: white;
+  border-color: white;
+}
+.ast-check svg {
+  width: 10px; height: 10px;
+  stroke: var(--navy); fill: none;
+  stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.ast-chip.checked .ast-check svg { opacity: 1; }
+
+/* Empty state — only shown if a dog has school bookings but somehow none rendered */
+.ast-empty {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  font-style: italic;
+}
+
+
+
+/* ─── Confirmation chip: after-school training indicator ─── */
+.review-chip.has-ast {
+  padding-right: 8px;
+}
+.ast-chip-divider {
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  background: currentColor;
+  opacity: 0.35;
+  margin: 0 5px 0 6px;
+  vertical-align: middle;
+}
+.ast-chip-icon {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  stroke: none;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Per-card footnote */
+.ast-footnote {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+.ast-footnote .ast-chip-icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--navy);
+  opacity: 0.65;
+}
+
+
 </style>
 </head>
 <body>
@@ -1628,10 +1805,30 @@ body {
 
   <!-- Book CTA -->
   <div class="book-cta">
-    <button class="book-btn" id="bookBtn" onclick="goToConfirmed()">Let's Book</button>
+    <button class="book-btn" id="bookBtn" onclick="goToAfterSchool()">Let's Book</button>
   </div>
 
 </div><!-- /viewBooking -->
+
+<!-- AFTER-SCHOOL TRAINING OPT-IN VIEW -->
+<div class="view" id="viewAfterSchool">
+
+  <div class="ast-back-row">
+    <button class="ast-back-btn" onclick="backToBooking()" aria-label="Back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+  </div>
+
+  <div class="page-title" style="padding: 4px 18px 6px;">Add <em>after-school training?</em></div>
+  <div class="page-subtitle" style="padding: 0 18px 18px;">Pick which school days you'd like to add 30 min of one-on-one training to. <strong>No extra charge</strong> — it's bundled with the school day.</div>
+
+  <div id="astCards"></div>
+
+  <div class="book-cta">
+    <button class="book-btn" onclick="goToConfirmedFromAfterSchool()">Continue</button>
+  </div>
+
+</div><!-- /viewAfterSchool -->
 
 <!-- CONFIRMED VIEW -->
 <div class="view" id="viewConfirmed">
@@ -1858,6 +2055,8 @@ let selectedDogIds = ['waffles', 'lola', 'brodie']; // all 3 selected by default
 let bookings = { waffles: [], lola: [], brodie: [] };
 // Pay-as-you-go state: { "dogId:type" : true } — user has accepted negative credits for this dog+type
 let payg = new Set();
+// After-school training opt-in: Set of "dogId:month:day" keys for school days the user opted into
+let afterSchool = new Set();
 
 // CAPACITY: faked capacity data by day, per month
 // Each day has school capacity and daycare capacity — max # of dogs we can take
@@ -2649,6 +2848,99 @@ function closeDogPicker() {
 // =============================================================
 // CONFIRMED
 // =============================================================
+// ─── AFTER-SCHOOL TRAINING OPT-IN ───────────────────────────
+function goToAfterSchool() {
+  // Skip the screen entirely if no school bookings exist
+  const hasSchoolBookings = dogs.some(d =>
+    bookings[d.id].some(b => b.type === 'school')
+  );
+  if (!hasSchoolBookings) {
+    goToConfirmed();
+    return;
+  }
+  renderAfterSchoolCards();
+  document.getElementById('viewBooking').classList.remove('active');
+  document.getElementById('viewAfterSchool').classList.add('active');
+  // Scroll to top of new view
+  const screen = document.querySelector('.device-screen-inner');
+  if (screen) screen.scrollTop = 0;
+}
+
+function backToBooking() {
+  document.getElementById('viewAfterSchool').classList.remove('active');
+  document.getElementById('viewBooking').classList.add('active');
+}
+
+function renderAfterSchoolCards() {
+  const monthOrder = { april: 0, may: 1 };
+  const container = document.getElementById('astCards');
+
+  // Only show dogs that have at least one school booking
+  const dogsWithSchool = dogs.filter(d =>
+    bookings[d.id].some(b => b.type === 'school')
+  );
+
+  container.className = 'ast-cards';
+  container.innerHTML = dogsWithSchool.map(d => {
+    const schoolDays = bookings[d.id]
+      .filter(b => b.type === 'school')
+      .slice()
+      .sort((a, x) => {
+        const mo = monthOrder[a.month] - monthOrder[x.month];
+        return mo !== 0 ? mo : a.day - x.day;
+      });
+
+    const chips = schoolDays.map(b => {
+      const key = `${d.id}:${b.month}:${b.day}`;
+      const checked = afterSchool.has(key);
+      const monthLabel = b.month === 'may' ? 'May' : 'Apr';
+      return `
+        <button class="ast-chip ${checked ? 'checked' : ''}" type="button"
+          role="checkbox" aria-checked="${checked}"
+          onclick="toggleAfterSchool('${d.id}', '${b.month}', ${b.day})">
+          <span class="ast-check">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          ${monthLabel} ${b.day}
+        </button>
+      `;
+    }).join('');
+
+    const photoSrc = d.photo
+      ? `<img src="data:image/jpeg;base64,${d.photo}" alt="${d.name}">`
+      : '';
+    const dayCount = schoolDays.length;
+
+    return `
+      <div class="ast-card">
+        <div class="ast-card-head">
+          <div class="ast-card-photo">${photoSrc}</div>
+          <div>
+            <div class="ast-card-name">${d.name}</div>
+            <div class="ast-card-sub">${dayCount} school day${dayCount !== 1 ? 's' : ''}</div>
+          </div>
+        </div>
+        <div class="ast-chips">${chips}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleAfterSchool(dogId, month, day) {
+  const key = `${dogId}:${month}:${day}`;
+  if (afterSchool.has(key)) {
+    afterSchool.delete(key);
+  } else {
+    afterSchool.add(key);
+  }
+  renderAfterSchoolCards();
+}
+
+function goToConfirmedFromAfterSchool() {
+  document.getElementById('viewAfterSchool').classList.remove('active');
+  goToConfirmed();
+}
+
 function goToConfirmed() {
   const totalSessions = dogs.reduce((sum, d) => sum + bookings[d.id].length, 0);
   const dogCount = dogs.filter(d => bookings[d.id].length > 0).length;
@@ -2662,7 +2954,33 @@ function goToConfirmed() {
       const mo = monthOrder[a.month] - monthOrder[x.month];
       return mo !== 0 ? mo : a.day - x.day;
     });
-    const chips = b.map(x => `<span class="review-chip ${x.type}">${x.month === 'may' ? 'May' : 'Apr'} ${x.day}</span>`).join('');
+    const trainingIconSvg =
+      `<svg viewBox="0 0 24 24" class="ast-chip-icon" aria-hidden="true">` +
+        `<circle cx="5" cy="8" r="3"/>` +
+        `<circle cx="5" cy="14" r="3"/>` +
+        `<circle cx="19" cy="8" r="3"/>` +
+        `<circle cx="19" cy="14" r="3"/>` +
+        `<rect x="5" y="9" width="14" height="4"/>` +
+      `</svg>`;
+    const chips = b.map(x => {
+      const key = `${d.id}:${x.month}:${x.day}`;
+      const hasAst = x.type === 'school' && afterSchool.has(key);
+      const dateLabel = `${x.month === 'may' ? 'May' : 'Apr'} ${x.day}`;
+      const ext = hasAst
+        ? `<span class="ast-chip-divider" aria-hidden="true"></span>${trainingIconSvg}`
+        : '';
+      const aria = hasAst ? ` aria-label="${dateLabel} with after-school training"` : '';
+      return `<span class="review-chip ${x.type}${hasAst ? ' has-ast' : ''}"${aria}>${dateLabel}${ext}</span>`;
+    }).join('');
+
+    // Count after-school days for this dog (for the footnote)
+    const astCount = b.filter(x =>
+      x.type === 'school' && afterSchool.has(`${d.id}:${x.month}:${x.day}`)
+    ).length;
+    const footnote = astCount > 0
+      ? `<div class="ast-footnote">${trainingIconSvg}<span>${astCount} day${astCount !== 1 ? 's' : ''} with after-school training</span></div>`
+      : '';
+
     return `
       <div class="review-card">
         <div class="review-card-head">
@@ -2675,11 +2993,13 @@ function goToConfirmed() {
           </div>
         </div>
         <div class="review-chips">${chips}</div>
+        ${footnote}
       </div>
     `;
   }).join('');
 
   document.getElementById('viewBooking').classList.remove('active');
+  document.getElementById('viewAfterSchool').classList.remove('active');
   document.getElementById('viewConfirmed').classList.add('active');
 }
 
@@ -2690,9 +3010,11 @@ function resetToBooking() {
   selectedWeekdays = new Set();
   payg = new Set();
   paygCard = {};
+  afterSchool = new Set();
   document.querySelectorAll('.weekday-pill').forEach(p => p.classList.remove('active'));
   document.getElementById('recurApply').disabled = true;
   document.getElementById('viewConfirmed').classList.remove('active');
+  document.getElementById('viewAfterSchool').classList.remove('active');
   document.getElementById('viewBooking').classList.add('active');
   renderDogs();
   renderCalendar();
