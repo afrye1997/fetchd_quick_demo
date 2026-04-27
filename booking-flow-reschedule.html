@@ -1472,6 +1472,905 @@ body {
 .snow-modal-cta:hover { background: var(--navy-mid, #2d4a8a); }
 
 
+
+/* ═══════════════════════════════════════════════════════════
+   RESCHEDULE FLOW — edit-mode jiggle for sessions + credits
+   ═══════════════════════════════════════════════════════════ */
+.view { display: none; }
+.view.active { display: block; }
+
+.rs-back-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px 4px;
+}
+.rs-back-btn {
+  width: 36px; height: 36px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--navy);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, transform 0.08s;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+.rs-back-btn:active { transform: scale(0.94); }
+.rs-back-btn svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.rs-step-pill {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+/* Edit / Done button (top-right of header) */
+.rs-edit-btn {
+  background: transparent;
+  border: none;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  padding: 6px 4px;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.rs-edit-btn:active { opacity: 0.55; }
+.rs-edit-btn[aria-pressed="true"] {
+  font-weight: 700;
+}
+/* Hide Edit/Done on confirm + done views (set via JS) */
+.rs-edit-btn.hidden { display: none; }
+
+/* After-school bone icon embedded in chip */
+.rs-chip-ast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3px;
+}
+.rs-chip-ast svg {
+  width: 14px; height: 14px;
+  fill: var(--navy);
+  opacity: 0.85;
+}
+/* Faded bone for removed chips */
+.rs-chip.removed .rs-chip-ast svg { opacity: 0.3; }
+
+/* In edit mode, school chips show a subtle hover/press state to telegraph tappability */
+.rs-jiggling .rs-chip:not(.daycare):not(.removed):active {
+  background: rgba(33, 53, 106, 0.04);
+}
+/* Daycare chips have no body-tap action — keep them looking non-interactive */
+.rs-jiggling .rs-chip.daycare {
+  cursor: default;
+}
+
+.rs-header {
+  padding: 16px 22px 18px;
+}
+.rs-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+.rs-title em { font-style: italic; }
+.rs-sub {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.rs-section-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 10px;
+}
+
+/* Dog cards w/ jiggling chips */
+.rs-dogs {
+  padding: 0 18px;
+  display: flex; flex-direction: column;
+  gap: 12px;
+}
+.rs-dog-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px 12px;
+  box-shadow: var(--shadow-sm);
+}
+.rs-dog-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rs-dog-card-photo {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+}
+.rs-dog-card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rs-dog-card-name {
+  flex: 1;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+.rs-dog-card-count {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.rs-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+@media (max-width: 360px) {
+  .rs-chip-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Date chip — jiggling in edit mode, with minus button */
+.rs-chip {
+  position: relative;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 6px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s, border-color 0.18s;
+  overflow: visible;
+}
+.rs-chip-day {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+}
+.rs-chip-date {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+}
+/* Bottom color bar to indicate session type */
+.rs-chip::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  border-radius: 0 0 8px 8px;
+  background: var(--navy);
+}
+.rs-chip.daycare::after { background: var(--accent-gold, #d4a64a); }
+
+/* Removed state — strikethrough, faded */
+.rs-chip.removed {
+  opacity: 0.42;
+  text-decoration: line-through;
+  text-decoration-color: rgba(224, 69, 69, 0.7);
+  text-decoration-thickness: 2px;
+  border-style: dashed;
+  border-color: rgba(224, 69, 69, 0.45);
+}
+.rs-chip.removed::after { background: var(--border); }
+
+/* Added state — soft tint to distinguish from already-existing */
+.rs-chip.added {
+  background: rgba(74, 138, 106, 0.06);
+  border-color: rgba(74, 138, 106, 0.4);
+}
+
+/* Apple-style jiggle */
+@keyframes rs-jiggle-1 {
+  0%, 100% { transform: rotate(-1.1deg); }
+  50%      { transform: rotate(1deg); }
+}
+@keyframes rs-jiggle-2 {
+  0%, 100% { transform: rotate(0.9deg); }
+  50%      { transform: rotate(-1.2deg); }
+}
+.rs-jiggling .rs-chip {
+  animation: rs-jiggle-1 0.32s ease-in-out infinite;
+  transform-origin: center;
+}
+/* Stagger every other chip with the alt animation, so it doesn't look mechanical */
+.rs-jiggling .rs-chip:nth-child(2n) {
+  animation-name: rs-jiggle-2;
+  animation-duration: 0.30s;
+}
+.rs-jiggling .rs-chip:nth-child(3n) {
+  animation-duration: 0.34s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rs-jiggling .rs-chip { animation: none; }
+}
+
+/* The minus button on each jiggling chip */
+.rs-chip-minus {
+  position: absolute;
+  top: -7px; right: -7px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #e04545;
+  border: 2px solid white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(224, 69, 69, 0.36);
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: opacity 0.18s, transform 0.18s;
+}
+/* Show minus only inside the rs-jiggling container (edit mode) */
+.rs-jiggling .rs-chip-minus,
+.rs-jiggling .rs-credit-minus {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+.rs-credit-minus {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.rs-chip-minus svg {
+  width: 12px; height: 12px;
+  stroke: white; stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+}
+.rs-chip-minus:active { transform: scale(0.88); }
+
+/* Restore (undo) button shown on .removed chips */
+.rs-chip.removed .rs-chip-minus {
+  background: var(--accent-green, #4a8a6a);
+  box-shadow: 0 2px 8px rgba(74, 138, 106, 0.4);
+}
+.rs-chip.removed .rs-chip-minus svg {
+  /* Convert minus → plus visually */
+  transform: rotate(0deg);
+}
+.rs-chip.removed .rs-chip-minus::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 12px; height: 3px;
+  background: white;
+  border-radius: 1.5px;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Add-more section */
+.rs-add-section {
+  padding: 24px 22px 8px;
+  background: rgba(255, 255, 255, 0.5);
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.rs-add-hint {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin: -6px 0 14px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+}
+
+.rs-dog-pickers {
+  display: flex; gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.rs-dog-pick {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px 6px 6px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.rs-dog-pick.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+.rs-dog-pick-photo {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg);
+}
+.rs-dog-pick-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.rs-type-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+.rs-type-btn {
+  padding: 7px 14px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  letter-spacing: -0.005em;
+  transition: background 0.18s, color 0.18s;
+}
+.rs-type-btn.active {
+  background: white;
+  color: var(--navy);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Mini calendar */
+.rs-cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.rs-cal-day-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 0 6px;
+}
+.rs-cal-day {
+  aspect-ratio: 1 / 1;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  position: relative;
+  padding: 0;
+}
+.rs-cal-day-num { line-height: 1; }
+.rs-cal-day-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  display: block;
+}
+.rs-cal-day-dot.green { background: var(--accent-green, #4a8a6a); }
+.rs-cal-day-dot.amber { background: #d4a64a; }
+.rs-cal-day-dot.red   { background: #e04545; }
+
+.rs-cal-day.empty { background: transparent; border: none; cursor: default; }
+.rs-cal-day.past { color: var(--border); cursor: not-allowed; background: transparent; border-color: transparent; }
+.rs-cal-day.no-availability {
+  color: var(--muted);
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: rgba(224, 69, 69, 0.04);
+  border-color: rgba(224, 69, 69, 0.16);
+}
+.rs-cal-day.no-availability:hover { border-color: rgba(224, 69, 69, 0.16); }
+.rs-cal-day:not(.empty):not(.past):not(.no-availability):not(.booked):hover {
+  border-color: var(--navy);
+  background: var(--bg);
+}
+
+.rs-cal-day.booked {
+  background: rgba(33, 53, 106, 0.06);
+  border-color: rgba(33, 53, 106, 0.18);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.rs-cal-day.booked.daycare { background: rgba(212, 166, 74, 0.1); border-color: rgba(212, 166, 74, 0.3); }
+/* On booked days, replace the dot with a tiny indicator at the bottom (existing pattern) */
+.rs-cal-day.booked .rs-cal-day-dot { visibility: hidden; }
+.rs-cal-day.booked::after {
+  content: ''; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--navy);
+}
+.rs-cal-day.booked.daycare::after { background: var(--accent-gold, #d4a64a); }
+
+/* Month header row above the grid */
+.rs-cal-month-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 10px;
+}
+.rs-cal-month-name {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.rs-cal-nav {
+  display: flex;
+  gap: 6px;
+}
+.rs-cal-nav-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  transition: background 0.18s;
+}
+.rs-cal-nav-btn:not(:disabled):hover { background: var(--bg); }
+.rs-cal-nav-btn svg {
+  width: 10px; height: 10px;
+  stroke: var(--navy); stroke-width: 1.6;
+  fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Capacity legend below the calendar */
+.rs-cal-legend {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 8px 12px 14px;
+  flex-wrap: wrap;
+}
+.rs-cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: -0.003em;
+}
+.rs-cal-legend-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+
+/* CTAs */
+.rs-cta-row {
+  padding: 14px 22px 8px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.rs-cta {
+  width: 100%;
+  background: linear-gradient(135deg, #21356A, #2d4a8a);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.08s, box-shadow 0.18s;
+  box-shadow: 0 8px 22px rgba(33, 53, 106, 0.22);
+}
+.rs-cta:active { transform: scale(0.99); }
+.rs-cta-text {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  padding: 8px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.rs-cta-text:hover { color: var(--navy); }
+
+/* Credits view */
+.rs-credits-list {
+  padding: 0 22px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.rs-credit-card {
+  position: relative;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: opacity 0.2s, border-style 0.18s;
+}
+.rs-credit-card.removed {
+  opacity: 0.45;
+  border-style: dashed;
+  border-color: rgba(224, 69, 69, 0.4);
+  text-decoration: line-through;
+  text-decoration-color: rgba(224, 69, 69, 0.6);
+  text-decoration-thickness: 2px;
+}
+.rs-credit-card.added {
+  background: rgba(74, 138, 106, 0.06);
+  border-color: rgba(74, 138, 106, 0.4);
+}
+.rs-credit-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(33, 53, 106, 0.08);
+  color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.rs-credit-icon.daycare {
+  background: rgba(212, 166, 74, 0.16);
+  color: #b88a30;
+}
+.rs-credit-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rs-credit-text { flex: 1; min-width: 0; }
+.rs-credit-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+.rs-credit-sub {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.rs-credit-price {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* The credit card minus button — same visual language as chip minus */
+.rs-credit-minus {
+  position: absolute;
+  top: -7px; right: -7px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #e04545;
+  border: 2px solid white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(224, 69, 69, 0.36);
+  padding: 0;
+}
+.rs-credit-minus svg {
+  width: 12px; height: 12px;
+  stroke: white; stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+}
+.rs-credit-minus:active { transform: scale(0.88); }
+.rs-credit-card.removed .rs-credit-minus {
+  background: var(--accent-green, #4a8a6a);
+  box-shadow: 0 2px 8px rgba(74, 138, 106, 0.4);
+}
+.rs-credit-card.removed .rs-credit-minus::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 12px; height: 3px;
+  background: white;
+  border-radius: 1.5px;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+/* Jiggle on the credit cards too */
+.rs-jiggling .rs-credit-card {
+  animation: rs-jiggle-1 0.34s ease-in-out infinite;
+  transform-origin: center;
+}
+.rs-jiggling .rs-credit-card:nth-child(2n) {
+  animation-name: rs-jiggle-2;
+  animation-duration: 0.31s;
+}
+
+/* "Add a package" options — non-jiggling cards w/ + button */
+.rs-credits-options {
+  padding: 0 22px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rs-credit-add {
+  background: white;
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, border-color 0.18s;
+}
+.rs-credit-add:hover { border-color: var(--navy); background: rgba(33, 53, 106, 0.02); }
+.rs-credit-add-plus {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.rs-credit-add-plus::before, .rs-credit-add-plus::after {
+  content: ''; position: absolute; background: white; border-radius: 1px;
+}
+.rs-credit-add-plus { position: relative; }
+.rs-credit-add-plus::before { width: 10px; height: 2px; }
+.rs-credit-add-plus::after  { width: 2px; height: 10px; }
+
+/* PAYG card (toggle to switch to no-credits) */
+.rs-payg-card {
+  margin: 0 22px 10px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rs-payg-card.active {
+  background: rgba(33, 53, 106, 0.04);
+  border-color: var(--navy);
+}
+.rs-payg-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(33, 53, 106, 0.08);
+  color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.rs-payg-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rs-payg-text { flex: 1; min-width: 0; }
+.rs-payg-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.1;
+}
+.rs-payg-desc {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}
+/* iOS-style toggle */
+.rs-payg-toggle {
+  width: 44px; height: 26px;
+  background: var(--border);
+  border: none;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.22s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.rs-payg-toggle.on { background: var(--accent-green, #4a8a6a); }
+.rs-toggle-knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 22px; height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.22s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.rs-payg-toggle.on .rs-toggle-knob { transform: translateX(18px); }
+
+/* Diff view */
+.rs-diff {
+  padding: 0 22px;
+  display: flex; flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.rs-diff-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.rs-diff-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rs-diff-header-photo {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+}
+.rs-diff-header-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rs-diff-header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+}
+.rs-diff-line {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.5;
+  padding: 4px 0;
+}
+.rs-diff-line strong {
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10px;
+  margin-right: 6px;
+}
+.rs-diff-line.removed { color: #e04545; }
+.rs-diff-line.added   { color: var(--accent-green, #4a8a6a); }
+
+.rs-diff-empty {
+  text-align: center;
+  padding: 50px 30px;
+}
+.rs-diff-empty-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(33, 53, 106, 0.06);
+  margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.rs-diff-empty-icon svg {
+  width: 26px; height: 26px;
+  stroke: var(--muted); fill: none; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.rs-diff-empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500;
+  color: var(--navy); font-style: italic;
+  margin-bottom: 4px;
+}
+.rs-diff-empty-desc {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: var(--muted);
+}
+
+/* Done hero */
+.rs-done-hero {
+  text-align: center;
+  padding: 36px 24px 22px;
+}
+.rs-done-check {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: rgba(74, 138, 106, 0.15);
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  animation: rs-pop-in 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+.rs-done-check svg {
+  width: 34px; height: 34px;
+  stroke: var(--accent-green, #4a8a6a);
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+@keyframes rs-pop-in {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.rs-done-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+  margin-bottom: 8px;
+}
+.rs-done-title em { font-style: italic; }
+.rs-done-sub {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+
 </style>
 </head>
 <body>
@@ -1496,241 +2395,156 @@ body {
   </button>
 </div>
 
-<!-- YOUR DOGS — 3-circle story row -->
-<div class="dogs-section">
-  <div class="dogs-label">Your dogs <span class="dogs-label-hint">· tap to view profile</span></div>
-  <div class="dogs-row">
-
-    <a href="dog-profile-waffles.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Waffles">
-        </div>
-      </div>
-      <div class="dog-story-name">Waffles</div>
-    </a>
-
-    <a href="dog-profile-lola.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Lola">
-        </div>
-      </div>
-      <div class="dog-story-name">Lola</div>
-    </a>
-
-    <a href="dog-profile-brodie.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Brodie">
-        </div>
-      </div>
-      <div class="dog-story-name">Brodie</div>
-    </a>
-
-    <a href="dog-profile-waffles.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Waffles">
-        </div>
-      </div>
-      <div class="dog-story-name">Waffles</div>
-    </a>
-
-    <a href="dog-profile-lola.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Lola">
-        </div>
-      </div>
-      <div class="dog-story-name">Lola</div>
-    </a>
-
-    <a href="dog-profile-brodie.html" class="dog-story" style="text-decoration: none; color: inherit;">
-      <div class="dog-story-ring">
-        <div class="dog-story-photo">
-          <img src="data:image/jpeg;base64,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" alt="Brodie">
-        </div>
-      </div>
-      <div class="dog-story-name">Brodie</div>
-    </a>
-  
-  </div>
-  <div class="dogs-scroll-hint">scroll <span class="dogs-scroll-hint-arrow">→</span></div>
-</div>
-
-<!-- THIS WEEK AT NWA — announcements row -->
-<div class="announcements">
-  <div class="announcements-label">This week at NWA School for Dogs</div>
-  <div class="announcements-scroll">
-
-    <!-- URGENT: Closure due to snow -->
-    <div class="announcement-card urgent" onclick="openSnowModal()">
-      <div class="announcement-tag-row">
-        <span class="announcement-tag urgent">Closed Today</span>
-        <span class="announcement-date">Apr 22</span>
-      </div>
-      <div class="announcement-title-row">
-        <span class="warn-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        </span>
-        <div class="announcement-title">School Closed Today Due to Snow Storm</div>
-      </div>
-      <div class="announcement-footer">
-        <span class="announcement-link">Read more</span>
-        <span class="announcement-arrow">›</span>
-      </div>
-    </div>
-
-    <!-- Team: Rachel joining -->
-    <div class="announcement-card team" onclick="location.href='meet-rachel.html'">
-      <div class="announcement-tag-row">
-        <span class="announcement-tag team">Team</span>
-        <span class="announcement-date">Apr 22</span>
-      </div>
-      <div class="announcement-title">Rachel joins the <em>team</em> — meet her!</div>
-      <div class="announcement-footer">
-        <span class="announcement-link">Read more</span>
-        <span class="announcement-arrow">›</span>
-      </div>
-    </div>
-
-    <!-- Class: Spring Puppy signups -->
-    <div class="announcement-card class" onclick="location.href='puppy-class.html'">
-      <div class="announcement-tag-row">
-        <span class="announcement-tag class">Classes</span>
-        <span class="announcement-date">Opens May 1</span>
-      </div>
-      <div class="announcement-title">Spring <em>Puppy Class</em> signups open</div>
-      <div class="announcement-footer">
-        <span class="announcement-link">Sign up</span>
-        <span class="announcement-arrow">›</span>
-      </div>
-    </div>
-
-    <!-- Event: Yappy hour -->
-    <div class="announcement-card event" onclick="location.href='yappy-hour.html'">
-      <div class="announcement-tag-row">
-        <span class="announcement-tag event">Event</span>
-        <span class="announcement-date">Sat, May 17</span>
-      </div>
-      <div class="announcement-title"><em>Yappy Hour</em> social — all pups welcome</div>
-      <div class="announcement-footer">
-        <span class="announcement-link">RSVP</span>
-        <span class="announcement-arrow">›</span>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- UP NEXT: day-centric, multi-dog aware -->
-<div class="up-next">
-  <div class="section-label">Up Next</div>
-
-  <div class="session-card">
-    <div class="session-day-strip">
-      <div class="session-when">
-        <span class="session-when-dot"></span>
-        Tomorrow · Wednesday April 23
-      </div>
-      <div class="session-day-title">3 <em>sessions</em> tomorrow</div>
-      <div class="session-day-count">Waffles, Lola &amp; Brodie</div>
-    </div>
-
-    <div class="session-dogs">
-      <!-- Waffles -->
-      <div class="session-dog-row">
-        <div class="session-dog-avatar">
-          <img src="data:image/jpeg;base64,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" alt="Waffles">
-        </div>
-        <div class="session-dog-info">
-          <div class="session-dog-name">Waffles</div>
-          <div class="session-dog-detail">Day School · <strong>w/ Rachel</strong></div>
-        </div>
-        <div>
-          <div class="session-dog-time">7:30 AM</div>
-          <div class="session-dog-time-lbl">Drop off</div>
-        </div>
-      </div>
-
-      <!-- Lola -->
-      <div class="session-dog-row">
-        <div class="session-dog-avatar">
-          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABYAFgDASIAAhEBAxEB/8QAHAAAAgMAAwEAAAAAAAAAAAAABAUABgcBAgMI/8QANxAAAgECBAUCBQMDAgcAAAAAAQIDBBEABRIhBhMxQVEiYQcUMnGBFZGhI7HRJEIzNFOCweHx/8QAGQEAAgMBAAAAAAAAAAAAAAAAAwQBAgUA/8QAJREAAgIBBAICAgMAAAAAAAAAAQIAAxEEEiExE0EiYRRRBTJx/9oADAMBAAIRAxEAPwBSuYRZekdKQl50DWCgaj0JwummWVWip5RDGqEMStxbzfvbAmYZqRDG9YIGcemMaABp7WP5xxkgqK2YsvKAjJ0ajsbdiPfCQE0mMIoVgSkeoghVdAPrcaQ2/wBXtgA5glXWGYu55YuCejHxg2pasrKHkOymWU3bske/nBnDnBvEOb1AldaWGl1el27rftbc4tkSuIomkllqo5JIxyiBqO+oX27dcGUBKwllkYNGRrUdbdsaBD8NzoEH6toP1AfLjY9t73wuq/hzmOVss1FUxVIU3cX0l9/fbHcCRyZUKjNl/U1icyy3I1Rld1vg2iSSjjrIjBSVVNLuCy2MfvgDNKTMF4jfnQgCw5kJB17d/cYJgoKqP/Tx6QpP1O19j0/+YItgXmVKFuJ50tJIKYxmpd0Ykqt9lXwPIwIzMZEleRwCSRfa9u2GjVVNQDlVFMzOraQ+kjfzftgFpVMmkSvyXY+gqCV82wP/ACXz+4Q1as8bzSU8UjrGT2ufviYXLGlNHpijEqO4AIAuF8Hv+MTEgp7nc+obHl0hk5L2aK5aRnAVfPXqMOY8ryyh0rG80lQfWTrAAv2Awrgng5vKqwqwxNqRWBADd233OG+SU1PmNTJMGuCbvMwHpHcD8Yj4gcyMljGWR5RE7nMMwRRTI39OK1g58nF4ySqgniMmtY1/2gm22KfnmZ0VNlMkzyLHBCNCDsO2MrqPiXE9S8uUrWSQRECR5Cui17BlF9QF9r2thWrfc5K8xmwLWg3HE+kaqrUeqIk6fqtiv53nNTFC0muMRBtTA9SPGF/AOeSZzStUTAqrWVdQ6kDf++GOe5FBnGUT0ssjpJYhWQ7+1xg3cFjbEqZ7wrmrLQS5rTCusNF3AlW/b3GKlnTfKZq9DPTloztHKrHcDsfe2E9N8NcwGfU0krU7UUFQ0urlATdiQXAva4737+cPs3y2dsxlkrXcU6Kp0qtzICLgj39vbF7NqEbOQZCKXB3cGKa2vV1hp6YMyn1MCoYDxc+bDHrU5fBMks0gSN4l9JUgagfbAeYR5fWVcZo4pKdFTqzaBtt0xyyTxAoWQQggX+onfZvticyCAPucUtC6Ubz0lAeSkpDO776hbfrf84mGNHWw5dlskEcSSpM5LFr6ifAviYqc/U4CMaZ0p8saFqKglCiwLI19/N98ATVk8eUytTKEAcHloOn/AKwZmU8XL1c/UixlydIJ798VfLM2pv0LM6qWT1cllQMegFv84DefkFh9MvBae8sEmf5U9TO3Mp025R6Od73whyfg3h+SpEiF2cH/AIQJAXe+GfA2YM3C8UshIR3Ykf8AccOMuipFqzWp6XuQRfrhSq40MQI3ZWLgCZZeGj8sRTxuU5I2A84Liz+agrVGZZ3CiJ0QxaGYX77kn9hhRHVOkIkgC8y+v1d++MMzfijNkzdnIM0rTHnl1NyL9b+MaOiqS4kseJn62xqsBe59T0maZRnMFQcsropZNF5EAKsvvYi9vf3xXeMp6aOu+Tma0dVl5Rd99SN/cBv2vjHvhvnmczfEPK6ulkRqAzJBLDqANmJDC3U3F8azxTlT1nEFPFGy3p5JNIJsCLD/ABgmtp8RBTowWjt8uQ/qVShpoG4daBXSWaFzqSaxK7ekA9x3wJk8wrpJqV2j13UR6CGS2xIP83wb8rPR181NPTEhGJ1WAtt3J7Y8qdquJhRxLCiyktpCgodvI6ffEZyJbGOp0pc/jRA1BTNWNEzIg+kK3c29sTCmlgky7N6dQGSM3Y9SLG/7YmIwf3LbyOo5rc7aUTRUlPQw0so5Y3Lu35P/AIxQ8toK2rySsURvoBdQx6EBt7Ys2ZUtRRzw/PRaqYLZbMBIo6gg+T/ODc4mFHwuI4qY8yqj5SONtCbmwHnC94OQYxpmABEA4cp3puHaKAf9Lz3O9zh9RUNVTwfMKRITa6jsMAZFTyT5dDcFdKgAEdPxhpQzVtNmcarC8lNZhJc72t4++M4DeSxjzfHgT0o+YIWnkkKeoAAnfpjPOP4I2qS9OnKDDfSdnue4xeTxHl75ZUyWaOVGI5Uh0sO2464z2Wapz3MNMqyJCfpKnSG9r9hjV0LCoEEzL1qG0ggQHhUPlGcU1RrKSK2tGx9BcRSx1MOXZjDI7XKs/LNtiCDv/nGbZVwFJV0bCmy6Z2kGkMqX073J1Hb9sbLwjw1DluS02XNzJJAo1s76tx4PjB9RYLBtWAor8Z3NM54qop89zSnqKKW+q0bx6wCxXoSO9xbz0wPFDWihlyuop2pna5Lk2bSN7j2tiwfF/hKDKIVzmiLAdJIg+m5vcMD1BxT6fic1K06MvzBKaJFZrtfupJ8jYHtgZUhhmGV1ZDieqxSxCOL/AJu8jKN7EE2sxJ6d9hiYMo6Get4gFDl/KEc+qRVnlCqulbiO/T99ziYIEY9CBLAHmJuIRmE2aLItTAIkVWiWU+lmBOy+drYuPD/DLZqkeYZgZnmjSyxN9CnvsML8wydqeekigVZowiiEfTbSdyR3a3v+MaVwU8MmVKzkCwuxc7XOBWV+XAhks8QJA5lXqMqalS601wD0UWAxxl1I8kczvHpdgQFHbFqz7+s3peIKvQBu/vhZHzY2HLj1k9wNjhf8U18Qv5PkEoOccG09bOhnj1SajYjra/nFu4a4cpaClWMQJ53W98M4MurHnjkkS2xt974dJRS6EY+m9jb+MHq03MFbqOMZnll7rTi9tC9DYbYYQ10FC/PJkndz6FHQYIpMuWFCz2tcmxxUM+rYqPNdaOjKSEKBjdCT1w4Kgg3GKAm07VnPxSmmqMghkjQM8kwFtGrT+MZK0NTFE9LFyGlDguwiAkvfz4GNG4sqJailEFWbxklVa+/TYj/OM3r4w89Mn6jErRIQkTMVJv16fjC72BnIEYWsogJncfNUqWmLyUzr6hYFfwR1/viYPhozBEFr51TeyB5LbH++JipEsDNBqcsSvyKemmneJgvMSVbK0bDe4OK7SZpO1YUWoiWnjIOpj6QbbsfOJiYDdkOiiM0AFWJl5zDMMvoIabLRURz11QOZJrFyqAb7dvt98HZVNSNIFBFnsCW20ra5/jExMaynMzLkCYx7GY9Cw6FewsSf5xXeLOLMtyKKIzjmMjquhSLi9tz7YmJhlEBYCJOxAzM0qfjUkvFK0QWnmpZZOUi07lnBP+4n6fa2+O+fZtmdRnmX5kMtjho+iR6DIZnJ3DsPo9O47G/tiYmE9S5OoCesTY0aBf49rB/YsBn6xmWDNoYMxygTqSYYImcW67A7H7HGeS/ORUSzIkEjbMrOpVx7qbb+NsTEwNNOjh3PYxAte67UHRzK8J6iqhEjROiLIHdjckk3HXz7dsTExMC7lxP/2Q==" alt="Lola">
-        </div>
-        <div class="session-dog-info">
-          <div class="session-dog-name">Lola</div>
-          <div class="session-dog-detail">Day School · <strong>w/ Rachel</strong></div>
-        </div>
-        <div>
-          <div class="session-dog-time">7:30 AM</div>
-          <div class="session-dog-time-lbl">Drop off</div>
-        </div>
-      </div>
-
-      <!-- Brodie -->
-      <div class="session-dog-row">
-        <div class="session-dog-avatar">
-          <img src="data:image/jpeg;base64,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" alt="Brodie">
-        </div>
-        <div class="session-dog-info">
-          <div class="session-dog-name">Brodie</div>
-          <div class="session-dog-detail">Private Lesson · <strong>w/ Shanthi</strong></div>
-        </div>
-        <div>
-          <div class="session-dog-time">4:00 PM</div>
-          <div class="session-dog-time-lbl">Start time</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="session-actions">
-      <button class="session-action" onclick="location.href='bookings-page.html'">
-        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0z"/>
-          <polyline points="12 7 12 12 15 14"/>
-        </svg>
-        See full schedule
-      </button>
-      <button class="session-action" onclick="location.href='booking-flow-reschedule.html'">
-        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12a9 9 0 11-3.5-7.1"/>
-          <polyline points="21 3 21 9 15 9"/>
-        </svg>
-        Reschedule
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- BOOK BUTTON -->
-<div class="book-cta">
-  <button class="book-btn" onclick="openSheet()">
-    <span class="book-btn-label">
-      <span class="book-btn-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="3"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-          <line x1="12" y1="14" x2="12" y2="18"/>
-          <line x1="10" y1="16" x2="14" y2="16"/>
-        </svg>
-      </span>
-      Book a new session
-    </span>
+<!-- Back arrow + title -->
+<div class="rs-back-row">
+  <button class="rs-back-btn" onclick="goBackOrHome()" aria-label="Back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
   </button>
+  <span class="rs-step-pill" id="rsStepPill">Sessions · Step 1 of 3</span>
+  <button class="rs-edit-btn" id="rsEditBtn" onclick="toggleEditMode()" aria-pressed="false" type="button">Edit</button>
 </div>
+
+<!-- VIEW 1 — EDIT SESSIONS -->
+<div class="view active" id="viewSessions">
+  <div class="rs-header">
+    <h1 class="rs-title">Edit your <em>schedule</em></h1>
+    <p class="rs-sub">Tap <strong>Edit</strong> to remove sessions or toggle after-school training. Use the calendar below to add new days.</p>
+  </div>
+
+  <!-- Per-dog cards w/ jiggling chips of current bookings -->
+  <div class="rs-dogs" id="rsDogs"></div>
+
+  <!-- Add-more calendar (one common calendar; tap to add for the dog you tap on) -->
+  <div class="rs-add-section">
+    <div class="rs-section-label">Add more days</div>
+    <p class="rs-add-hint">First, pick which dog. Then pick a date. The dog will get the highlighted type — tap the toggle to switch type.</p>
+
+    <!-- Dog picker -->
+    <div class="rs-dog-pickers" id="rsDogPickers"></div>
+
+    <!-- School/Daycare toggle -->
+    <div class="rs-type-toggle">
+      <button class="rs-type-btn active" data-type="school" type="button">Day School</button>
+      <button class="rs-type-btn" data-type="daycare" type="button">Daycare</button>
+    </div>
+
+    <!-- Mini calendar -->
+    <div class="rs-cal-month-row">
+      <div class="rs-cal-month-name">April 2026</div>
+      <div class="rs-cal-nav">
+        <button class="rs-cal-nav-btn rs-cal-nav-prev" type="button" onclick="prevRsMonth()" aria-label="Previous month">
+          <svg viewBox="0 0 10 10"><polyline points="6.5 2 3.5 5 6.5 8"/></svg>
+        </button>
+        <button class="rs-cal-nav-btn rs-cal-nav-next" type="button" onclick="nextRsMonth()" aria-label="Next month">
+          <svg viewBox="0 0 10 10"><polyline points="3.5 2 6.5 5 3.5 8"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="rs-cal" id="rsCal"></div>
+    <div class="rs-cal-legend">
+      <div class="rs-cal-legend-item"><span class="rs-cal-legend-dot" style="background: var(--accent-green, #4a8a6a)"></span>Open</div>
+      <div class="rs-cal-legend-item"><span class="rs-cal-legend-dot" style="background: #d4a64a"></span>Limited</div>
+      <div class="rs-cal-legend-item"><span class="rs-cal-legend-dot" style="background: #e04545"></span>Full</div>
+    </div>
+  </div>
+
+  <!-- CTA row -->
+  <div class="rs-cta-row">
+    <button class="rs-cta" onclick="goToCredits()">Continue to credits</button>
+  </div>
+
+  <div style="height: 30px;"></div>
+</div>
+
+<!-- VIEW 2 — EDIT CREDITS -->
+<div class="view" id="viewCredits">
+  <div class="rs-header">
+    <h1 class="rs-title">Edit your <em>credits</em></h1>
+    <p class="rs-sub">Tap <strong>Edit</strong> to remove a current package. Add new ones below.</p>
+  </div>
+
+  <!-- Existing credit packages with jiggle/minus -->
+  <div class="rs-section-label" style="padding-left: 22px;">Current packages</div>
+  <div class="rs-credits-list" id="rsCreditsList"></div>
+
+  <!-- Add new packages -->
+  <div class="rs-section-label" style="padding-left: 22px; padding-top: 18px;">Add a package</div>
+  <div class="rs-credits-options" id="rsCreditsOptions"></div>
+
+  <!-- Or PAYG -->
+  <div class="rs-payg-card" id="rsPaygCard">
+    <div class="rs-payg-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M14.5 9a3 3 0 00-5.7 1c0 1.5 1.4 2.5 2.7 3 1.4.5 2.7 1.5 2.7 3a3 3 0 01-5.7 1"/><line x1="12" y1="6" x2="12" y2="7.5"/><line x1="12" y1="16.5" x2="12" y2="18"/></svg>
+    </div>
+    <div class="rs-payg-text">
+      <div class="rs-payg-title">Pay as you go</div>
+      <div class="rs-payg-desc">Skip credits — invoiced after each visit</div>
+    </div>
+    <button class="rs-payg-toggle" id="rsPaygToggle" onclick="togglePayg()" type="button">
+      <span class="rs-toggle-knob"></span>
+    </button>
+  </div>
+
+  <div class="rs-cta-row">
+    <button class="rs-cta" onclick="goToConfirm()">Review changes</button>
+    <button class="rs-cta-text" onclick="goBackToSessions()">&larr; Back to sessions</button>
+  </div>
+
+  <div style="height: 30px;"></div>
+</div>
+
+<!-- VIEW 3 — CONFIRM -->
+<div class="view" id="viewConfirm">
+  <div class="rs-header">
+    <h1 class="rs-title">Confirm <em>changes</em></h1>
+    <p class="rs-sub">Review what you're changing before we save it.</p>
+  </div>
+
+  <!-- Diff list — populated dynamically -->
+  <div class="rs-diff" id="rsDiff"></div>
+
+  <!-- Empty diff hint, shown if no changes -->
+  <div class="rs-diff-empty" id="rsDiffEmpty" style="display: none;">
+    <div class="rs-diff-empty-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div class="rs-diff-empty-title">No changes yet</div>
+    <div class="rs-diff-empty-desc">Go back and edit your schedule or credits.</div>
+  </div>
+
+  <div class="rs-cta-row">
+    <button class="rs-cta" onclick="confirmChanges()" id="rsConfirmBtn">Confirm changes</button>
+    <button class="rs-cta-text" onclick="goBackToCredits()">&larr; Back to credits</button>
+  </div>
+
+  <div style="height: 30px;"></div>
+</div>
+
+<!-- VIEW 4 — DONE -->
+<div class="view" id="viewDone">
+  <div class="rs-done-hero">
+    <div class="rs-done-check">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="rs-done-title">Your updated changes have been <em>confirmed!</em></div>
+    <div class="rs-done-sub">We've sent you an email summary too.</div>
+  </div>
+
+  <!-- Final summary mirroring the diff -->
+  <div class="rs-diff" id="rsDoneDiff"></div>
+
+  <div class="rs-cta-row">
+    <button class="rs-cta" onclick="location.href='index.html'">Back to home</button>
+  </div>
+
+  <div style="height: 30px;"></div>
+</div>
+
 
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <div class="nav-item active" onclick="location.href='index.html'">
+    <div class="nav-item" onclick="location.href='index.html'">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg></div>
       <div class="nav-label">Home</div>
     </div>
@@ -1995,41 +2809,539 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-<!-- SNOW STORM CLOSURE MODAL -->
-<div class="snow-modal-backdrop" id="snowModal" onclick="if(event.target===this)closeSnowModal()">
-  <div class="snow-modal" role="alertdialog" aria-labelledby="snowModalTitle" aria-describedby="snowModalBody">
-    <div class="snow-modal-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <line x1="12" y1="2" x2="12" y2="22"/>
-        <line x1="2" y1="12" x2="22" y2="12"/>
-        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-        <line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/>
-        <polyline points="9 5 12 2 15 5"/>
-        <polyline points="9 19 12 22 15 19"/>
-        <polyline points="5 9 2 12 5 15"/>
-        <polyline points="19 9 22 12 19 15"/>
-      </svg>
-    </div>
-    <div class="snow-modal-title" id="snowModalTitle">School closed <em>today</em></div>
-    <div class="snow-modal-body" id="snowModalBody">
-      Our <strong>Fayetteville</strong> location is closed due to snow. Please stay safe!<br><br>
-      All credits will be added back to your account. Please reschedule for your next session.
-    </div>
-    <button class="snow-modal-cta" onclick="closeSnowModal()">Got it</button>
-  </div>
-</div>
 
 <script>
-function openSnowModal() {
-  document.getElementById('snowModal').classList.add('open');
+const DOGS_DATA = [
+  { id: 'waffles', name: 'Waffles', photo: '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' },
+  { id: 'lola',    name: 'Lola',    photo: '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' },
+  { id: 'brodie',  name: 'Brodie',  photo: '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' },
+];
+const PHOTO_BY = Object.fromEntries(DOGS_DATA.map(d => [d.id, d.photo]));
+
+// Initial bookings — what the user currently has scheduled
+// Each entry: { dogId, type, month, day, dayOfWeek, afterSchool? }
+const INITIAL_BOOKINGS = [
+  { dogId: 'waffles', type: 'school',  month: 4, day: 28, dow: 'Mon', afterSchool: true },
+  { dogId: 'waffles', type: 'school',  month: 4, day: 30, dow: 'Wed' },
+  { dogId: 'waffles', type: 'daycare', month: 5, day: 2,  dow: 'Fri' },
+  { dogId: 'lola',    type: 'school',  month: 4, day: 28, dow: 'Mon' },
+  { dogId: 'lola',    type: 'school',  month: 4, day: 30, dow: 'Wed', afterSchool: true },
+  { dogId: 'lola',    type: 'daycare', month: 5, day: 5,  dow: 'Mon' },
+  { dogId: 'brodie',  type: 'school',  month: 4, day: 29, dow: 'Tue' },
+  { dogId: 'brodie',  type: 'school',  month: 5, day: 1,  dow: 'Thu' },
+];
+const INITIAL_CREDITS = [
+  { id: 'c1', kind: 'school',  count: 8, label: '8-pack School',  price: 240 },
+  { id: 'c2', kind: 'daycare', count: 5, label: '5-pack Daycare', price: 150 },
+];
+const ADD_PACKAGES = [
+  { kind: 'school',  count: 4,  price: 120 },
+  { kind: 'school',  count: 8,  price: 240 },
+  { kind: 'school',  count: 16, price: 460 },
+  { kind: 'daycare', count: 5,  price: 150 },
+  { kind: 'daycare', count: 10, price: 290 },
+];
+const MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_SHORT = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Working state — clones of initial that we mutate as user edits
+let bookings = INITIAL_BOOKINGS.map(b => ({ ...b, status: 'kept', afterSchoolStart: !!b.afterSchool, afterSchool: !!b.afterSchool }));
+let removedCreditIds = new Set();
+let addedCredits = [];   // full package objects pushed in
+let paygActive = false;
+let activeAddDog = 'waffles';
+let activeAddType = 'school';
+let editMode = false;
+
+// Helpers
+function bookingKey(b) { return `${b.dogId}|${b.type}|${b.month}|${b.day}`; }
+function fmtDate(b) { return `${MONTH_SHORT[b.month]} ${b.day}`; }
+function dowFor(month, day) {
+  // Calendar uses Apr 2026: Apr 1 is Wednesday
+  // We'll compute using Date (year 2026)
+  const d = new Date(2026, month - 1, day);
+  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
 }
-function closeSnowModal() {
-  document.getElementById('snowModal').classList.remove('open');
+
+// ─── Render: Sessions view ──────────────────────────────────
+const BONE_SVG = '<svg viewBox="0 0 24 24"><circle cx="5" cy="8" r="3"/><circle cx="5" cy="14" r="3"/><circle cx="19" cy="8" r="3"/><circle cx="19" cy="14" r="3"/><rect x="5" y="9" width="14" height="4"/></svg>';
+
+function renderDogs() {
+  const html = DOGS_DATA.map(dog => {
+    const dogBookings = bookings.filter(b => b.dogId === dog.id);
+    const activeCount = dogBookings.filter(b => b.status !== 'removed').length;
+    if (dogBookings.length === 0) {
+      return `
+        <div class="rs-dog-card">
+          <div class="rs-dog-card-header">
+            <div class="rs-dog-card-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
+            <div class="rs-dog-card-name">${dog.name}</div>
+            <div class="rs-dog-card-count">No sessions</div>
+          </div>
+        </div>
+      `;
+    }
+    const chipsHtml = dogBookings.map((b, i) => {
+      const cls = ['rs-chip',
+        b.type === 'daycare' ? 'daycare' : '',
+        b.status === 'removed' ? 'removed' : '',
+        b.status === 'added' ? 'added' : ''].filter(x => x).join(' ');
+      const minusIcon = '<svg viewBox="0 0 24 24"><line x1="6" y1="12" x2="18" y2="12"/></svg>';
+      // Bone icon shows when after-school is on for this booking
+      const astHtml = (b.type === 'school' && b.afterSchool && b.status !== 'removed')
+        ? `<div class="rs-chip-ast" aria-label="After-school training">${BONE_SVG}</div>`
+        : '';
+      // Body click toggles after-school — but ONLY for school chips, ONLY in edit mode, ONLY when not removed
+      const bodyClick = (b.type === 'school' && b.status !== 'removed')
+        ? ` onclick="onChipBodyTap('${bookingKey(b)}', event)"`
+        : '';
+      return `
+        <div class="${cls}" data-key="${bookingKey(b)}"${bodyClick}>
+          <button class="rs-chip-minus" type="button" onclick="toggleBooking('${bookingKey(b)}', event)" aria-label="${b.status === 'removed' ? 'Restore' : 'Remove'}">
+            ${minusIcon}
+          </button>
+          <div class="rs-chip-day">${b.dow}</div>
+          <div class="rs-chip-date">${MONTH_SHORT[b.month]} ${b.day}</div>
+          ${astHtml}
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="rs-dog-card">
+        <div class="rs-dog-card-header">
+          <div class="rs-dog-card-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
+          <div class="rs-dog-card-name">${dog.name}</div>
+          <div class="rs-dog-card-count">${activeCount} session${activeCount !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="rs-chip-grid${editMode ? ' rs-jiggling' : ''}">${chipsHtml}</div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('rsDogs').innerHTML = html;
 }
-// Allow Esc to close
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeSnowModal();
+
+function onChipBodyTap(key, ev) {
+  if (ev) ev.stopPropagation();
+  if (!editMode) return;  // No-op outside edit mode
+  const b = bookings.find(x => bookingKey(x) === key);
+  if (!b || b.type !== 'school' || b.status === 'removed') return;
+  b.afterSchool = !b.afterSchool;
+  renderDogs();
+}
+
+function toggleBooking(key, ev) {
+  if (ev) ev.stopPropagation();
+  const b = bookings.find(x => bookingKey(x) === key);
+  if (!b) return;
+  if (b.status === 'added') {
+    // Drop entirely (it was a new add — undo just removes it)
+    bookings = bookings.filter(x => bookingKey(x) !== key);
+  } else if (b.status === 'removed') {
+    // Restore
+    b.status = 'kept';
+  } else {
+    // Mark removed
+    b.status = 'removed';
+  }
+  renderDogs();
+  renderCal();
+}
+
+// ─── Add-more dog picker + type toggle ──────────────────────
+function renderDogPickers() {
+  const html = DOGS_DATA.map(d => `
+    <button class="rs-dog-pick ${d.id === activeAddDog ? 'active' : ''}" data-dog="${d.id}" type="button" onclick="setActiveAddDog('${d.id}')">
+      <div class="rs-dog-pick-photo"><img src="data:image/jpeg;base64,${d.photo}" alt="${d.name}"></div>
+      ${d.name}
+    </button>
+  `).join('');
+  document.getElementById('rsDogPickers').innerHTML = html;
+}
+function setActiveAddDog(id) { activeAddDog = id; renderDogPickers(); renderCal(); }
+
+document.querySelectorAll('.rs-type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeAddType = btn.dataset.type;
+    document.querySelectorAll('.rs-type-btn').forEach(b => b.classList.toggle('active', b === btn));
+    renderCal();
+  });
 });
+
+// ─── Mini calendar ──────────────────────────────────────────
+// Capacity by day per month — mirrors booking-flow.html's MONTH_CONFIG.
+// Days not listed are wide-open (3 school + 3 daycare).
+const RS_CAPACITY = {
+  4: {  // April
+    27: { school: 3, daycare: 3 },
+    28: { school: 1, daycare: 2 },  // amber school, amber daycare
+    29: { school: 2, daycare: 3 },
+    30: { school: 0, daycare: 1 },  // red school, amber daycare
+  },
+  5: {  // May
+    1:  { school: 1, daycare: 2 },  // amber both
+    4:  { school: 3, daycare: 3 },
+    5:  { school: 2, daycare: 3 },
+    6:  { school: 3, daycare: 3 },
+    7:  { school: 1, daycare: 2 },
+    8:  { school: 3, daycare: 3 },
+    11: { school: 3, daycare: 2 },
+    12: { school: 0, daycare: 3 },  // red school
+    13: { school: 2, daycare: 1 },
+    14: { school: 3, daycare: 3 },
+    15: { school: 3, daycare: 3 },
+    18: { school: 1, daycare: 3 },
+    19: { school: 3, daycare: 3 },
+    20: { school: 3, daycare: 2 },
+    21: { school: 0, daycare: 0 },  // red both
+    22: { school: 2, daycare: 3 },
+    25: { school: 3, daycare: 3 },
+    26: { school: 3, daycare: 3 },
+    27: { school: 1, daycare: 1 },
+    28: { school: 3, daycare: 3 },
+    29: { school: 2, daycare: 3 },
+  }
+};
+
+// Per-month calendar layout config (start weekday, days, "today" if current month).
+// April 2026: Apr 1 = Wednesday (3); today (demo) = Apr 27.
+// May   2026: May 1 = Friday    (5); not the current month.
+const RS_MONTH_CONFIG = {
+  4: { name: 'April 2026', startWeekday: 3, daysInMonth: 30, today: 27, isCurrent: true  },
+  5: { name: 'May 2026',   startWeekday: 5, daysInMonth: 31, today: null, isCurrent: false },
+};
+
+// Active month for the reschedule calendar
+let currentRsMonth = 4;
+
+function rsDayAvailability(month, day, type) {
+  const cap = RS_CAPACITY[month] && RS_CAPACITY[month][day];
+  const remaining = cap ? cap[type] : 3; // unlisted = wide open
+  if (remaining === 0) return 'red';
+  if (remaining <= 2)  return 'amber';
+  return 'green';
+}
+
+function renderCal() {
+  const config = RS_MONTH_CONFIG[currentRsMonth];
+  const { name, startWeekday, daysInMonth, today, isCurrent } = config;
+
+  // Update month label + nav button states
+  const nameEl = document.querySelector('.rs-cal-month-name');
+  if (nameEl) nameEl.textContent = name;
+  const prevBtn = document.querySelector('.rs-cal-nav-prev');
+  const nextBtn = document.querySelector('.rs-cal-nav-next');
+  if (prevBtn) {
+    prevBtn.disabled = (currentRsMonth === 4);
+    prevBtn.style.opacity = prevBtn.disabled ? '0.3' : '1';
+    prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+  }
+  if (nextBtn) {
+    nextBtn.disabled = (currentRsMonth === 5);
+    nextBtn.style.opacity = nextBtn.disabled ? '0.3' : '1';
+    nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+  }
+
+  const dayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  // Header labels
+  let html = dayLabels.map(d => `<div class="rs-cal-day-label">${d}</div>`).join('');
+
+  // Empty cells before day 1 (offset to its weekday column)
+  for (let i = 0; i < startWeekday; i++) {
+    html += '<div class="rs-cal-day empty"></div>';
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dt = new Date(2026, currentRsMonth - 1, d);
+    const m = currentRsMonth;
+    const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+    const isPast = isCurrent && today !== null && d < today;
+
+    // Already booked (and not removed) for the active dog at this date+type?
+    const matchingBooking = bookings.find(b =>
+      b.dogId === activeAddDog && b.month === m && b.day === d && b.type === activeAddType && b.status !== 'removed'
+    );
+
+    const weekendBlock = isWeekend && activeAddType === 'school';
+    let availStatus = null;
+    if (!matchingBooking && !weekendBlock && !isPast) {
+      availStatus = rsDayAvailability(m, d, activeAddType);
+    }
+
+    let cls = 'rs-cal-day';
+    if (matchingBooking) cls += ' booked' + (activeAddType === 'daycare' ? ' daycare' : '');
+    if (weekendBlock || isPast) cls += ' past';
+    if (availStatus === 'red') cls += ' no-availability';
+
+    const clickable = !matchingBooking && !weekendBlock && !isPast && availStatus !== 'red';
+    const click = clickable ? ` onclick="addBooking(${m}, ${d})"` : '';
+
+    const dotHtml = (availStatus && !matchingBooking)
+      ? `<span class="rs-cal-day-dot ${availStatus}"></span>`
+      : '<span class="rs-cal-day-dot" style="visibility:hidden"></span>';
+
+    html += `<div class="${cls}"${click}><span class="rs-cal-day-num">${d}</span>${dotHtml}</div>`;
+  }
+  document.getElementById('rsCal').innerHTML = html;
+}
+
+function prevRsMonth() {
+  if (currentRsMonth === 4) return;
+  currentRsMonth = 4;
+  renderCal();
+}
+function nextRsMonth() {
+  if (currentRsMonth === 5) return;
+  currentRsMonth = 5;
+  renderCal();
+}
+
+function addBooking(month, day) {
+  // Don't add if already exists
+  const exists = bookings.find(b =>
+    b.dogId === activeAddDog && b.month === month && b.day === day && b.type === activeAddType
+  );
+  if (exists) {
+    // If it's currently removed, restore instead
+    if (exists.status === 'removed') exists.status = 'kept';
+    renderDogs();
+    renderCal();
+    return;
+  }
+  bookings.push({
+    dogId: activeAddDog,
+    type: activeAddType,
+    month, day,
+    dow: dowFor(month, day),
+    status: 'added',
+    afterSchool: false,
+    afterSchoolStart: false,
+  });
+  renderDogs();
+  renderCal();
+}
+
+// ─── Credits view ───────────────────────────────────────────
+function renderCredits() {
+  const listHtml = INITIAL_CREDITS.map(c => {
+    const removed = removedCreditIds.has(c.id);
+    const iconCls = c.kind === 'daycare' ? 'rs-credit-icon daycare' : 'rs-credit-icon';
+    const iconSvg = c.kind === 'daycare'
+      ? '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0z"/><circle cx="12" cy="12" r="3"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5 3.5 9 9 9s9-4 9-9V7l-9-5z"/></svg>';
+    return `
+      <div class="rs-credit-card ${removed ? 'removed' : ''}" data-id="${c.id}">
+        <button class="rs-credit-minus" type="button" onclick="toggleCredit('${c.id}')" aria-label="${removed ? 'Restore' : 'Remove'}">
+          ${removed ? '' : '<svg viewBox="0 0 24 24"><line x1="6" y1="12" x2="18" y2="12"/></svg>'}
+        </button>
+        <div class="${iconCls}">${iconSvg}</div>
+        <div class="rs-credit-text">
+          <div class="rs-credit-title">${c.label}</div>
+          <div class="rs-credit-sub">${c.count} ${c.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
+        </div>
+        <div class="rs-credit-price">$${c.price}</div>
+      </div>
+    `;
+  }).join('');
+  // Append "added" packages too — those use the removed-style undo on click
+  const addedHtml = addedCredits.map((c, idx) => `
+    <div class="rs-credit-card added" data-added-idx="${idx}">
+      <button class="rs-credit-minus" type="button" onclick="undoAddedCredit(${idx})" aria-label="Undo add">
+        <svg viewBox="0 0 24 24"><line x1="6" y1="12" x2="18" y2="12"/></svg>
+      </button>
+      <div class="rs-credit-icon ${c.kind === 'daycare' ? 'daycare' : ''}">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5 3.5 9 9 9s9-4 9-9V7l-9-5z"/></svg>
+      </div>
+      <div class="rs-credit-text">
+        <div class="rs-credit-title">${c.count}-pack ${c.kind === 'daycare' ? 'Daycare' : 'School'}</div>
+        <div class="rs-credit-sub">+${c.count} ${c.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
+      </div>
+      <div class="rs-credit-price">$${c.price}</div>
+    </div>
+  `).join('');
+  document.getElementById('rsCreditsList').innerHTML = `<div class="${editMode ? 'rs-jiggling' : ''}" style="display:flex;flex-direction:column;gap:10px;">${listHtml + addedHtml}</div>`;
+}
+
+function toggleCredit(id) {
+  if (removedCreditIds.has(id)) removedCreditIds.delete(id);
+  else removedCreditIds.add(id);
+  renderCredits();
+}
+function undoAddedCredit(idx) {
+  addedCredits.splice(idx, 1);
+  renderCredits();
+}
+
+function renderAddOptions() {
+  const html = ADD_PACKAGES.map((p, idx) => `
+    <button class="rs-credit-add" type="button" onclick="addCreditPackage(${idx})">
+      <div class="rs-credit-add-plus"></div>
+      <div class="rs-credit-text">
+        <div class="rs-credit-title">${p.count}-pack ${p.kind === 'daycare' ? 'Daycare' : 'School'}</div>
+        <div class="rs-credit-sub">${p.count} ${p.kind === 'daycare' ? 'daycare' : 'school'} credits</div>
+      </div>
+      <div class="rs-credit-price">$${p.price}</div>
+    </button>
+  `).join('');
+  document.getElementById('rsCreditsOptions').innerHTML = html;
+}
+
+function addCreditPackage(idx) {
+  addedCredits.push({ ...ADD_PACKAGES[idx] });
+  renderCredits();
+}
+
+function togglePayg() {
+  paygActive = !paygActive;
+  const t = document.getElementById('rsPaygToggle');
+  t.classList.toggle('on', paygActive);
+  document.getElementById('rsPaygCard').classList.toggle('active', paygActive);
+}
+
+// ─── Diff render ─────────────────────────────────────────────
+function buildDiff() {
+  const out = [];
+  // Per-dog session diff (and after-school diff)
+  DOGS_DATA.forEach(dog => {
+    const removed = bookings.filter(b => b.dogId === dog.id && b.status === 'removed');
+    const added   = bookings.filter(b => b.dogId === dog.id && b.status === 'added');
+    // After-school changes: kept-status school chips whose afterSchool flipped from start
+    // Plus added chips that have afterSchool on (those count as "added with after-school")
+    const astAdded = bookings.filter(b =>
+      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
+      b.afterSchool === true && b.afterSchoolStart === false
+    );
+    const astRemoved = bookings.filter(b =>
+      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
+      b.afterSchool === false && b.afterSchoolStart === true
+    );
+    if (removed.length === 0 && added.length === 0 && astAdded.length === 0 && astRemoved.length === 0) return;
+    out.push({
+      kind: 'dog',
+      dog,
+      removedDates: removed.map(b => fmtDate(b)),
+      addedDates: added.map(b => fmtDate(b)),
+      astAddedDates: astAdded.map(b => fmtDate(b)),
+      astRemovedDates: astRemoved.map(b => fmtDate(b)),
+    });
+  });
+  // Credits diff
+  const creditsRemoved = INITIAL_CREDITS.filter(c => removedCreditIds.has(c.id));
+  if (creditsRemoved.length || addedCredits.length || paygActive) {
+    out.push({
+      kind: 'credits',
+      removed: creditsRemoved,
+      added: addedCredits,
+      payg: paygActive,
+    });
+  }
+  return out;
+}
+
+function renderDiff(targetId) {
+  const diff = buildDiff();
+  const target = document.getElementById(targetId);
+  if (diff.length === 0) {
+    target.innerHTML = '';
+    if (targetId === 'rsDiff') {
+      document.getElementById('rsDiffEmpty').style.display = '';
+      document.getElementById('rsConfirmBtn').disabled = true;
+      document.getElementById('rsConfirmBtn').style.opacity = '0.45';
+    }
+    return;
+  }
+  if (targetId === 'rsDiff') {
+    document.getElementById('rsDiffEmpty').style.display = 'none';
+    document.getElementById('rsConfirmBtn').disabled = false;
+    document.getElementById('rsConfirmBtn').style.opacity = '1';
+  }
+  target.innerHTML = diff.map(item => {
+    if (item.kind === 'dog') {
+      const lines = [];
+      if (item.removedDates.length) lines.push(`<div class="rs-diff-line removed"><strong>Removed</strong>${item.removedDates.join(', ')}</div>`);
+      if (item.addedDates.length)   lines.push(`<div class="rs-diff-line added"><strong>Added</strong>${item.addedDates.join(', ')}</div>`);
+      if (item.astAddedDates.length)   lines.push(`<div class="rs-diff-line added"><strong>+ After-school on</strong>${item.astAddedDates.join(', ')}</div>`);
+      if (item.astRemovedDates.length) lines.push(`<div class="rs-diff-line removed"><strong>− After-school off</strong>${item.astRemovedDates.join(', ')}</div>`);
+      return `
+        <div class="rs-diff-card">
+          <div class="rs-diff-header">
+            <div class="rs-diff-header-photo"><img src="data:image/jpeg;base64,${item.dog.photo}" alt="${item.dog.name}"></div>
+            <div class="rs-diff-header-title">${item.dog.name}</div>
+          </div>
+          ${lines.join('')}
+        </div>
+      `;
+    } else {
+      const lines = [];
+      if (item.removed.length) lines.push(`<div class="rs-diff-line removed"><strong>Removed</strong>${item.removed.map(c => c.label).join(', ')}</div>`);
+      if (item.added.length)   lines.push(`<div class="rs-diff-line added"><strong>Added</strong>${item.added.map(c => `${c.count}-pack ${c.kind === 'daycare' ? 'Daycare' : 'School'}`).join(', ')}</div>`);
+      if (item.payg)           lines.push(`<div class="rs-diff-line added"><strong>Switched to</strong>Pay as you go</div>`);
+      return `
+        <div class="rs-diff-card">
+          <div class="rs-diff-header">
+            <div class="rs-diff-header-title">Credits</div>
+          </div>
+          ${lines.join('')}
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+// ─── Edit mode toggle ──────────────────────────────────────
+function toggleEditMode() {
+  editMode = !editMode;
+  const btn = document.getElementById('rsEditBtn');
+  btn.textContent = editMode ? 'Done' : 'Edit';
+  btn.setAttribute('aria-pressed', editMode ? 'true' : 'false');
+  // Re-render the visible view so jiggle/minus visibility updates
+  const activeView = document.querySelector('.view.active').id;
+  if (activeView === 'viewSessions') renderDogs();
+  if (activeView === 'viewCredits') renderCredits();
+}
+
+// Hide Edit button on review/done views (no editable list there)
+function setEditBtnVisibility(viewId) {
+  const btn = document.getElementById('rsEditBtn');
+  const showOnViews = ['viewSessions', 'viewCredits'];
+  btn.classList.toggle('hidden', !showOnViews.includes(viewId));
+}
+
+// ─── View transitions ───────────────────────────────────────
+function switchView(toId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(toId).classList.add('active');
+  const screen = document.querySelector('.device-screen-inner');
+  if (screen) screen.scrollTop = 0;
+  // When leaving an editable view, exit edit mode
+  if (toId !== 'viewSessions' && toId !== 'viewCredits' && editMode) {
+    editMode = false;
+    const btn = document.getElementById('rsEditBtn');
+    btn.textContent = 'Edit';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+  setEditBtnVisibility(toId);
+}
+
+function goToCredits() { switchView('viewCredits'); document.getElementById('rsStepPill').textContent = 'Credits · Step 2 of 3'; renderCredits(); renderAddOptions(); }
+function goBackToSessions() { switchView('viewSessions'); document.getElementById('rsStepPill').textContent = 'Sessions · Step 1 of 3'; renderDogs(); }
+function goToConfirm() { switchView('viewConfirm'); document.getElementById('rsStepPill').textContent = 'Review · Step 3 of 3'; renderDiff('rsDiff'); }
+function goBackToCredits() { switchView('viewCredits'); document.getElementById('rsStepPill').textContent = 'Credits · Step 2 of 3'; renderCredits(); }
+function confirmChanges() { switchView('viewDone'); document.getElementById('rsStepPill').style.display = 'none'; renderDiff('rsDoneDiff'); }
+function goBackOrHome() {
+  const active = document.querySelector('.view.active').id;
+  if (active === 'viewSessions') location.href = 'index.html';
+  else if (active === 'viewCredits') goBackToSessions();
+  else if (active === 'viewConfirm') goBackToCredits();
+  else if (active === 'viewDone') location.href = 'index.html';
+}
+
+// Init
+renderDogs();
+renderDogPickers();
+renderCal();
+setEditBtnVisibility('viewSessions');
 </script>
 
 
