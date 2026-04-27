@@ -1763,6 +1763,99 @@ body {
   line-height: 1.4;
   margin-top: -4px;
 }
+
+/* ─── Preferred-dates picker ─── */
+.pl-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 18px;
+}
+.pl-date-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+}
+.pl-date-card:hover {
+  border-color: var(--navy-pale);
+  box-shadow: 0 4px 12px rgba(33, 53, 106, 0.06);
+}
+.pl-date-card:active { transform: scale(0.99); }
+.pl-date-card.has-value {
+  border-color: var(--navy-pale);
+  background: rgba(184, 200, 232, 0.08);
+}
+.pl-date-num {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+}
+.pl-date-card.has-value .pl-date-num {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+.pl-date-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.pl-date-label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pl-date-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+.pl-date-value:empty::before {
+  content: attr(data-empty-text);
+  font-style: italic;
+  color: var(--muted);
+  opacity: 0.7;
+}
+.pl-date-input {
+  /* Visually hidden — the date value is shown via .pl-date-value text.
+     Tapping the card calls showPicker() on this input to open the system date picker. */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: none;
+  background: transparent;
+  pointer-events: none;  /* card receives the click; we open picker programmatically */
+  font-size: 16px;        /* keeps iOS from zooming if it ever gets focus */
+}
 .pl-upload-zone {
   margin: 0 18px;
   padding: 28px 18px 26px;
@@ -2029,6 +2122,36 @@ body {
     <div class="pl-textarea-counter"><span id="plDescribeCount">0</span> / 500</div>
   </div>
 
+  <!-- Preferred dates -->
+  <div class="section-label" style="padding-top: 22px;">Choose 3 dates that work for you</div>
+  <div class="pl-section-help">We'll do our best to match one of your preferred days</div>
+  <div class="pl-dates">
+    <div class="pl-date-card" onclick="openDatePicker(this)">
+      <span class="pl-date-num">1</span>
+      <span class="pl-date-info">
+        <span class="pl-date-label">First choice</span>
+        <span class="pl-date-value" data-empty-text="Pick a date"></span>
+      </span>
+      <input type="date" class="pl-date-input" data-slot="1">
+    </div>
+    <div class="pl-date-card" onclick="openDatePicker(this)">
+      <span class="pl-date-num">2</span>
+      <span class="pl-date-info">
+        <span class="pl-date-label">Second choice</span>
+        <span class="pl-date-value" data-empty-text="Pick a date"></span>
+      </span>
+      <input type="date" class="pl-date-input" data-slot="2">
+    </div>
+    <div class="pl-date-card" onclick="openDatePicker(this)">
+      <span class="pl-date-num">3</span>
+      <span class="pl-date-info">
+        <span class="pl-date-label">Third choice</span>
+        <span class="pl-date-value" data-empty-text="Pick a date"></span>
+      </span>
+      <input type="date" class="pl-date-input" data-slot="3">
+    </div>
+  </div>
+
   <!-- Photos & videos -->
   <div class="section-label" style="padding-top: 22px;">Photos &amp; videos</div>
   <div class="pl-section-help">Helps our trainers see the behavior firsthand — optional</div>
@@ -2246,6 +2369,54 @@ function initTextareaCounter() {
   });
 }
 
+// ─── Step 2: Preferred dates ────────────────────────────────
+function openDatePicker(card) {
+  const input = card?.querySelector('.pl-date-input');
+  if (!input) return;
+  // Modern browsers (iOS 16.4+, Chrome, Edge, Safari, Firefox 101+) support showPicker()
+  if (typeof input.showPicker === 'function') {
+    try {
+      input.showPicker();
+      return;
+    } catch (e) {
+      // showPicker can throw if not user-initiated; fall through to focus()
+    }
+  }
+  // Fallback: focus + click. Older browsers will show the picker on focus.
+  input.focus();
+  input.click();
+}
+
+function initDatePickers() {
+  // Today's date in yyyy-mm-dd for the min attribute (no past dates)
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const minDate = `${yyyy}-${mm}-${dd}`;
+
+  document.querySelectorAll('.pl-date-input').forEach(input => {
+    input.min = minDate;
+    input.addEventListener('change', () => {
+      const card = input.closest('.pl-date-card');
+      const valueEl = card?.querySelector('.pl-date-value');
+      if (!card || !valueEl) return;
+      if (input.value) {
+        // Format like "Tue, Apr 28"
+        const dt = new Date(input.value + 'T00:00:00');
+        const formatted = dt.toLocaleDateString('en-US', {
+          weekday: 'short', month: 'short', day: 'numeric'
+        });
+        valueEl.textContent = formatted;
+        card.classList.add('has-value');
+      } else {
+        valueEl.textContent = '';
+        card.classList.remove('has-value');
+      }
+    });
+  });
+}
+
 // ─── Step 2: Photo upload mockup ───────────────────────────
 function mockUpload() {
   // Visual mockup only — small bounce on the upload zone
@@ -2275,6 +2446,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDogSelector();
   initGoalChips();
   initTextareaCounter();
+  initDatePickers();
 });
 </script>
 
