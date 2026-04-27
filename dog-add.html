@@ -45,29 +45,31 @@ body {
 }
 .device-screen { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: -8px;
+}
 .back-link {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 4px;
-  margin: 4px 0 -8px -4px;
+  justify-content: center;
+  width: 32px; height: 32px;
+  padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
   color: var(--muted);
-  letter-spacing: -0.005em;
   transition: color 0.15s, transform 0.1s;
+  flex-shrink: 0;
 }
 .back-link:active { transform: translateX(-2px); color: var(--navy); }
 .back-link svg {
-  width: 16px; height: 16px;
+  width: 22px; height: 22px;
   stroke: currentColor; fill: none;
-  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
 }
 
 .content { padding: 22px 20px 32px; display: flex; flex-direction: column; gap: 18px; }
@@ -580,12 +582,12 @@ body {
 
     <div class="content">
 
-      <button class="back-link" onclick="location.href='account.html'" type="button">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        <span>Back</span>
-      </button>
-
-      <h1 class="page-title">Add a dog</h1>
+      <div class="title-row">
+        <button class="back-link" onclick="location.href='account.html'" type="button" aria-label="Back to account">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 class="page-title">Add a dog</h1>
+      </div>
       <div class="page-subtitle">Tell us about your new pup.</div>
 
       <!-- HERO PHOTO -->
