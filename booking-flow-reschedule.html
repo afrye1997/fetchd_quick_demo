@@ -2039,127 +2039,132 @@ body {
 .rs-cta-text:hover { color: var(--navy); }
 
 
-/* ─── After-School view ───────────────────────────────── */
+/* ─── After-School view (matches booking-flow's ast-* pattern) ─── */
 .rs-ast-dogs {
-  padding: 0 18px;
   display: flex; flex-direction: column;
   gap: 12px;
+  padding: 0 18px;
   margin-bottom: 8px;
 }
-.rs-ast-dog-card {
+.rs-ast-card {
   background: white;
   border: 1.5px solid var(--border);
-  border-radius: 16px;
-  padding: 14px 16px 12px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 14px;
+  padding: 14px;
 }
-.rs-ast-dog-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.rs-ast-card-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
 }
-.rs-ast-dog-photo {
-  width: 38px; height: 38px;
+.rs-ast-card-photo {
+  width: 36px; height: 36px;
   border-radius: 50%;
-  overflow: hidden;
   flex-shrink: 0;
-  background: var(--bg);
+  overflow: hidden;
   border: 1.5px solid var(--border);
+  background: var(--bg);
 }
-.rs-ast-dog-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.rs-ast-dog-name {
-  flex: 1;
+.rs-ast-card-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rs-ast-card-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 19px; font-weight: 500;
   color: var(--navy);
   letter-spacing: -0.01em;
+  line-height: 1;
 }
-.rs-ast-dog-count {
+.rs-ast-card-sub {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
-  letter-spacing: 0.06em;
-}
-.rs-ast-empty {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-  font-style: italic;
-  padding: 8px 0;
-  letter-spacing: -0.005em;
-}
-.rs-ast-rows {
-  display: flex; flex-direction: column;
-  gap: 6px;
-}
-.rs-ast-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 4px;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s, transform 0.06s;
-}
-.rs-ast-row:active { transform: scale(0.99); }
-.rs-ast-row + .rs-ast-row {
-  border-top: 1px solid var(--border-soft);
-  border-radius: 0;
-}
-.rs-ast-row-text { flex: 1; min-width: 0; }
-.rs-ast-row-day {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-  letter-spacing: -0.005em;
-}
-.rs-ast-row-sub {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--muted);
-  margin-top: 2px;
-  letter-spacing: -0.005em;
-}
-.rs-ast-row.on .rs-ast-row-sub {
-  color: var(--accent-green, #4a8a6a);
-  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-top: 3px;
 }
 
-/* iOS-style toggle on each row */
-.rs-ast-row-toggle {
-  width: 44px; height: 26px;
-  background: var(--border);
-  border-radius: 14px;
-  position: relative;
-  flex-shrink: 0;
-  transition: background 0.22s;
+/* Chip row — wraps */
+.rs-ast-chips {
+  display: flex; flex-wrap: wrap;
+  gap: 8px;
 }
-.rs-ast-row.on .rs-ast-row-toggle {
-  background: var(--accent-green, #4a8a6a);
-}
-.rs-ast-row-knob {
-  position: absolute;
-  top: 2px; left: 2px;
-  width: 22px; height: 22px;
+
+/* Each chip is a button (Aria role: checkbox via aria-checked) */
+.rs-ast-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 12px 7px 8px;
   background: white;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: transform 0.22s;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--navy);
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.18s, border-color 0.18s, transform 0.08s, color 0.18s;
 }
-.rs-ast-row.on .rs-ast-row-knob {
-  transform: translateX(18px);
+.rs-ast-chip:active { transform: scale(0.97); }
+.rs-ast-chip.checked {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+}
+
+/* Round check indicator inside chip */
+.rs-ast-check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s, border-color 0.18s;
+}
+.rs-ast-chip.checked .rs-ast-check {
+  background: white;
+  border-color: white;
+}
+.rs-ast-check svg {
+  width: 10px; height: 10px;
+  stroke: var(--navy); fill: none;
+  stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.rs-ast-chip.checked .rs-ast-check svg { opacity: 1; }
+
+/* Empty state when there are zero school days at all */
+.rs-ast-empty-state {
+  text-align: center;
+  padding: 50px 30px;
+}
+.rs-ast-empty-state-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(33, 53, 106, 0.06);
+  margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.rs-ast-empty-state-icon svg {
+  width: 26px; height: 26px;
+  stroke: var(--muted); fill: none; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.rs-ast-empty-state-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500;
+  color: var(--navy); font-style: italic;
+  margin-bottom: 4px;
+}
+.rs-ast-empty-state-desc {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: var(--muted);
+  max-width: 280px; margin: 0 auto;
+  line-height: 1.4;
 }
 
 /* ─── Confirmation chips (booking-flow style, with red removed variant) ── */
@@ -2459,8 +2464,8 @@ body {
 <!-- VIEW 2 — AFTER-SCHOOL TRAINING -->
 <div class="view" id="viewAfterSchool">
   <div class="rs-header">
-    <h1 class="rs-title">After-school training</h1>
-    <p class="rs-sub">For each school day, choose whether your dog stays for after-school training.</p>
+    <h1 class="rs-title">Add after-school training?</h1>
+    <p class="rs-sub">Pick which school days you'd like to add 30 min of one-on-one training to. <strong>No extra charge</strong> &mdash; it's bundled with the school day.</p>
   </div>
 
   <!-- Per-dog list of school days with toggles -->
@@ -3078,49 +3083,59 @@ function addBooking(month, day) {
 
 // ─── After-School view ──────────────────────────────────────
 function renderAfterSchool() {
-  const html = DOGS_DATA.map(dog => {
-    // Only school days, only those that aren't removed (you can't add after-school
-    // training to a session you're about to remove)
-    const schoolDays = bookings.filter(b =>
-      b.dogId === dog.id && b.type === 'school' && b.status !== 'removed'
-    );
-    if (schoolDays.length === 0) {
-      return `
-        <div class="rs-ast-dog-card">
-          <div class="rs-ast-dog-header">
-            <div class="rs-ast-dog-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
-            <div class="rs-ast-dog-name">${dog.name}</div>
-          </div>
-          <div class="rs-ast-empty">No school days scheduled</div>
+  // Only show dogs with at least one school day (excluding removed sessions)
+  const dogsWithSchool = DOGS_DATA.filter(dog =>
+    bookings.some(b => b.dogId === dog.id && b.type === 'school' && b.status !== 'removed')
+  );
+
+  if (dogsWithSchool.length === 0) {
+    document.getElementById('rsAstDogs').innerHTML = `
+      <div class="rs-ast-empty-state">
+        <div class="rs-ast-empty-state-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </div>
-      `;
-    }
-    const rowsHtml = schoolDays.map(b => {
+        <div class="rs-ast-empty-state-title">No school days</div>
+        <div class="rs-ast-empty-state-desc">Add at least one school day to your schedule to enable after-school training.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const html = dogsWithSchool.map(dog => {
+    const schoolDays = bookings
+      .filter(b => b.dogId === dog.id && b.type === 'school' && b.status !== 'removed')
+      .slice()
+      .sort((a, b) => (a.month - b.month) || (a.day - b.day));
+
+    const chips = schoolDays.map(b => {
       const checked = !!b.afterSchool;
       const key = bookingKey(b);
       return `
-        <button class="rs-ast-row ${checked ? 'on' : ''}" type="button" onclick="toggleAfterSchool('${key}')">
-          <div class="rs-ast-row-text">
-            <div class="rs-ast-row-day">${b.dow}, ${MONTH_SHORT[b.month]} ${b.day}</div>
-            <div class="rs-ast-row-sub">${checked ? 'After-school training included' : 'School only'}</div>
-          </div>
-          <div class="rs-ast-row-toggle">
-            <span class="rs-ast-row-knob"></span>
-          </div>
+        <button class="rs-ast-chip ${checked ? 'checked' : ''}" type="button"
+          role="checkbox" aria-checked="${checked}"
+          onclick="toggleAfterSchool('${key}')">
+          <span class="rs-ast-check">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          ${MONTH_SHORT[b.month]} ${b.day}
         </button>
       `;
     }).join('');
+
     return `
-      <div class="rs-ast-dog-card">
-        <div class="rs-ast-dog-header">
-          <div class="rs-ast-dog-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
-          <div class="rs-ast-dog-name">${dog.name}</div>
-          <div class="rs-ast-dog-count">${schoolDays.length} school day${schoolDays.length !== 1 ? 's' : ''}</div>
+      <div class="rs-ast-card">
+        <div class="rs-ast-card-head">
+          <div class="rs-ast-card-photo"><img src="data:image/jpeg;base64,${dog.photo}" alt="${dog.name}"></div>
+          <div>
+            <div class="rs-ast-card-name">${dog.name}</div>
+            <div class="rs-ast-card-sub">${schoolDays.length} school day${schoolDays.length !== 1 ? 's' : ''}</div>
+          </div>
         </div>
-        <div class="rs-ast-rows">${rowsHtml}</div>
+        <div class="rs-ast-chips">${chips}</div>
       </div>
     `;
   }).join('');
+
   document.getElementById('rsAstDogs').innerHTML = html;
 }
 
@@ -3146,13 +3161,8 @@ function buildDiff() {
       added,
     });
   });
-  // Per-dog after-school summary (grouped state, not diff)
-  // Show this section if ANY dog has at least one school day either with or without after-school
-  // Skipping the section entirely when no school days exist for any dog
-  const hasAnySchoolDay = bookings.some(b => b.type === 'school' && b.status !== 'removed');
-  if (hasAnySchoolDay) {
-    out.push({ kind: 'afterSchool' });
-  }
+  // Per-dog after-school summary (grouped state) is intentionally omitted from the
+  // confirmation view — bone icons inline on the session chips already convey this.
   return out;
 }
 
@@ -3230,58 +3240,7 @@ function renderDiff(targetId) {
     `;
   }).join('');
 
-  // After-school grouped section (per dog: with vs. without)
-  let afterSchoolCard = '';
-  const wantsAst = diff.some(d => d.kind === 'afterSchool');
-  if (wantsAst) {
-    const dogBlocks = DOGS_DATA.map(dog => {
-      const schoolDays = bookings.filter(b =>
-        b.dogId === dog.id && b.type === 'school' && b.status !== 'removed'
-      );
-      if (schoolDays.length === 0) return '';
-      const withAst    = schoolDays.filter(b => b.afterSchool);
-      const withoutAst = schoolDays.filter(b => !b.afterSchool);
-      const withChips    = withAst.map(b => renderConfChip(b, false)).join('');
-      const withoutChips = withoutAst.map(b => {
-        // Render as a non-bone chip (school day, no after-school)
-        return `<span class="rs-conf-chip">${b.dow} ${MONTH_SHORT[b.month]} ${b.day}</span>`;
-      }).join('');
-      const sections = [];
-      if (withAst.length) {
-        sections.push(`
-          <div class="rs-conf-chip-section">
-            <div class="rs-conf-chip-section-label added">With after-school</div>
-            <div class="rs-conf-chips">${withChips}</div>
-          </div>
-        `);
-      }
-      if (withoutAst.length) {
-        sections.push(`
-          <div class="rs-conf-chip-section">
-            <div class="rs-conf-chip-section-label">School only</div>
-            <div class="rs-conf-chips">${withoutChips}</div>
-          </div>
-        `);
-      }
-      return `
-        <div class="rs-conf-ast-dog">
-          <div class="rs-conf-ast-dog-name">${dog.name}</div>
-          ${sections.join('')}
-        </div>
-      `;
-    }).filter(Boolean).join('');
-
-    afterSchoolCard = `
-      <div class="rs-diff-card">
-        <div class="rs-diff-header">
-          <div class="rs-diff-header-title">After-school training</div>
-        </div>
-        ${dogBlocks}
-      </div>
-    `;
-  }
-
-  target.innerHTML = dogCards + afterSchoolCard;
+  target.innerHTML = dogCards;
 }
 
 // ─── Edit mode toggle ──────────────────────────────────────
