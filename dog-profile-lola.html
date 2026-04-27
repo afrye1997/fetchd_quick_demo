@@ -2287,7 +2287,7 @@ body {
     </button>
   </div>
   <div class="notif-list" id="notifList">
-    <button class="notif-row unread" data-route="report-card-all.html" data-randomize="true">
+    <button class="notif-row unread" data-route="report-card-all-lola.html" data-randomize="true">
       <span class="notif-unread-dot"></span>
       <span class="notif-icon report">
         <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg>
@@ -2602,13 +2602,13 @@ document.querySelectorAll('.tab').forEach(tab => {
   const variants = ['foundation', 'advanced', 'looseleash', 'housemanners', 'cgc'];
   function goToRandom() {
     const pick = variants[Math.floor(Math.random() * variants.length)];
-    location.href = 'report-card-all.html#' + pick;
+    location.href = 'report-card-all-lola.html#' + pick;
   }
   const latestBtn = document.getElementById('latest-report-btn');
   if (latestBtn) latestBtn.addEventListener('click', goToRandom);
   const allBtn = document.getElementById('all-reports-btn');
   if (allBtn) allBtn.addEventListener('click', () => {
-    location.href = 'bookings-page.html#past';
+    location.href = 'reports-list-lola.html';
   });
 })();
 
@@ -2797,10 +2797,10 @@ document.querySelectorAll('.tab').forEach(tab => {
     row.addEventListener('click', () => {
       let route = row.dataset.route;
       if (!route) return;
-      if (row.dataset.randomize === 'true' && route.includes('report-card-all.html')) {
+      if (row.dataset.randomize === 'true' && route.includes('report-card-all-lola.html')) {
         const variants = ['foundation', 'advanced', 'looseleash', 'housemanners', 'cgc'];
         const pick = variants[Math.floor(Math.random() * variants.length)];
-        route = 'report-card-all.html#' + pick;
+        route = 'report-card-all-lola.html#' + pick;
       }
       location.href = route;
     });
