@@ -1089,6 +1089,40 @@ body {
   padding-bottom: max(env(safe-area-inset-bottom, 18px), 18px) !important;
 }
 
+/* ─── Persistent app chrome — header + bottom nav stay pinned ─── */
+:root {
+  --app-header-height: 92px;  /* 48px safe-area top + content + bottom padding + border */
+  --app-nav-height: 78px;     /* content + 18px safe-area bottom + border */
+}
+
+/* Header: pin to top of viewport */
+.header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+}
+
+/* Nav: pin to bottom of viewport */
+.nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-top: 0 !important;  /* override sticky's margin-top: auto */
+  z-index: 100 !important;
+}
+
+/* Push the page content inside the safe band between header and nav.
+   The chrome sits ON TOP via position: fixed, so we add equivalent
+   padding to the scroll container so content doesn't slip under. */
+.device-screen-inner {
+  padding-top: var(--app-header-height) !important;
+  padding-bottom: var(--app-nav-height) !important;
+  box-sizing: border-box !important;
+}
+
 
 /* ═══════════════════════════════════════════════════════════
    NOTIFICATIONS POPOVER
