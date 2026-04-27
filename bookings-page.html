@@ -3905,26 +3905,9 @@ function closeSessionTypeSheet() {
   setTimeout(() => document.getElementById('bkBackdrop').classList.remove('open'), 250);
 }
 
-// Wire each option's tap to its destination flow.
-// Wrapped in DOMContentLoaded because the .bk-sheet-option buttons are rendered
-// in the DOM AFTER this script tag, so we need to wait for the parser to finish.
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.bk-sheet-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      const action = opt.dataset.action;
-      if (action === 'bookings') {
-        location.href = 'booking-flow.html';
-      } else if (action === 'private') {
-        location.href = 'book-private.html';
-      } else if (action === 'group') {
-        location.href = 'book-group.html';
-      } else {
-        // boardtrain — no flow yet, just close the sheet
-        closeSessionTypeSheet();
-      }
-    });
-  });
-});
+// Book-a-session option clicks are wired via inline `onclick` attributes on each
+// .bk-sheet-option button (more reliable across mobile browsers than addEventListener
+// — the buttons live AFTER this script tag in the DOM).
 </script>
 
 
@@ -3975,7 +3958,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="bk-sheet-title">What kind of <em>session</em>?</div>
   <div class="bk-sheet-sub">Pick the type of visit you want to book.</div>
 
-  <button class="bk-sheet-option" type="button" data-action="bookings">
+  <button class="bk-sheet-option" type="button" data-action="bookings" onclick="location.href='booking-flow.html'">
     <div class="bk-sheet-option-icon combo">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/>
@@ -3989,7 +3972,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <span class="bk-sheet-option-arrow">›</span>
   </button>
 
-  <button class="bk-sheet-option" type="button" data-action="private">
+  <button class="bk-sheet-option" type="button" data-action="private" onclick="location.href='book-private.html'">
     <div class="bk-sheet-option-icon private">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="3.5"/>
@@ -4003,7 +3986,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <span class="bk-sheet-option-arrow">›</span>
   </button>
 
-  <button class="bk-sheet-option" type="button" data-action="group">
+  <button class="bk-sheet-option" type="button" data-action="group" onclick="location.href='book-group.html'">
     <div class="bk-sheet-option-icon group">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="8" r="3"/>
@@ -4019,7 +4002,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <span class="bk-sheet-option-arrow">›</span>
   </button>
 
-  <button class="bk-sheet-option" type="button" data-action="boardtrain">
+  <button class="bk-sheet-option" type="button" data-action="boardtrain" onclick="closeSessionTypeSheet()">
     <div class="bk-sheet-option-icon boardtrain">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/>
