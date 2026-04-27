@@ -739,7 +739,7 @@ body {
 .modal-body { padding: 4px 16px 16px; }
 
 /* Package options (credits modal) */
-.packages { display: flex; flex-direction: column; gap: 7px; }
+.packages { display: flex; flex-direction: column; gap: 10px; }
 .package {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 12px;
@@ -844,9 +844,14 @@ body {
 .modal-actions {
   padding: 14px 16px 18px;
   display: flex; flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   border-top: 1px solid var(--border-soft);
   margin-top: 4px;
+}
+.modal-actions > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .modal-btn {
   width: 100%;
@@ -1747,17 +1752,66 @@ body {
               </button>
             </div>
           </div>
+
+          <!-- PURCHASE CONFIRM VIEW: shown after tapping "Purchase & Add Credits" -->
+          <div id="purchaseConfirmView" style="display: none;">
+            <!-- Credits-being-added info card -->
+            <div class="payg-info-card">
+              <div class="payg-info-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="payg-info-text">
+                <div class="payg-info-title" id="confirmCreditsTitle">8 school credits will be added</div>
+                <div class="payg-info-desc" id="confirmCreditsDesc">Added to Waffles' account immediately after payment.</div>
+              </div>
+            </div>
+
+            <!-- Card list (same pattern as PAYG) -->
+            <div class="payg-section-label">Charge to</div>
+            <div class="payg-card-list">
+              <button class="payg-card-row selected" data-purchase-card="card-1" type="button" onclick="selectPurchaseCard('card-1')">
+                <div class="payg-card-icon visa">
+                  <svg viewBox="0 0 32 20"><rect x="0.5" y="0.5" width="31" height="19" rx="2.5"/><text x="16" y="14" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="9" font-weight="700" fill="currentColor" stroke="none">VISA</text></svg>
+                </div>
+                <div class="payg-card-text">
+                  <div class="payg-card-title-row">
+                    <div class="payg-card-title">Visa &middot;&middot;&middot;&middot; 4821</div>
+                    <span class="payg-card-default-badge">Default</span>
+                  </div>
+                  <div class="payg-card-sub">Expires 09/27</div>
+                </div>
+                <div class="payg-card-radio"></div>
+              </button>
+              <button class="payg-card-row" data-purchase-card="card-2" type="button" onclick="selectPurchaseCard('card-2')">
+                <div class="payg-card-icon mc">
+                  <svg viewBox="0 0 32 20"><rect x="0.5" y="0.5" width="31" height="19" rx="2.5"/><circle cx="13" cy="10" r="4.5" fill="#eb001b" stroke="none" opacity="0.85"/><circle cx="19" cy="10" r="4.5" fill="#f79e1b" stroke="none" opacity="0.85"/></svg>
+                </div>
+                <div class="payg-card-text">
+                  <div class="payg-card-title-row">
+                    <div class="payg-card-title">Mastercard &middot;&middot;&middot;&middot; 8203</div>
+                  </div>
+                  <div class="payg-card-sub">Expires 03/26</div>
+                </div>
+                <div class="payg-card-radio"></div>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="modal-actions">
           <!-- Purchase view actions (default) -->
           <div id="purchaseActions">
-            <button class="modal-btn modal-btn-primary" onclick="confirmPurchase()">Purchase &amp; Add Credits</button>
+            <button class="modal-btn modal-btn-primary" onclick="showPurchaseConfirmView()">Purchase &amp; Add Credits</button>
             <button class="modal-btn modal-btn-payg" onclick="showPaygView()">Pay as you go</button>
             <button class="modal-btn modal-btn-secondary" onclick="closeCreditsModalAndRevert()">Cancel</button>
           </div>
           <!-- PAYG view actions -->
           <div id="paygActions" style="display: none;">
             <button class="modal-btn modal-btn-primary" onclick="confirmPayg()">Use pay-as-you-go</button>
+            <button class="modal-btn modal-btn-secondary" onclick="showPurchaseView()">Back</button>
+          </div>
+          <!-- Purchase confirm view actions -->
+          <div id="purchaseConfirmActions" style="display: none;">
+            <button class="modal-btn modal-btn-primary" id="purchaseConfirmBtn" onclick="confirmPurchaseFinal()">Charge &amp; add credits</button>
             <button class="modal-btn modal-btn-secondary" onclick="showPurchaseView()">Back</button>
           </div>
         </div>
@@ -1885,6 +1939,9 @@ let creditsModalState = {
 // PAYG card selection (per-(dogId:type), shared across bookings)
 let paygCard = {};                  // { 'd1:school': 'card-1', ... }
 let selectedPaygCardId = 'card-1';  // current modal selection
+
+// Purchase card selection (one-shot per purchase)
+let selectedPurchaseCardId = 'card-1';
 
 // Recurring panel state
 let selectedWeekdays = new Set();
@@ -2317,8 +2374,13 @@ function openCreditsModal(dogId, type, pendingDay) {
   showPurchaseView();
   const recalled = paygCard[`${dogId}:${type}`];
   selectedPaygCardId = recalled || 'card-1';
-  document.querySelectorAll('.payg-card-row').forEach(r => {
+  document.querySelectorAll('.payg-card-row[data-card]').forEach(r => {
     r.classList.toggle('selected', r.dataset.card === selectedPaygCardId);
+  });
+  // Reset purchase card to default
+  selectedPurchaseCardId = 'card-1';
+  document.querySelectorAll('.payg-card-row[data-purchase-card]').forEach(r => {
+    r.classList.toggle('selected', r.dataset.purchaseCard === 'card-1');
   });
   document.getElementById('creditsModal').classList.add('open');
 }
@@ -2366,7 +2428,50 @@ function selectPackage(pkg) {
   });
 }
 
-function confirmPurchase() {
+// Purchase: switch modal body to the confirmation view showing what
+// will be added and which card will be charged. Does NOT commit yet.
+function showPurchaseConfirmView() {
+  const dog = dogs.find(d => d.id === creditsModalState.dogId);
+  const pkgs = creditsModalState.type === 'school'
+    ? [{ n: 4, p: 140 }, { n: 8, p: 240 }, { n: 16, p: 400 }]
+    : [{ n: 5, p: 150 }, { n: 10, p: 280 }, { n: 20, p: 500 }];
+  const pkg = pkgs.find(x => String(x.n) === creditsModalState.selectedPkg) || pkgs[1];
+  const typeLabel = creditsModalState.type === 'school' ? 'school' : 'daycare';
+  const unitLabel = creditsModalState.type === 'school' ? 'class' : 'day';
+  const creditWord = pkg.n === 1 ? 'credit' : 'credits';
+
+  // Populate info card
+  document.getElementById('confirmCreditsTitle').textContent =
+    `${pkg.n} ${typeLabel} ${creditWord} will be added`;
+  document.getElementById('confirmCreditsDesc').textContent =
+    `Added to ${dog.name}'s account immediately after payment. That's ${pkg.n} ${unitLabel}${pkg.n === 1 ? '' : 's'} at $${(pkg.p / pkg.n).toFixed(0)} per ${unitLabel}.`;
+
+  // Set CTA copy with the price
+  document.getElementById('purchaseConfirmBtn').textContent = `Charge $${pkg.p} & add credits`;
+
+  // Show the view, hide others
+  document.getElementById('purchaseView').style.display = 'none';
+  document.getElementById('paygView').style.display = 'none';
+  document.getElementById('purchaseConfirmView').style.display = '';
+  document.getElementById('purchaseActions').style.display = 'none';
+  document.getElementById('paygActions').style.display = 'none';
+  document.getElementById('purchaseConfirmActions').style.display = '';
+
+  // Update title/subtitle to match the context
+  document.getElementById('modalTitle').innerHTML = `Confirm purchase for <em>${dog.name}</em>`;
+  document.getElementById('modalSubtitle').textContent = 'Review and choose how to pay.';
+}
+
+// Purchase confirm view: select which card to charge
+function selectPurchaseCard(cardId) {
+  selectedPurchaseCardId = cardId;
+  document.querySelectorAll('.payg-card-row[data-purchase-card]').forEach(r => {
+    r.classList.toggle('selected', r.dataset.purchaseCard === cardId);
+  });
+}
+
+// Purchase: actual commit — adds credits to the dog and closes the modal
+function confirmPurchaseFinal() {
   const dog = dogs.find(d => d.id === creditsModalState.dogId);
   const pkg = parseInt(creditsModalState.selectedPkg);
   if (creditsModalState.type === 'school') {
@@ -2376,6 +2481,7 @@ function confirmPurchase() {
   }
   // Purchasing credits exits pay-as-you-go state for this dog+type
   payg.delete(`${dog.id}:${creditsModalState.type}`);
+  delete paygCard[`${dog.id}:${creditsModalState.type}`];
   document.getElementById('creditsModal').classList.remove('open');
   creditsModalState = { dogId: null, type: 'school', pendingDay: null, pendingMonth: null, selectedPkg: '8' };
   renderReviewCards();
@@ -2387,8 +2493,10 @@ function confirmPurchase() {
 function showPaygView() {
   document.getElementById('purchaseView').style.display = 'none';
   document.getElementById('paygView').style.display = '';
+  document.getElementById('purchaseConfirmView').style.display = 'none';
   document.getElementById('purchaseActions').style.display = 'none';
   document.getElementById('paygActions').style.display = '';
+  document.getElementById('purchaseConfirmActions').style.display = 'none';
   // Update modal title/subtitle to reflect the new context
   const dog = dogs.find(d => d.id === creditsModalState.dogId);
   if (dog) {
@@ -2402,8 +2510,10 @@ function showPaygView() {
 function showPurchaseView() {
   document.getElementById('purchaseView').style.display = '';
   document.getElementById('paygView').style.display = 'none';
+  document.getElementById('purchaseConfirmView').style.display = 'none';
   document.getElementById('purchaseActions').style.display = '';
   document.getElementById('paygActions').style.display = 'none';
+  document.getElementById('purchaseConfirmActions').style.display = 'none';
   // Restore original modal title/subtitle
   const dog = dogs.find(d => d.id === creditsModalState.dogId);
   if (dog) {
