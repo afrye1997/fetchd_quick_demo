@@ -3153,16 +3153,25 @@ function buildDiff() {
   DOGS_DATA.forEach(dog => {
     const removed = bookings.filter(b => b.dogId === dog.id && b.status === 'removed');
     const added   = bookings.filter(b => b.dogId === dog.id && b.status === 'added');
-    if (removed.length === 0 && added.length === 0) return;
+    // After-school changes on EXISTING (kept) sessions whose flag flipped from start
+    const astTurnedOn = bookings.filter(b =>
+      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
+      b.afterSchool === true && b.afterSchoolStart === false
+    );
+    const astTurnedOff = bookings.filter(b =>
+      b.dogId === dog.id && b.type === 'school' && b.status === 'kept' &&
+      b.afterSchool === false && b.afterSchoolStart === true
+    );
+    if (removed.length === 0 && added.length === 0 && astTurnedOn.length === 0 && astTurnedOff.length === 0) return;
     out.push({
       kind: 'dog',
       dog,
       removed,
       added,
+      astTurnedOn,
+      astTurnedOff,
     });
   });
-  // Per-dog after-school summary (grouped state) is intentionally omitted from the
-  // confirmation view — bone icons inline on the session chips already convey this.
   return out;
 }
 
@@ -3225,6 +3234,30 @@ function renderDiff(targetId) {
       sections.push(`
         <div class="rs-conf-chip-section">
           <div class="rs-conf-chip-section-label added">Added</div>
+          <div class="rs-conf-chips">${chips}</div>
+        </div>
+      `);
+    }
+    if (item.astTurnedOn.length) {
+      // Render with bone icon (afterSchool is true)
+      const chips = item.astTurnedOn.map(b => renderConfChip(b, false)).join('');
+      sections.push(`
+        <div class="rs-conf-chip-section">
+          <div class="rs-conf-chip-section-label added">After-school added</div>
+          <div class="rs-conf-chips">${chips}</div>
+        </div>
+      `);
+    }
+    if (item.astTurnedOff.length) {
+      // Render WITHOUT bone (afterSchool is false now), with red removed treatment to indicate removal
+      const chips = item.astTurnedOff.map(b => {
+        const cls = ['rs-conf-chip', 'removed'];
+        const label = `${b.dow} ${MONTH_SHORT[b.month]} ${b.day}`;
+        return `<span class="${cls.join(' ')}">${label}</span>`;
+      }).join('');
+      sections.push(`
+        <div class="rs-conf-chip-section">
+          <div class="rs-conf-chip-section-label removed">After-school removed</div>
           <div class="rs-conf-chips">${chips}</div>
         </div>
       `);
