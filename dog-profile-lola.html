@@ -491,6 +491,255 @@ body {
 
 
 
+
+/* ─── Reports section: recent report cards horizontal scroller ─── */
+.rep-recent-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 4px 6px;
+}
+.rep-strip-scroller {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 8px;
+  scrollbar-width: none;
+  margin: 0 -4px;
+}
+.rep-strip-scroller::-webkit-scrollbar { display: none; }
+.rep-strip-card {
+  scroll-snap-align: start;
+  width: 130px;
+  flex-shrink: 0;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Instrument Sans', sans-serif;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(33, 53, 106, 0.04);
+  transition: transform 0.12s, box-shadow 0.18s;
+}
+.rep-strip-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(33, 53, 106, 0.10); }
+.rep-strip-card:active { transform: translateY(-1px) scale(0.99); }
+.rep-strip-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  z-index: 2;
+}
+.rep-strip-card.type-school::before     { background: var(--navy); }
+.rep-strip-card.type-daycare::before    { background: var(--accent-gold); }
+.rep-strip-card.type-private::before    { background: var(--accent-purple); }
+.rep-strip-card.type-boardtrain::before { background: var(--accent-terracotta); }
+.rep-strip-card.type-groupclass::before { background: #5a9a9a; }
+
+.rep-strip-body {
+  padding: 8px 9px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rep-strip-name-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+.rep-strip-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+.rep-strip-date {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.rep-strip-type {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: -2px;
+}
+.rep-strip-type.type-school     { color: var(--navy); }
+.rep-strip-type.type-daycare    { color: var(--accent-gold-dark); }
+.rep-strip-type.type-private    { color: #6f4eb8; }
+.rep-strip-type.type-boardtrain { color: var(--accent-terracotta-dark); }
+.rep-strip-type.type-groupclass { color: #2e6e6e; }
+
+.rep-strip-metrics {
+  display: flex; flex-direction: column; gap: 3px;
+  margin-top: 2px;
+}
+.rep-metric {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.rep-metric-label {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rep-metric-dots { display: flex; gap: 1.5px; flex-shrink: 0; }
+.rep-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.rep-dot-filled { background: var(--accent-green); }
+
+/* Primary "View latest report" button at the top of the Reports modal */
+.rep-latest-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(33, 53, 106, 0.18);
+  transition: transform 0.1s, box-shadow 0.18s;
+}
+.rep-latest-btn:active { transform: scale(0.98); box-shadow: 0 1px 4px rgba(33, 53, 106, 0.18); }
+.rep-latest-btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* Secondary "View all" button — sits below the primary navy CTA */
+.rep-viewall-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: white;
+  color: var(--navy);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s, transform 0.1s, border-color 0.15s;
+  margin-top: -4px;
+}
+.rep-viewall-btn:active {
+  transform: scale(0.99);
+  background-color: rgba(33, 53, 106, 0.04);
+  border-color: var(--navy-pale);
+}
+.rep-viewall-btn svg {
+  width: 12px; height: 12px;
+  stroke: var(--muted);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Recent reports label — small italic Cormorant subtitle for "· last 7 days" */
+.rep-recent-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted-soft, #a8b6cf);
+}
+
+/* Strip wrap holds the scroller plus the scroll hint stacked beneath it */
+.rep-strip-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: -2px;
+}
+
+/* Scroll hint — flush-right, fades when content fits or user is at end.
+   Scoped (.rep-*) so it doesn't conflict with the global .scroll-hint. */
+.rep-scroll-hint {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 4px 2px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+  gap: 4px;
+  align-items: center;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.rep-scroll-hint.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.rep-scroll-hint-arrow {
+  display: inline-block;
+  font-size: 11px;
+  animation: rep-scroll-hint-bob 2s ease-in-out infinite;
+}
+@keyframes rep-scroll-hint-bob {
+  0%, 100% { transform: translateX(0); opacity: 0.6; }
+  50% { transform: translateX(3px); opacity: 1; }
+}
+
 /* Section card — see "Collapsible sections" block above for the updated
    Apple-style card treatment. The colored left-edge stripe lives on
    .section now (not .card::before) so it persists when the body collapses. */
@@ -2180,6 +2429,132 @@ body {
           </div>
         </div>
 
+        <!-- REPORTS -->
+        <div class="section reports is-collapsed">
+          <div class="section-label-row">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
+                <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
+                <div class="section-head-label">Reports</div>
+              </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+          </div>
+          <div class="card">
+            <button class="rep-latest-btn" id="latest-report-btn">
+              <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+              View Latest Report
+            </button>
+            <button class="rep-viewall-btn" id="all-reports-btn">
+              View all
+              <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+            </button>
+            <div class="rep-recent-label">Recent reports <span class="rep-recent-sub">· last 7 days</span></div>
+            <div class="rep-strip-wrap">
+              <div class="rep-strip-scroller" id="repStripScroller-lola">
+                <button class="rep-strip-card type-private" type="button" onclick="location.href='report-card-all-lola.html#looseleash'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">FRI APR 25</div>
+                  </div>
+                  <div class="rep-strip-type type-private">Private Lesson</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-school" type="button" onclick="location.href='report-card-all-lola.html#advanced'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">WED APR 23</div>
+                  </div>
+                  <div class="rep-strip-type type-school">School Day</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-private" type="button" onclick="location.href='report-card-all-lola.html#looseleash'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">MON APR 21</div>
+                  </div>
+                  <div class="rep-strip-type type-private">Private Lesson</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-school" type="button" onclick="location.href='report-card-all-lola.html#foundation'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">THU APR 17</div>
+                  </div>
+                  <div class="rep-strip-type type-school">School Day</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-private" type="button" onclick="location.href='report-card-all-lola.html#advanced'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">TUE APR 15</div>
+                  </div>
+                  <div class="rep-strip-type type-private">Private Lesson</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-groupclass" type="button" onclick="location.href='report-card-all-lola.html#cgc'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">FRI APR 11</div>
+                  </div>
+                  <div class="rep-strip-type type-groupclass">Group Class</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Sociability</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              <button class="rep-strip-card type-school" type="button" onclick="location.href='report-card-all-lola.html#foundation'">
+                <div class="rep-strip-body">
+                  <div class="rep-strip-name-row">
+                    <div class="rep-strip-name">Lola</div>
+                    <div class="rep-strip-date">WED APR 9</div>
+                  </div>
+                  <div class="rep-strip-type type-school">School Day</div>
+                  <div class="rep-strip-metrics">
+                              <div class="rep-metric"><span class="rep-metric-label">Focus</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Obedience</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span></span></div>
+              <div class="rep-metric"><span class="rep-metric-label">Confidence</span><span class="rep-metric-dots"><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot rep-dot-filled"></span><span class="rep-dot"></span></span></div>
+                  </div>
+                </div>
+              </button>
+              </div>
+              <div class="rep-scroll-hint" data-target="#repStripScroller-lola">scroll <span class="rep-scroll-hint-arrow">→</span></div>
+            </div>
+          </div>
+        </div>
         <!-- DAY CARE -->
         <div class="section daycare is-collapsed">
           <div class="section-label-row">
@@ -2365,33 +2740,6 @@ body {
             <div class="bt-empty">
               <div class="bt-empty-text">Live-in training with a personal plan. Available on request.</div>
               <button class="btn-request-wide" type="button">Request Info</button>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- REPORTS -->
-        <div class="section reports is-collapsed">
-          <div class="section-label-row">
-            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
-              <div class="section-head">
-                <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
-                <div class="section-head-label">Reports</div>
-              </div>
-              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
-            </button>
-          </div>
-          <div class="card">
-            <div class="reports-btn-row">
-              <button class="current-report-link" id="latest-report-btn">
-                <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-                Latest report card
-                <span class="arrow">→</span>
-              </button>
-              <button class="current-report-link current-report-link-secondary" id="all-reports-btn">
-                View all
-                <span class="arrow">→</span>
-              </button>
             </div>
           </div>
         </div>
@@ -3223,6 +3571,57 @@ document.querySelectorAll('.tab').forEach(tab => {
     markReadBtn.textContent = anyUnread ? 'Mark all as read' : 'All caught up';
   }
 })();
+
+// ══════════════════════════════════════════
+// Reports strip scroll hint — fades out when scrolled to end
+// ══════════════════════════════════════════
+(function() {
+  function wireRepHint(hint, row) {
+    if (!hint || !row) return;
+    function update() {
+      const fits = row.scrollWidth <= row.clientWidth + 1;
+      const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+      if (fits || atEnd) hint.classList.add('is-hidden');
+      else hint.classList.remove('is-hidden');
+    }
+    row.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // Expose so the modal-open handler can re-run after layout settles
+    hint._repUpdate = update;
+    requestAnimationFrame(update);
+  }
+
+  function initRepHints() {
+    document.querySelectorAll('.rep-scroll-hint[data-target]').forEach(hint => {
+      if (hint._repWired) return;
+      const row = document.querySelector(hint.dataset.target);
+      if (row) {
+        hint._repWired = true;
+        wireRepHint(hint, row);
+      }
+    });
+  }
+
+  function refreshRepHints() {
+    document.querySelectorAll('.rep-scroll-hint').forEach(hint => {
+      if (hint._repUpdate) requestAnimationFrame(hint._repUpdate);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initRepHints);
+  // Hook the section modal opener: when a Reports tile opens, the scroller
+  // is suddenly measurable inside the modal — re-measure so the hint
+  // shows/hides correctly.
+  const origOpen = window.openSectionModal;
+  if (typeof origOpen === 'function') {
+    window.openSectionModal = function(section) {
+      origOpen(section);
+      // Wait a frame for the modal to lay out, then refresh.
+      requestAnimationFrame(() => requestAnimationFrame(refreshRepHints));
+    };
+  }
+})();
+
 </script>
 
 </body>
