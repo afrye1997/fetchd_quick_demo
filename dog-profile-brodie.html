@@ -24,6 +24,8 @@
   --accent-purple: #7a5bc4;
   --accent-terracotta: #c47a5a;
   --accent-terracotta-dark: #8a4a2a;
+  --accent-pink: #f4b6c8;
+  --accent-pink-dark: #b85a7a;
   --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
   --shadow-md: 0 4px 16px rgba(33, 53, 106, 0.08);
 }
@@ -131,34 +133,39 @@ body {
 
 .profile-hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 14px;
-  padding: 4px 20px 16px;
+  padding: 8px 20px 20px;
+  text-align: center;
 }
 .profile-photo {
-  width: 56px; height: 56px; border-radius: 50%;
+  width: 140px; height: 140px; border-radius: 50%;
   overflow: hidden; flex-shrink: 0;
-  border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(33, 53, 106, 0.15);
+  border: 3px solid white;
+  box-shadow: 0 6px 24px rgba(33, 53, 106, 0.18),
+              0 2px 6px rgba(33, 53, 106, 0.10);
 }
 .profile-photo img {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
 .profile-ident {
   display: flex; flex-direction: column;
-  gap: 2px; flex: 1; min-width: 0;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
 }
 .profile-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 26px; font-weight: 500;
+  font-size: 32px; font-weight: 500;
   letter-spacing: -0.015em;
   line-height: 1;
   color: var(--navy);
 }
 .profile-meta {
-  font-size: 12px; font-weight: 500;
+  font-size: 13px; font-weight: 500;
   color: var(--muted);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 /* Tabs */
@@ -244,6 +251,229 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+/* ─── Collapsible sections — Apple-style "card" treatment ─── */
+
+/* Each section IS the card now: subtle cream-tinted bg, soft shadow,
+   14px corners, accent stripe down the left edge. Collapsed and expanded
+   states share the same visual chrome — only the body content slides in/out. */
+.section {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(33, 53, 106, 0.04),
+              0 4px 16px rgba(33, 53, 106, 0.04);
+  margin: 0 16px 12px;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.25s ease, transform 0.18s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.section:hover {
+  box-shadow: 0 1px 2px rgba(33, 53, 106, 0.05),
+              0 6px 22px rgba(33, 53, 106, 0.06);
+}
+
+/* Accent stripe — moved from .card::before onto .section so it persists
+   even when the inner card is collapsed away. */
+.section::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+.section.school::before     { background: var(--navy); }
+.section.private::before    { background: #9b7ed4; }
+.section.group::before      { background: var(--accent-green); }
+.section.daycare::before    { background: var(--accent-gold); }
+.section.boardtrain::before { background: var(--accent-terracotta); }
+.section.reports::before    { background: var(--accent-pink); }
+/* Simple sections (Care Notes) get a quiet neutral stripe */
+.section:not(.school):not(.private):not(.group):not(.daycare):not(.boardtrain):not(.reports)::before {
+  background: var(--border);
+}
+
+/* The toggle button now spans the entire section header — full width,
+   generous tap target, momentary tinted bg on press (Apple Settings row feel). */
+.section-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex: none;
+  gap: 12px;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  text-align: left;
+  min-width: 0;
+  transition: background-color 0.15s ease;
+  position: relative;
+  z-index: 2;
+}
+.section-toggle:active {
+  background-color: rgba(33, 53, 106, 0.04);
+}
+/* When section is in the section-label-row context (5 big sections),
+   the toggle button is the row's only child and spans full width. */
+.section-label-row {
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+.section-label-row .section-toggle {
+  flex: 1;
+  width: 100%;
+}
+
+.section-toggle.simple {
+  padding: 14px 16px;
+  margin: 0;
+  width: 100%;
+  flex: none;
+  justify-content: space-between;
+  gap: 12px;
+}
+.section-toggle.simple .section-label {
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+.section-toggle .section-head {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* iOS-style chevron — slightly larger, lower contrast, points right when
+   collapsed and rotates 90° clockwise to point down when expanded. */
+.section-chevron {
+  width: 9px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: var(--muted-soft, #a8b6cf);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  transform: rotate(0deg);
+  margin-left: auto;
+  align-self: center;
+}
+.section.is-collapsed .section-chevron {
+  transform: rotate(0deg);
+}
+.section:not(.is-collapsed) .section-chevron {
+  transform: rotate(90deg);
+}
+
+/* When a section's .card is moved into the section detail modal,
+   override the inline-collapse hiding so it renders fully. */
+.modal-section-body .card,
+.modal-section-body .card[style] {
+  max-height: none !important;
+  opacity: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent;
+  display: flex !important;
+}
+.modal-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* The collapsing body — animates max-height + opacity. We rely on a
+   generous max-height (1500px is enough for any of our sections); the
+   spring curve gives it that satisfying Apple feel. */
+.card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin: 0 16px 16px;
+  padding: 16px;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  max-height: 1500px;
+  opacity: 1;
+  transition: max-height 0.42s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 0.28s ease 0.05s,
+              padding 0.42s cubic-bezier(0.32, 0.72, 0, 1),
+              margin 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.card::before {
+  /* Suppress the old inner stripe — moved onto .section. */
+  display: none;
+}
+.section.is-collapsed .card {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* When collapsed, also drop the outer section's bottom margin so closed
+   rows pack tightly into a clean Apple Settings-style list. */
+.section.is-collapsed {
+  margin-bottom: 8px;
+}
+
+/* Slight elevation bump for the open section so it feels "lit up" relative
+   to the closed siblings around it. */
+.section:not(.is-collapsed) {
+  box-shadow: 0 1px 2px rgba(33, 53, 106, 0.06),
+              0 8px 28px rgba(33, 53, 106, 0.08);
+}
+
+/* Per-category icon tints — refined: slightly more saturated bg,
+   a touch smaller, more rounded for icon-glyph coherence. */
+.section-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.section-icon svg {
+  width: 14px; height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Section labels — slightly bigger, a little less aggressive on tracking,
+   for that more-readable Apple-Settings cell label feel. */
+.section-head-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.section-toggle.simple .section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
 
 /* Per-category tints (soft bg, deeper text) */
 .section.school .section-icon  { background: rgba(33, 53, 106, 0.1);  color: var(--navy); }
@@ -256,46 +486,14 @@ body {
 .section.daycare .section-head-label { color: var(--accent-gold-dark); }
 .section.boardtrain .section-icon { background: rgba(196, 122, 90, 0.18); color: var(--accent-terracotta-dark); }
 .section.boardtrain .section-head-label { color: var(--accent-terracotta-dark); }
+.section.reports .section-icon { background: rgba(244, 182, 200, 0.35); color: var(--accent-pink-dark); }
+.section.reports .section-head-label { color: var(--accent-pink-dark); }
 
-.section-link {
-  font-size: 11px; font-weight: 600;
-  color: var(--navy-mid);
-  letter-spacing: 0.02em;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  background: none; border: none;
-  cursor: pointer; padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.section-link:active { opacity: 0.6; }
 
-/* Section card */
-.section {
-  margin: 0 16px 16px;
-}
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-  overflow: hidden;
-}
-/* Colored left-edge accent stripe */
-.card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-}
-.section.school .card::before  { background: var(--navy); }
-.section.private .card::before { background: #9b7ed4; }
-.section.group .card::before   { background: var(--accent-green); }
-.section.daycare .card::before { background: var(--accent-gold); }
-.section.boardtrain .card::before { background: var(--accent-terracotta); }
+
+/* Section card — see "Collapsible sections" block above for the updated
+   Apple-style card treatment. The colored left-edge stripe lives on
+   .section now (not .card::before) so it persists when the body collapses. */
 
 /* School Progress */
 .school-progress {
@@ -1287,6 +1485,27 @@ a.info-link:active { opacity: 0.55; }
   max-height: 85vh;
   overflow-y: auto;
 }
+
+/* Centered card variant — for full-section detail popups (Apple-style).
+   Sits in the middle of the screen, sizes to content, scales+fades in. */
+.modal-backdrop.modal-centered {
+  align-items: center;
+  padding: 24px;
+}
+.modal-card.modal-card-centered {
+  max-width: 360px;
+  border-radius: 18px;
+  padding: 18px 18px 20px;
+  padding-bottom: 20px;
+  box-shadow: 0 24px 60px rgba(33, 53, 106, 0.28),
+              0 4px 12px rgba(33, 53, 106, 0.10);
+  animation: modal-scale-in 0.26s cubic-bezier(0.32, 1.15, 0.6, 1);
+  max-height: calc(100vh - 48px);
+}
+@keyframes modal-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
 @keyframes modal-slide {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1560,7 +1779,62 @@ a.info-link:active { opacity: 0.55; }
 
 /* Tab switching — show/hide content */
 .tab-panel { display: none; }
-.tab-panel.active { display: block; }
+.tab-panel.active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 16px;
+  align-items: start;
+}
+
+/* In the 2-col grid, each section is a tile by default. Drop the side margins
+   (the grid gap + tab-panel padding handle horizontal spacing now) and zero
+   the bottom margin (gap handles vertical spacing too). */
+.tab-panel.active > .section {
+  margin: 0;
+}
+
+/* Collapsed tile layout: icon centered up top, label centered below.
+   Tile gets a square-ish min-height so the grid feels like a tile grid
+   rather than a row of buttons. The chevron is hidden when collapsed —
+   the entire tile is the affordance. */
+.tab-panel.active > .section.is-collapsed .section-toggle {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 18px 12px 16px;
+  gap: 10px;
+  min-height: 96px;
+}
+.tab-panel.active > .section.is-collapsed .section-toggle .section-head {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.tab-panel.active > .section.is-collapsed .section-toggle .section-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+}
+.tab-panel.active > .section.is-collapsed .section-toggle .section-icon svg {
+  width: 18px; height: 18px;
+}
+.tab-panel.active > .section.is-collapsed .section-toggle .section-head-label,
+.tab-panel.active > .section.is-collapsed .section-toggle.simple .section-label {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+}
+.tab-panel.active > .section.is-collapsed .section-chevron {
+  display: none;
+}
+
+/* Expanded section breaks out to full-width row across both columns,
+   reverting to the horizontal header layout so content has room to breathe. */
+.tab-panel.active > .section:not(.is-collapsed) {
+  grid-column: 1 / -1;
+}
 
 /* ═══════════════════════════════════════════════════════════
    REAL DEVICE MODE — strip mockup chrome, fill real viewport
@@ -1856,14 +2130,16 @@ body {
       <div class="tab-panel active" id="panel-overview">
 
         <!-- SCHOOL PROGRESS -->
-        <div class="section school">
+        <div class="section school is-collapsed">
           <div class="section-label-row">
-            <div class="section-head">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
               <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div>
               <div class="section-head-label">School Progress</div>
             </div>
-            <button class="section-link">Full history</button>
-          </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+            </div>
           <div class="card">
             <div class="school-progress">
               
@@ -1888,25 +2164,6 @@ body {
           <div class="step-label">Canine Good Citizen</div>
         </div>
             </div>
-            <div class="reports-block">
-              <div class="reports-label-row">
-                <div class="mini-label">Reports</div>
-                <button class="current-info-btn" data-open-modal="curriculumModal" aria-label="What's being learned in House Manners" title="What's being learned in House Manners">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                </button>
-              </div>
-              <div class="reports-btn-row">
-                <button class="current-report-link" id="latest-report-btn">
-                  <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-                  Latest report card
-                  <span class="arrow">→</span>
-                </button>
-                <button class="current-report-link current-report-link-secondary" id="all-reports-btn">
-                  View all
-                  <span class="arrow">→</span>
-                </button>
-              </div>
-            </div>
             
       <div class="prev-row">
         <div class="prev-label">Upcoming</div>
@@ -1924,14 +2181,16 @@ body {
         </div>
 
         <!-- DAY CARE -->
-        <div class="section daycare">
+        <div class="section daycare is-collapsed">
           <div class="section-label-row">
-            <div class="section-head">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
               <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/></svg></div>
               <div class="section-head-label">Day Care</div>
             </div>
-            <button class="section-link">Full history</button>
-          </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+            </div>
           <div class="card">
             <div class="daycare-top">
               <div class="daycare-stat">
@@ -2008,14 +2267,16 @@ body {
         </div>
 
         <!-- PRIVATE LESSONS -->
-        <div class="section private">
+        <div class="section private is-collapsed">
           <div class="section-label-row">
-            <div class="section-head">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
               <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.2-6 7-6s7 2.5 7 6"/></svg></div>
               <div class="section-head-label">Private Lessons</div>
             </div>
-            <button class="section-link">Full history</button>
-          </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+            </div>
           <div class="card">
             <div class="info-rows">
               <div class="info-row">
@@ -2048,14 +2309,16 @@ body {
         </div>
 
         <!-- GROUP LESSONS -->
-        <div class="section group">
+        <div class="section group is-collapsed">
           <div class="section-label-row">
-            <div class="section-head">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
               <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M15 19c0-2.5 2-4 4-4"/></svg></div>
               <div class="section-head-label">Group Lessons</div>
             </div>
-            <button class="section-link">Full history</button>
-          </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+            </div>
           <div class="card">
             <div class="info-rows">
               <div class="info-row">
@@ -2088,12 +2351,15 @@ body {
         </div>
 
         <!-- BOARD & TRAIN -->
-        <div class="section boardtrain">
+        <div class="section boardtrain is-collapsed">
           <div class="section-label-row">
-            <div class="section-head">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
               <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/><circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/></svg></div>
               <div class="section-head-label">Board &amp; Train</div>
             </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
           </div>
           <div class="card">
             <div class="bt-empty">
@@ -2103,6 +2369,32 @@ body {
           </div>
         </div>
 
+
+        <!-- REPORTS -->
+        <div class="section reports is-collapsed">
+          <div class="section-label-row">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
+                <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
+                <div class="section-head-label">Reports</div>
+              </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+          </div>
+          <div class="card">
+            <div class="reports-btn-row">
+              <button class="current-report-link" id="latest-report-btn">
+                <svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+                Latest report card
+                <span class="arrow">→</span>
+              </button>
+              <button class="current-report-link current-report-link-secondary" id="all-reports-btn">
+                View all
+                <span class="arrow">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- END OVERVIEW -->
 
@@ -2110,8 +2402,11 @@ body {
       <div class="tab-panel" id="panel-care">
 
         <!-- MEDICATIONS -->
-        <div class="section">
-          <div class="section-label">Medications</div>
+        <div class="section is-collapsed">
+          <button class="section-toggle simple" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+            <div class="section-label">Medications</div>
+            <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+          </button>
           <div class="card">
             
       <div class="care-row">
@@ -2140,8 +2435,11 @@ body {
         </div>
 
         <!-- VACCINES -->
-        <div class="section">
-          <div class="section-label">Vaccines</div>
+        <div class="section is-collapsed">
+          <button class="section-toggle simple" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+            <div class="section-label">Vaccines</div>
+            <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+          </button>
           <div class="card">
             
       <div class="vaccine-row">
@@ -2186,8 +2484,11 @@ body {
         </div>
 
         <!-- FEEDING INSTRUCTIONS -->
-        <div class="section">
-          <div class="section-label">Feeding Instructions</div>
+        <div class="section is-collapsed">
+          <button class="section-toggle simple" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+            <div class="section-label">Feeding Instructions</div>
+            <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+          </button>
           <div class="card">
             <div class="care-row" style="border-bottom: none; padding: 0;">
               <div class="care-icon med">
@@ -2205,8 +2506,11 @@ body {
         </div>
 
         <!-- SPECIAL NOTES -->
-        <div class="section">
-          <div class="section-label">Special Notes</div>
+        <div class="section is-collapsed">
+          <button class="section-toggle simple" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+            <div class="section-label">Special Notes</div>
+            <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+          </button>
           <div class="card">
             
       <div class="care-row">
@@ -2339,6 +2643,19 @@ body {
 <!-- ═══════════════════════════════════════════
      MODAL POPUPS (care notes forms)
      ═══════════════════════════════════════════ -->
+
+<!-- Section detail (reusable — populated dynamically from a tapped tile) -->
+<div class="modal-backdrop modal-centered" data-modal="sectionModal" id="sectionModal">
+  <div class="modal-card modal-card-centered" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="sectionModalTitle"></div>
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg viewBox="0 0 12 12"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
+      </button>
+    </div>
+    <div class="modal-section-body" id="sectionModalBody"></div>
+  </div>
+</div>
 
 <!-- Add Medication -->
 <div class="modal-backdrop" data-modal="medModal">
@@ -2580,6 +2897,81 @@ body {
 </div>
 
 <script>
+// ══════════════════════════════════════════
+// Collapsible sections (Overview + Care Notes)
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// Section detail modal (Apple-style centered card popup)
+// Tapping a section tile moves its .card content into a shared modal,
+// then moves it back when the modal closes. This preserves IDs and any
+// existing event listeners on the inner buttons.
+// ══════════════════════════════════════════
+function toggleProfileSection(btn) {
+  const section = btn.closest('.section');
+  if (!section) return;
+  openSectionModal(section);
+}
+
+(function() {
+  const modal = document.getElementById('sectionModal');
+  const titleEl = document.getElementById('sectionModalTitle');
+  const bodyEl = document.getElementById('sectionModalBody');
+  if (!modal || !titleEl || !bodyEl) return;
+
+  let activeSection = null;
+  let originalAnchor = null;
+
+  window.openSectionModal = function(section) {
+    if (!section) return;
+    if (activeSection) closeSectionModal();
+
+    const labelEl = section.querySelector('.section-head-label, .section-label');
+    titleEl.textContent = labelEl ? labelEl.textContent : '';
+
+    const card = section.querySelector('.card');
+    if (card) {
+      originalAnchor = { parent: card.parentNode, next: card.nextSibling };
+      bodyEl.appendChild(card);
+    } else {
+      originalAnchor = null;
+    }
+    activeSection = section;
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeSectionModal() {
+    if (!activeSection) return;
+    const card = bodyEl.querySelector('.card');
+    if (card && originalAnchor) {
+      originalAnchor.parent.insertBefore(card, originalAnchor.next || null);
+    }
+    activeSection = null;
+    originalAnchor = null;
+    titleEl.textContent = '';
+    modal.classList.remove('open');
+    if (!document.querySelector('.modal-backdrop.open')) {
+      document.body.style.overflow = '';
+    }
+  }
+  window.closeSectionModal = closeSectionModal;
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeSectionModal();
+  });
+
+  modal.querySelectorAll('[data-close-modal]').forEach(btn => {
+    btn.addEventListener('click', closeSectionModal, true);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeSectionModal();
+    }
+  });
+})();
+
 // ══════════════════════════════════════════
 // Tab switching
 // ══════════════════════════════════════════

@@ -684,7 +684,8 @@ body {
   opacity: 0.8;
 }
 
-.dogs-scroll-hint {
+.dogs-scroll-hint,
+.scroll-hint {
   display: flex;
   justify-content: flex-end;
   padding: 4px 24px 0;
@@ -696,9 +697,17 @@ body {
   opacity: 0.7;
   gap: 4px;
   align-items: center;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.dogs-scroll-hint.is-hidden,
+.scroll-hint.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.dogs-scroll-hint-arrow {
+.dogs-scroll-hint-arrow,
+.scroll-hint-arrow {
   display: inline-block;
   font-size: 11px;
   animation: scroll-hint 2s ease-in-out infinite;
@@ -1626,6 +1635,7 @@ body {
     </div>
 
   </div>
+  <div class="scroll-hint" data-target=".announcements-scroll">scroll <span class="scroll-hint-arrow">→</span></div>
 </div>
 
 <!-- UP NEXT: day-centric, multi-dog aware -->
@@ -1853,9 +1863,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Ensure the dogs row starts at the leftmost scroll position on page load,
 // so the first 3 dogs are visible and centered in the viewport.
+// Also: hide any "scroll →" hint when its target row is at the rightmost scroll
+// position (or has nothing to scroll because all items already fit).
 document.addEventListener('DOMContentLoaded', () => {
-  const row = document.querySelector('.dogs-row');
-  if (row) row.scrollLeft = 0;
+  const dogsRow = document.querySelector('.dogs-row');
+  if (dogsRow) dogsRow.scrollLeft = 0;
+
+  // Wire each scroll hint to its target horizontal-scroll row.
+  // The legacy ".dogs-scroll-hint" pairs with ".dogs-row";
+  // newer ".scroll-hint" elements specify their target via data-target.
+  function wireHint(hint, row) {
+    if (!hint || !row) return;
+    function update() {
+      const fits = row.scrollWidth <= row.clientWidth + 1;
+      const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+      if (fits || atEnd) hint.classList.add('is-hidden');
+      else hint.classList.remove('is-hidden');
+    }
+    row.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    requestAnimationFrame(update);
+  }
+
+  wireHint(document.querySelector('.dogs-scroll-hint'), dogsRow);
+
+  document.querySelectorAll('.scroll-hint[data-target]').forEach(hint => {
+    const row = document.querySelector(hint.dataset.target);
+    wireHint(hint, row);
+  });
 });
 </script>
 
