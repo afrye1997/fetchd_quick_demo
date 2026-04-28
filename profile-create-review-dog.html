@@ -815,7 +815,7 @@ function toggleCard(headerEl) {
 }
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
-    document.querySelectorAll('.review-card.collapsible').forEach(card => {
+    document.querySelectorAll('.review-card.collapsible[data-card="dog"]').forEach(card => {
       card.classList.add('collapsed');
     });
   }, 3000);
