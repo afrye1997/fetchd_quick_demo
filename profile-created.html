@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>NWA · Profile Created</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1f8;
+  --navy: #21356A;
+  --navy-mid: #2d4a8a;
+  --navy-pale: #b8c8e8;
+  --card: #f8faff;
+  --border: #d4dcec;
+  --border-soft: #e4eaf4;
+  --muted: #6a85b0;
+  --muted-soft: #8ea3c7;
+  --accent-gold: #d4a64a;
+  --accent-gold-dark: #8a6a28;
+  --accent-green: #4a8a6a;
+  --accent-green-bright: #22a858;
+  --accent-purple: #7a5bc4;
+  --accent-terracotta: #c47a5a;
+  --accent-red: #e04545;
+  --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
+  --shadow-md: 0 4px 16px rgba(33, 53, 106, 0.06);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: #2a2d35;
+  font-family: 'Instrument Sans', sans-serif;
+  color: var(--navy);
+  min-height: 100vh;
+  padding: 40px 20px 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: hidden;
+}
+.device-frame {
+  width: 430px; height: 902px;
+  background: #1a1c22; border-radius: 58px; padding: 14px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  flex-shrink: 0;
+}
+.dynamic-island {
+  position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+  width: 126px; height: 37px; background: #000; border-radius: 20px;
+  z-index: 100; pointer-events: none;
+}
+.device-screen {
+  width: 402px; height: 874px;
+  background: var(--bg);
+  border-radius: 46px;
+  overflow: hidden;
+  position: relative;
+}
+.device-screen-inner {
+  width: 100%; height: 100%;
+  overflow-y: auto; overflow-x: hidden;
+  position: relative;
+  display: flex; flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.device-screen-inner::-webkit-scrollbar { display: none; }
+
+.auth-page {
+  flex: 1;
+  display: flex; flex-direction: column;
+  padding: max(env(safe-area-inset-top, 18px), 60px) 20px max(env(safe-area-inset-bottom, 18px), 28px);
+  background: var(--bg);
+  min-height: 100%;
+  position: relative;
+}
+.auth-logo {
+  display: flex; justify-content: center;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+  position: relative; z-index: 2;
+}
+.auth-logo img { height: 32px; width: auto; display: block; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 0;
+  margin-bottom: 18px;
+  -webkit-tap-highlight-color: transparent;
+  align-self: flex-start;
+  transition: color 0.15s;
+  position: relative; z-index: 2;
+}
+.back-link:active { color: var(--navy); }
+.back-link svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; stroke-width: 2;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn:active { transform: scale(0.99); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: white;
+  box-shadow: 0 2px 8px rgba(33, 53, 106, 0.18);
+}
+.btn-primary:active { box-shadow: 0 1px 4px rgba(33, 53, 106, 0.2); }
+.btn-secondary {
+  background: white;
+  color: var(--navy);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:active {
+  background: var(--bg);
+  border-color: var(--navy-pale);
+}
+
+/* REAL DEVICE MODE */
+html, body {
+  background: var(--bg, #eef1f8) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+body {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+.device-frame {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  background: var(--bg, #eef1f8) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.dynamic-island { display: none !important; }
+.device-screen {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  border-radius: 0 !important;
+  background: var(--bg, #eef1f8) !important;
+}
+.device-screen-inner {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+}
+.paw-pattern {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+  z-index: 1;
+}
+.paw-pattern svg {
+  position: absolute;
+  fill: var(--navy-pale);
+  opacity: 0.22;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+.step-circle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted-soft);
+  transition: all 0.2s;
+}
+.step.active .step-circle {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+  box-shadow: 0 2px 6px rgba(33, 53, 106, 0.2);
+}
+.step.complete .step-circle {
+  background: var(--accent-green-bright);
+  border-color: var(--accent-green-bright);
+  color: white;
+}
+.step.complete .step-circle svg {
+  width: 14px; height: 14px;
+  stroke: white; stroke-width: 3;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+.step-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.step.active .step-label { color: var(--navy); }
+.step.complete .step-label { color: var(--accent-green-bright); }
+.step-bar {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin: 0 -2px;
+  position: relative;
+  top: -10px;
+}
+.step-bar.complete { background: var(--accent-green-bright); }
+.form-section {
+  margin-bottom: 22px;
+  position: relative; z-index: 2;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-gold-dark);
+  margin-bottom: 12px;
+  display: block;
+}
+.field-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.field-row > .field { flex: 1; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy);
+}
+.field-input {
+  width: 100%;
+  padding: 11px 13px;
+  background: white;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 10px;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s, background-color 0.18s;
+}
+.field-input::placeholder { color: var(--muted-soft); }
+.field-input:focus {
+  border-color: var(--navy-pale);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(184, 200, 232, 0.25);
+}
+.field-input.with-icon { padding-left: 38px; }
+.field-input-wrap { position: relative; }
+.field-icon {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.field-icon svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; stroke-width: 2;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+textarea.field-input {
+  font-family: inherit;
+  resize: none;
+  min-height: 70px;
+}
+/* Pill toggle group (Spayed/Neutered/No, Fayetteville/Bentonville) */
+.pill-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.pill-toggle {
+  flex: 1;
+  padding: 11px 8px;
+  background: white;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 10px;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.pill-toggle.selected {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+  box-shadow: 0 2px 8px rgba(33, 53, 106, 0.2);
+}
+.pill-toggle:active:not(.selected) {
+  background: var(--bg);
+  border-color: var(--navy-pale);
+}
+/* Photo upload chip — circular dashed border with + */
+.photo-upload {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  border: 2px dashed var(--navy-pale);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 0 auto 24px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s, background-color 0.15s;
+  position: relative; z-index: 2;
+}
+.photo-upload:active {
+  border-color: var(--navy);
+  background: var(--bg);
+}
+.photo-upload-plus {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1;
+  margin-top: -2px;
+}
+.photo-upload-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Page title block */
+.page-header {
+  margin-bottom: 20px;
+  position: relative; z-index: 2;
+}
+.page-title {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.page-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+/* Action row at bottom of form */
+.form-actions {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  gap: 10px;
+  position: relative; z-index: 2;
+}
+.form-actions .btn { flex: 1; }
+.form-actions.single .btn { flex: 1; }
+
+.success-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  justify-content: center;
+  position: relative; z-index: 2;
+  padding: 0 8px;
+}
+.success-check {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  background: rgba(74, 138, 106, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  position: relative;
+}
+.success-check::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: rgba(74, 138, 106, 0.18);
+}
+.success-check svg {
+  width: 44px; height: 44px;
+  stroke: var(--accent-green-bright);
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  position: relative;
+  z-index: 1;
+}
+.success-headline {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 38px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+.success-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 320px;
+}
+.success-dog-card {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.success-dog-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-terracotta));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  color: white;
+}
+.success-dog-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+.success-dog-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+}
+.success-dog-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.success-dog-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-green-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.success-dog-check svg {
+  width: 12px; height: 12px;
+  stroke: white;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.success-actions {
+  width: 100%;
+  position: relative; z-index: 2;
+}
+
+</style>
+</head>
+<body>
+<div class="device-frame">
+  <div class="dynamic-island"></div>
+  <div class="device-screen">
+    <div class="device-screen-inner">
+      <div class="auth-page">
+        <div class="paw-pattern"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 5%; top: 12%; width: 28px; height: 28px; transform: rotate(-22deg);">
+<ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+<ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+<path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 90%; top: 14%; width: 24px; height: 24px; transform: rotate(30deg);">
+<ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+<ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+<path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 4%; top: 86%; width: 30px; height: 30px; transform: rotate(18deg);">
+<ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+<ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+<path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 88%; top: 90%; width: 26px; height: 26px; transform: rotate(-25deg);">
+<ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+<ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+<path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 50%; top: 95%; width: 22px; height: 22px; transform: rotate(10deg);">
+<ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+<ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+<ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+<path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg></div>
+        <div class="success-hero">
+          <div class="success-check">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h1 class="success-headline">Profile Created!</h1>
+          <p class="success-subtitle">Welcome to NWA School for Dogs, friend! We can&rsquo;t wait to meet your pup.</p>
+          <div class="success-dog-card">
+            <div class="success-dog-avatar">W</div>
+            <div class="success-dog-meta">
+              <span class="success-dog-name">Waffles</span>
+              <span class="success-dog-sub">Golden Retriever &middot; Profile complete</span>
+            </div>
+            <div class="success-dog-check">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="success-actions">
+            <button class="btn btn-primary" type="button" onclick="location.href='how-it-works.html'">Let&rsquo;s get started! &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

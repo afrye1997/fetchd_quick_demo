@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>NWA · Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef1f8;
+  --navy: #21356A;
+  --navy-mid: #2d4a8a;
+  --navy-pale: #b8c8e8;
+  --card: #f8faff;
+  --border: #d4dcec;
+  --border-soft: #e4eaf4;
+  --muted: #6a85b0;
+  --muted-soft: #8ea3c7;
+  --accent-gold: #d4a64a;
+  --accent-gold-dark: #8a6a28;
+  --accent-green: #4a8a6a;
+  --accent-purple: #7a5bc4;
+  --accent-terracotta: #c47a5a;
+  --accent-red: #e04545;
+  --shadow-sm: 0 1px 2px rgba(33, 53, 106, 0.04);
+  --shadow-md: 0 4px 16px rgba(33, 53, 106, 0.06);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: #2a2d35;
+  font-family: 'Instrument Sans', sans-serif;
+  color: var(--navy);
+  min-height: 100vh;
+  padding: 40px 20px 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: hidden;
+}
+.device-frame {
+  width: 430px; height: 902px;
+  background: #1a1c22; border-radius: 58px; padding: 14px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  flex-shrink: 0;
+}
+.dynamic-island {
+  position: absolute;
+  top: 24px; left: 50%;
+  transform: translateX(-50%);
+  width: 126px; height: 37px;
+  background: #000; border-radius: 20px;
+  z-index: 100;
+  pointer-events: none;
+}
+.device-screen {
+  width: 402px; height: 874px;
+  background: var(--bg);
+  border-radius: 46px;
+  overflow: hidden;
+  position: relative;
+}
+.device-screen-inner {
+  width: 100%; height: 100%;
+  overflow-y: auto; overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.device-screen-inner::-webkit-scrollbar { display: none; }
+
+/* Shared auth chrome */
+.auth-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: max(env(safe-area-inset-top, 18px), 60px) 20px max(env(safe-area-inset-bottom, 18px), 28px);
+  background: var(--bg);
+  min-height: 100%;
+  position: relative;
+}
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+.auth-logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 0;
+  margin-bottom: 18px;
+  -webkit-tap-highlight-color: transparent;
+  align-self: flex-start;
+  transition: color 0.15s;
+  position: relative;
+  z-index: 2;
+}
+.back-link:active { color: var(--navy); }
+.back-link svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; stroke-width: 2;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  box-shadow: var(--shadow-sm), var(--shadow-md);
+  position: relative;
+  z-index: 2;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-gold-dark);
+  margin-bottom: 6px;
+  display: block;
+}
+.page-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  line-height: 1.15;
+  position: relative;
+  z-index: 2;
+}
+.page-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+.btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn:active { transform: scale(0.99); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: white;
+  box-shadow: 0 2px 8px rgba(33, 53, 106, 0.18);
+}
+.btn-primary:active { box-shadow: 0 1px 4px rgba(33, 53, 106, 0.2); }
+.btn-secondary {
+  background: white;
+  color: var(--navy);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:active {
+  background: var(--bg);
+  border-color: var(--navy-pale);
+}
+
+/* PAW PRINT PATTERN BACKDROP — sits behind everything in .auth-page,
+   subtle, scattered, navy-pale color so it reads like wallpaper */
+.paw-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.paw-pattern svg {
+  position: absolute;
+  fill: var(--navy-pale);
+  opacity: 0.32;
+}
+
+/* Page-specific styles */
+
+.signin-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.provider-btn {
+  width: 100%;
+  padding: 13px 16px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.1s, background-color 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.provider-btn:active {
+  transform: scale(0.99);
+  background: var(--bg);
+  border-color: var(--navy-pale);
+}
+.provider-icon-google { width: 18px; height: 18px; flex-shrink: 0; }
+.provider-icon-apple {
+  width: 18px; height: 18px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; line-height: 1;
+  color: var(--navy);
+}
+/* Paw-print divider — replaces the boring hairline rule */
+.paw-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+}
+.paw-divider::before, .paw-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.paw-divider-icon {
+  width: 16px; height: 16px;
+  fill: var(--navy-pale);
+  flex-shrink: 0;
+}
+.paw-divider-text {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-input-wrap { position: relative; }
+.field-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 10px;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.18s, background-color 0.18s;
+}
+.field-input::placeholder { color: var(--muted-soft); }
+.field-input:focus {
+  border-color: var(--navy-pale);
+  background: white;
+}
+.field-input[type="password"] { padding-right: 40px; }
+.field-eye {
+  position: absolute;
+  right: 8px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.field-eye:active { background: var(--bg); }
+.field-eye svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; stroke-width: 2;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+.options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -2px;
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.checkbox-label input {
+  width: 16px; height: 16px;
+  accent-color: var(--navy);
+  margin: 0;
+  cursor: pointer;
+}
+.forgot-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.forgot-link:active { opacity: 0.6; }
+.activate-row {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  position: relative;
+  z-index: 2;
+}
+.activate-row a {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: none;
+}
+.activate-row a:active { opacity: 0.6; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   REAL DEVICE MODE — strip mockup chrome on actual mobile/desktop
+   ═══════════════════════════════════════════════════════════ */
+html, body {
+  background: var(--bg, #eef1f8) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+body {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+}
+.device-frame {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  background: var(--bg, #eef1f8) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.dynamic-island { display: none !important; }
+.device-screen {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  border-radius: 0 !important;
+  background: var(--bg, #eef1f8) !important;
+}
+.device-screen-inner {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+}
+</style>
+</head>
+<body>
+<div class="device-frame">
+  <div class="dynamic-island"></div>
+  <div class="device-screen">
+    <div class="device-screen-inner">
+      <div class="auth-page">
+      <div class="paw-pattern"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 4%; top: 18%; width: 28px; height: 28px; transform: rotate(-25deg);">
+  <ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+  <ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+  <path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 88%; top: 14%; width: 24px; height: 24px; transform: rotate(30deg);">
+  <ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+  <ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+  <path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 6%; top: 84%; width: 30px; height: 30px; transform: rotate(15deg);">
+  <ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+  <ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+  <path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="left: 90%; top: 88%; width: 26px; height: 26px; transform: rotate(-20deg);">
+  <ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+  <ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+  <ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+  <path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+</svg></div>
+      <a href="index.html" class="back-link">
+        <svg viewBox="0 0 14 14" aria-hidden="true"><polyline points="9 2 3 7 9 12"/></svg>
+        Back
+      </a>
+      <h1 class="page-title">Welcome back</h1>
+      <p class="page-subtitle">Sign in to see your dog&rsquo;s schedule and reports.</p>
+      <div class="card signin-card">
+        <button class="provider-btn" type="button" onclick="location.href='home.html'">
+          <svg class="provider-icon-google" viewBox="0 0 18 18" aria-hidden="true">
+            <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+            <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button class="provider-btn" type="button" onclick="location.href='home.html'">
+          <span class="provider-icon-apple">&#xF8FF;</span>
+          Continue with Apple
+        </button>
+        <div class="paw-divider">
+          <span class="paw-divider-text">
+            <svg class="paw-divider-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <ellipse cx="6.5" cy="7" rx="2" ry="2.6"/>
+              <ellipse cx="11.5" cy="4.5" rx="2" ry="2.6"/>
+              <ellipse cx="16.5" cy="4.5" rx="2" ry="2.6"/>
+              <ellipse cx="21.5" cy="7" rx="2" ry="2.6"/>
+              <path d="M14 9.5c-3 0-5.5 2.2-5.5 5 0 2 1.5 3.5 3.4 3.5 1.2 0 1.4-.6 2.1-.6s.9.6 2.1.6c1.9 0 3.4-1.5 3.4-3.5 0-2.8-2.5-5-5.5-5z"/>
+            </svg>
+            Or with email
+          </span>
+        </div>
+        <div class="field-wrap">
+          <label class="section-label" for="email-input">Email</label>
+          <div class="field-input-wrap">
+            <input class="field-input" id="email-input" type="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="field-wrap">
+          <label class="section-label" for="password-input">Password</label>
+          <div class="field-input-wrap">
+            <input class="field-input" id="password-input" type="password" placeholder="••••••••" autocomplete="current-password">
+            <button class="field-eye" type="button" onclick="togglePw(this)" aria-label="Toggle password visibility">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="options-row">
+          <label class="checkbox-label">
+            <input type="checkbox">
+            Stay signed in
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="location.href='home.html'">Sign In</button>
+      </div>
+      <div class="activate-row">
+        New client at NWA? <a href="#">Activate your account</a>
+      </div>
+<script>
+function togglePw(btn) {
+  const inp = btn.parentNode.querySelector('input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+</script>
+      </div>
+    </div><!-- /.device-screen-inner -->
+  </div><!-- /.device-screen -->
+</div><!-- /.device-frame -->
+</body>
+</html>

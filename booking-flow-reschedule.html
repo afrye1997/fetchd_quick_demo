@@ -2520,7 +2520,7 @@ body {
   <div class="rs-diff" id="rsDoneDiff"></div>
 
   <div class="rs-cta-row">
-    <button class="rs-cta" onclick="location.href='index.html'">Back to home</button>
+    <button class="rs-cta" onclick="location.href='home.html'">Back to home</button>
   </div>
 
   <div style="height: 30px;"></div>
@@ -2530,7 +2530,7 @@ body {
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <div class="nav-item" onclick="location.href='index.html'">
+    <div class="nav-item" onclick="location.href='home.html'">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg></div>
       <div class="nav-label">Home</div>
     </div>
@@ -3337,10 +3337,10 @@ function goBackToAfterSchool() { switchView('viewAfterSchool'); document.getElem
 function confirmChanges() { switchView('viewDone'); document.getElementById('rsStepPill').style.display = 'none'; renderDiff('rsDoneDiff'); }
 function goBackOrHome() {
   const active = document.querySelector('.view.active').id;
-  if (active === 'viewSessions') location.href = 'index.html';
+  if (active === 'viewSessions') location.href = 'home.html';
   else if (active === 'viewAfterSchool') goBackToSessions();
   else if (active === 'viewConfirm') goBackToAfterSchool();
-  else if (active === 'viewDone') location.href = 'index.html';
+  else if (active === 'viewDone') location.href = 'home.html';
 }
 
 // Init
