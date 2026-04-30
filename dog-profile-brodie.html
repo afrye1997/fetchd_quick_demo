@@ -286,6 +286,7 @@ body {
 .section.group::before      { background: var(--accent-green); }
 .section.daycare::before    { background: var(--accent-gold); }
 .section.boardtrain::before { background: var(--accent-terracotta); }
+.section.boarding::before { background: var(--accent-pink, #f4b6c8); }
 .section.reports::before    { background: var(--accent-pink); }
 /* Simple sections (Care Notes) get a quiet neutral stripe */
 .section:not(.school):not(.private):not(.group):not(.daycare):not(.boardtrain):not(.reports)::before {
@@ -485,7 +486,9 @@ body {
 .section.daycare .section-icon { background: rgba(212, 166, 74, 0.18); color: var(--accent-gold-dark); }
 .section.daycare .section-head-label { color: var(--accent-gold-dark); }
 .section.boardtrain .section-icon { background: rgba(196, 122, 90, 0.18); color: var(--accent-terracotta-dark); }
+.section.boarding .section-icon { background: rgba(214, 138, 163, 0.18); color: #b6657f; }
 .section.boardtrain .section-head-label { color: var(--accent-terracotta-dark); }
+.section.boarding .section-head-label { color: #b6657f; }
 .section.reports .section-icon { background: rgba(244, 182, 200, 0.35); color: var(--accent-pink-dark); }
 .section.reports .section-head-label { color: var(--accent-pink-dark); }
 
@@ -2350,7 +2353,7 @@ body {
 
       <!-- PROFILE TOP ROW: back, menu -->
       <div class="profile-top-row">
-        <button class="back-btn" onclick="location.href='home.html'" aria-label="Back">
+        <button class="back-btn" onclick="location.href='index.html'" aria-label="Back">
           <svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>
         </button>
         <button class="menu-btn" aria-label="More options">
@@ -2743,7 +2746,49 @@ body {
             </div>
           </div>
         </div>
-      </div>
+      
+        <!-- BOARDING -->
+        <div class="section boarding is-collapsed">
+          <div class="section-label-row">
+            <button class="section-toggle" type="button" onclick="toggleProfileSection(this)" aria-expanded="false">
+              <div class="section-head">
+              <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M16 11.5a3.5 3.5 0 1 1-3.5-3.5 2.8 2.8 0 0 0 3.5 3.5z"/></svg></div>
+              <div class="section-head-label">Boarding</div>
+            </div>
+              <svg class="section-chevron" viewBox="0 0 9 14" aria-hidden="true"><polyline points="1.5 1.5 7.5 7 1.5 12.5"/></svg>
+            </button>
+          </div>
+          <div class="card">
+            <div class="info-rows">
+              <div class="info-row">
+                <span class="info-label">Upcoming stay</span>
+                <span class="info-value">May 24 – May 27</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Reason</span>
+                <span class="info-value">Memorial Day stay</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Where</span>
+                <a class="info-value info-link" href="https://www.google.com/maps/search/?api=1&query=NWA+School+for+Dogs+Fayetteville+AR" target="_blank" rel="noopener">NWA Facility 📍</a>
+              </div>
+            </div>
+            <div class="prev-row">
+              <div class="prev-label">Previous</div>
+              <div class="prev-chips">
+                <div class="chip">Mar 14 – Mar 17</div>
+                <button class="prev-arrow" aria-label="See all">
+                  <svg viewBox="0 0 16 16"><polyline points="6 4 10 8 6 12"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn-request-wide" type="button" onclick="location.href='book-boarding.html'">Request Boarding Stay</button>
+            </div>
+          </div>
+        </div>
+
+        </div>
       <!-- END OVERVIEW -->
 
       <!-- TAB: CARE NOTES -->
@@ -2905,7 +2950,7 @@ body {
     <!-- BOTTOM NAV (Home active — since we came from landing) -->
     <div class="nav">
       <div class="nav-inner">
-        <div class="nav-item active" onclick="location.href='home.html'">
+        <div class="nav-item active" onclick="location.href='index.html'">
           <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg></div>
           <div class="nav-label">Home</div>
         </div>

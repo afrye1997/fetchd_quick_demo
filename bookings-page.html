@@ -389,6 +389,7 @@ body {
 .type-chip[data-type="private"] .type-chip-dot { background: var(--accent-purple); }
 .type-chip[data-type="boardtrain"] .type-chip-dot { background: #c47a5a; }
 .type-chip[data-type="groupclass"] .type-chip-dot { background: #5a9a9a; }
+.type-chip[data-type="boarding"] .type-chip-dot { background: var(--accent-pink, #f4b6c8); }
 
 /* Active state — uniform navy fill across ALL types.
    The colored dot stays in its category color as the legend. */
@@ -990,6 +991,7 @@ body {
 .session-card.private::before { background: var(--accent-purple); }
 .session-card.boardtrain::before { background: #c47a5a; }
 .session-card.groupclass::before { background: #5a9a9a; }
+.session-card.boarding::before { background: var(--accent-pink, #f4b6c8); }
 
 .session-row {
   display: flex;
@@ -1050,6 +1052,7 @@ body {
 .session-type.private { color: var(--accent-purple); }
 .session-type.boardtrain { color: #c47a5a; }
 .session-type.groupclass { color: #5a9a9a; }
+.session-type.boarding { color: var(--accent-pink, #f4b6c8); }
 
 .session-meta {
   font-size: 12px;
@@ -1404,6 +1407,7 @@ body {
 .rs-strip-card.type-private::before    { background: var(--accent-purple, #9b7ed4); }
 .rs-strip-card.type-boardtrain::before { background: #c47a5a; }
 .rs-strip-card.type-groupclass::before { background: #5a9a9a; }
+.rs-strip-card.type-boarding::before    { background: var(--accent-pink, #f4b6c8); }
 
 /* Big photo at the top of the strip card */
 .rs-square-top {
@@ -1473,6 +1477,7 @@ body {
 .rs-square-type.type-private    { color: #6f4eb8; }
 .rs-square-type.type-boardtrain { color: #8a4a1f; }
 .rs-square-type.type-groupclass { color: #2e6e6e; }
+.rs-square-type.type-boarding    { color: #b6657f; }
 
 .rs-square-metrics {
   display: flex; flex-direction: column; gap: 3px;
@@ -1943,7 +1948,7 @@ body {
   line-height: 1.1;
 }
 
-/* Book-a-new-session CTA — mirrored from home.html */
+/* Book-a-new-session CTA — mirrored from index.html */
 .book-cta {
   margin: 6px 16px 14px;
   flex-shrink: 0;
@@ -2113,6 +2118,7 @@ body {
 .tl-card.type-daycare  { border-left-color: var(--accent-gold, #d4a64a); }
 .tl-card.type-private  { border-left-color: #9b7ed4; }
 .tl-card.type-groupclass  { border-left-color: #4a8a8a; }
+.tl-card.type-boarding  { border-left-color: var(--accent-pink, #f4b6c8); }
 .tl-card.type-boardtrain  { border-left-color: var(--accent-terracotta, #c47a4a); }
 
 .tl-card-photo {
@@ -2156,6 +2162,7 @@ body {
 .tl-card-type.type-daycare  { color: var(--accent-gold-dark, #8a6a28); }
 .tl-card-type.type-private  { color: #6f4eb8; }
 .tl-card-type.type-groupclass  { color: #2e6e6e; }
+.tl-card-type.type-boarding  { color: #b6657f; }
 .tl-card-type.type-boardtrain  { color: #8a4a1f; }
 .tl-card-meta { font-weight: 500; }
 
@@ -2610,6 +2617,7 @@ body {
 .bk-sheet-option-icon.private    { background: var(--accent-purple, #7a5bc4); }
 .bk-sheet-option-icon.group      { background: var(--accent-green, #4a8a6a); }
 .bk-sheet-option-icon.boardtrain { background: var(--accent-terracotta, #c47a5a); }
+.bk-sheet-option-icon.boarding   { background: var(--accent-pink, #f4b6c8); }
 .bk-sheet-option-icon svg { width: 20px; height: 20px; }
 
 .bk-sheet-option-text { flex: 1; min-width: 0; }
@@ -2723,6 +2731,10 @@ body {
     <button class="type-chip active" data-type="boardtrain">
       <span class="type-chip-dot"></span>
       Board &amp; Train
+    </button>
+        <button class="type-chip active" data-type="boarding">
+      <span class="type-chip-dot"></span>
+      Boarding
     </button>
     <button class="type-chip active" data-type="groupclass">
       <span class="type-chip-dot"></span>
@@ -3487,7 +3499,7 @@ body {
 <!-- BOTTOM NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <div class="nav-item" onclick="location.href='home.html'">
+    <div class="nav-item" onclick="location.href='index.html'">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg></div>
       <div class="nav-label">Home</div>
     </div>
@@ -4243,6 +4255,20 @@ function closeSessionTypeSheet() {
     </div>
     <span class="bk-sheet-option-arrow">›</span>
   </button>
+  <button class="bk-sheet-option" type="button" data-action="boarding" onclick="location.href='book-boarding.html'">
+    <div class="bk-sheet-option-icon boarding">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/>
+        <path d="M16 11.5a3.5 3.5 0 1 1-3.5-3.5 2.8 2.8 0 0 0 3.5 3.5z"/>
+      </svg>
+    </div>
+    <div class="bk-sheet-option-text">
+      <div class="bk-sheet-option-name">Boarding</div>
+      <div class="bk-sheet-option-desc">Overnight stays · drop-off &amp; pick-up</div>
+    </div>
+    <span class="bk-sheet-option-arrow">›</span>
+  </button>
+
 </div>
 
 </body>
