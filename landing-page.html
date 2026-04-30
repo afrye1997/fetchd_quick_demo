@@ -899,7 +899,7 @@ body {
 
 /* BOOK SHEET */
 .sheet-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(33, 53, 106, 0.35);
   backdrop-filter: blur(4px);
@@ -913,7 +913,7 @@ body {
 .sheet-backdrop.open { display: block; }
 
 .sheet {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%) translateY(100%);
@@ -923,6 +923,9 @@ body {
   border-radius: 24px 24px 0 0;
   z-index: 101;
   padding: 14px 20px 36px;
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: 0 -8px 32px rgba(33, 53, 106, 0.15);
 }
