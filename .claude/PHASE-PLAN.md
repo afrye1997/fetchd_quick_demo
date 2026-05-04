@@ -20,6 +20,25 @@ The deliverable at the end of this phase is something Allison can hand to Shanth
 
 ---
 
+## Foundation status (completed before screens)
+
+The following infrastructure is built and committed. Don't rebuild it.
+
+- [x] Expo SDK 54 initialized in `mobile/` with TypeScript strict mode
+- [x] All architecture-locked dependencies installed (Expo Router, Reanimated, Gesture Handler, etc.)
+- [x] Full folder structure per ARCHITECTURE.md
+- [x] `mobile/src/theme.ts` — all DS color, typography, spacing, shadow tokens
+- [x] `mobile/app/_layout.tsx` — font loading (Cormorant Garamond + Instrument Sans), SafeAreaProvider, splash screen
+- [x] `mobile/app/index.tsx` — redirects to `/(tabs)` (auth bypass for prototype phase)
+- [x] `mobile/tsconfig.json` — strict mode + `@/*` path alias
+- [x] `mobile/src/types/` — all domain types (Dog, Booking, PendingRequest, Report, Message, Thread, Notification, Announcement)
+- [x] `mobile/src/mock/` — all mock data as JSON (dogs, bookings, pending-requests, reports, announcements, threads, messages, notifications)
+- [x] `mobile/assets/images/` — dog photos (waffles, lola, brodie) and logo
+
+**Next:** repository layer (`mobile/src/repositories/`) — transforms raw JSON → domain types with simulated network delay.
+
+---
+
 ## What's IN scope for this phase
 
 ### Screens, in port order

@@ -399,15 +399,17 @@ The prototype phase uses **mock data only**. No Supabase, no real backend, no au
 
 ### Where mock data lives
 
-`mobile/src/mock/` — one file per data type. See `mobile/src/mock/README.md` for the conventions inside that folder.
+`mobile/src/mock/` — one file per data type, as **`.json` files** (not `.ts`). JSON was chosen so the mock data looks exactly like a real API response: snake_case keys, ISO 8601 date strings, UUID-format IDs. The repository layer transforms raw JSON → camelCase domain types on the way out.
+
+Files: `dogs.json`, `bookings.json`, `pending-requests.json`, `reports.json`, `announcements.json`, `threads.json`, `messages.json`, `notifications.json`.
 
 ### How repositories use it
 
-Each repository in `mobile/src/repositories/` is structured to make the mock-to-real swap mechanical:
+Each repository in `mobile/src/repositories/` imports the JSON and transforms it to domain types:
 
 ```ts
 // mobile/src/repositories/dogRepository.ts
-import { mockDogs } from '@/mock/dogs';
+import rawDogs from '@/mock/dogs.json';
 import type { Dog } from '@/types/dog';
 
 // Today: returns mock data with simulated delay
