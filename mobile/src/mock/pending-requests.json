@@ -1,0 +1,42 @@
+[
+  {
+    "id": "req-a1b2c3d4-0001-4e5f-8a2b-000000000001",
+    "dog_id": "3f1d8a2e-b549-4c7f-9e3a-1d2b4c5e6f7a",
+    "category": "boarding",
+    "submitted_at": "2026-05-02T14:23:00.000Z",
+    "preferred_dates": [
+      "2026-05-23T00:00:00.000Z",
+      "2026-05-24T00:00:00.000Z",
+      "2026-05-25T00:00:00.000Z"
+    ],
+    "notes": "We'll be out of town for the long weekend. Waffles does well with other dogs but gets anxious at night — she may need a little extra reassurance the first evening.",
+    "focus_areas": null,
+    "length_weeks": null
+  },
+  {
+    "id": "req-a1b2c3d4-0002-4e5f-8a2b-000000000002",
+    "dog_id": "2b4d6f8a-3c5e-4f7a-9b1c-2d3e4f5a6b7c",
+    "category": "private-lesson",
+    "submitted_at": "2026-05-03T09:47:00.000Z",
+    "preferred_dates": [
+      "2026-05-16T00:00:00.000Z",
+      "2026-05-17T00:00:00.000Z",
+      "2026-05-22T00:00:00.000Z"
+    ],
+    "notes": "Would love to work on reactivity again — the skateboard thing is getting worse. He lunged at a cyclist on Sunday.",
+    "focus_areas": ["reactivity", "loose-leash"],
+    "length_weeks": null
+  },
+  {
+    "id": "req-a1b2c3d4-0003-4e5f-8a2b-000000000003",
+    "dog_id": "7a9c2e4f-1b3d-4e5f-8a2b-3c4d5e6f7a8b",
+    "category": "board-and-train",
+    "submitted_at": "2026-05-04T08:12:00.000Z",
+    "preferred_dates": [
+      "2026-06-01T00:00:00.000Z"
+    ],
+    "notes": "Lola's come a long way but I think an immersive week would really lock in her recall. Open to Shanthi's recommendation on duration.",
+    "focus_areas": ["recall", "impulse-control", "door-manners"],
+    "length_weeks": 2
+  }
+]

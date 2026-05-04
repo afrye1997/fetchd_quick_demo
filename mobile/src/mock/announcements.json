@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ann-001",
+    "category": "urgent",
+    "title": "Closed Memorial Day",
+    "published_at": "2026-05-01T09:00:00.000Z",
+    "deep_link_path": null
+  },
+  {
+    "id": "ann-002",
+    "category": "event",
+    "title": "Yappy Hour Saturday",
+    "published_at": "2026-04-29T10:00:00.000Z",
+    "deep_link_path": "/info/yappy-hour"
+  },
+  {
+    "id": "ann-003",
+    "category": "class",
+    "title": "Puppy class signups open",
+    "published_at": "2026-04-25T08:00:00.000Z",
+    "deep_link_path": "/info/puppy-class"
+  },
+  {
+    "id": "ann-004",
+    "category": "team",
+    "title": "Rachel joins the team",
+    "published_at": "2026-04-20T09:00:00.000Z",
+    "deep_link_path": "/info/meet-rachel"
+  },
+  {
+    "id": "ann-005",
+    "category": "promo",
+    "title": "Summer Day School packages now available",
+    "published_at": "2026-04-15T10:00:00.000Z",
+    "deep_link_path": null
+  },
+  {
+    "id": "ann-006",
+    "category": "team",
+    "title": "Bentonville location now open Saturdays",
+    "published_at": "2026-04-10T09:00:00.000Z",
+    "deep_link_path": null
+  }
+]

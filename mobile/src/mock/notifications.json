@@ -1,0 +1,74 @@
+[
+  {
+    "id": "notif-001",
+    "type": "report-published",
+    "title": "Waffles has a new report card!",
+    "body": "Ashe · Day School · Foundation",
+    "received_at": "2026-05-01T17:00:00.000Z",
+    "is_read": false,
+    "deep_link_path": "/report-card/3f1d8a2e-b549-4c7f-9e3a-1d2b4c5e6f7a?variant=foundation"
+  },
+  {
+    "id": "notif-002",
+    "type": "booking-confirmed",
+    "title": "Your Day School request for Waffles on May 6 is confirmed.",
+    "body": "just now",
+    "received_at": "2026-05-01T14:10:00.000Z",
+    "is_read": false,
+    "deep_link_path": null
+  },
+  {
+    "id": "notif-003",
+    "type": "announcement",
+    "title": "Closed Memorial Day",
+    "body": "3 days ago",
+    "received_at": "2026-05-01T09:00:00.000Z",
+    "is_read": true,
+    "deep_link_path": null
+  },
+  {
+    "id": "notif-004",
+    "type": "report-published",
+    "title": "Brodie has a new report card!",
+    "body": "Rachel · Private Lesson · CGC Prep",
+    "received_at": "2026-04-29T10:30:00.000Z",
+    "is_read": true,
+    "deep_link_path": "/report-card/2b4d6f8a-3c5e-4f7a-9b1c-2d3e4f5a6b7c?variant=cgc"
+  },
+  {
+    "id": "notif-005",
+    "type": "booking-confirmed",
+    "title": "Your Private Lesson request for Brodie on May 8 is confirmed.",
+    "body": "4 days ago",
+    "received_at": "2026-04-30T09:00:00.000Z",
+    "is_read": true,
+    "deep_link_path": null
+  },
+  {
+    "id": "notif-006",
+    "type": "announcement",
+    "title": "Yappy Hour Saturday",
+    "body": "5 days ago",
+    "received_at": "2026-04-29T10:00:00.000Z",
+    "is_read": true,
+    "deep_link_path": "/info/yappy-hour"
+  },
+  {
+    "id": "notif-007",
+    "type": "report-published",
+    "title": "Lola has a new report card!",
+    "body": "Rachel · Group Class · House Manners",
+    "received_at": "2026-04-28T19:00:00.000Z",
+    "is_read": true,
+    "deep_link_path": "/report-card/7a9c2e4f-1b3d-4e5f-8a2b-3c4d5e6f7a8b?variant=house-manners"
+  },
+  {
+    "id": "notif-008",
+    "type": "booking-confirmed",
+    "title": "Your Day Care request for Lola on May 6 is confirmed.",
+    "body": "1 week ago",
+    "received_at": "2026-04-27T14:00:00.000Z",
+    "is_read": true,
+    "deep_link_path": null
+  }
+]

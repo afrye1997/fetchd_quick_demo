@@ -1,0 +1,69 @@
+[
+  {
+    "id": "3f1d8a2e-b549-4c7f-9e3a-1d2b4c5e6f7a",
+    "name": "Waffles",
+    "breed": "Golden Retriever",
+    "age_years": 3,
+    "profile_image_path": "images/dogs/waffles/waffles-pfp.jpg",
+    "vaccines": [
+      { "name": "Rabies", "expires_at": "2027-04-10T00:00:00.000Z" },
+      { "name": "DHPP", "expires_at": "2027-04-10T00:00:00.000Z" },
+      { "name": "Bordetella", "expires_at": "2026-07-15T00:00:00.000Z" }
+    ],
+    "medications": [],
+    "feeding": {
+      "brand": "Purina Pro Plan Adult",
+      "amount": "2 cups",
+      "frequency": "twice daily (7am and 5pm)",
+      "notes": "Add warm water to soften kibble. She eats fast — use a slow feeder bowl."
+    },
+    "special_notes": "High energy, loves fetch and tug. Gets overstimulated in large off-leash groups — rotate her out every 20 minutes. Strong leash puller; responds well to front-clip harness."
+  },
+  {
+    "id": "7a9c2e4f-1b3d-4e5f-8a2b-3c4d5e6f7a8b",
+    "name": "Lola",
+    "breed": "Golden Retriever",
+    "age_years": 5,
+    "profile_image_path": "images/dogs/lola/lola-pfp.jpg",
+    "vaccines": [
+      { "name": "Rabies", "expires_at": "2027-01-22T00:00:00.000Z" },
+      { "name": "DHPP", "expires_at": "2027-01-22T00:00:00.000Z" },
+      { "name": "Bordetella", "expires_at": "2026-06-05T00:00:00.000Z" }
+    ],
+    "medications": [],
+    "feeding": {
+      "brand": "Hill's Science Diet Adult",
+      "amount": "1.75 cups",
+      "frequency": "twice daily (8am and 6pm)",
+      "notes": null
+    },
+    "special_notes": "Very food motivated — excellent for training. Nervous around unfamiliar men; give her space to approach on her own terms. Knows sit, down, stay, come, leave it."
+  },
+  {
+    "id": "2b4d6f8a-3c5e-4f7a-9b1c-2d3e4f5a6b7c",
+    "name": "Brodie",
+    "breed": "Mixed Breed",
+    "age_years": 7,
+    "profile_image_path": "images/dogs/brodie/brodie-pfp.jpg",
+    "vaccines": [
+      { "name": "Rabies", "expires_at": "2027-03-08T00:00:00.000Z" },
+      { "name": "DHPP", "expires_at": "2027-03-08T00:00:00.000Z" },
+      { "name": "Bordetella", "expires_at": "2026-05-20T00:00:00.000Z" }
+    ],
+    "medications": [
+      {
+        "id": "med-001",
+        "name": "Carprofen",
+        "dose": "25mg",
+        "frequency": "once daily with food (joint support)"
+      }
+    ],
+    "feeding": {
+      "brand": "Royal Canin Medium Adult",
+      "amount": "1.5 cups",
+      "frequency": "twice daily (7:30am and 5:30pm)",
+      "notes": "Always give with food due to Carprofen. Slightly overweight — do not give extra treats."
+    },
+    "special_notes": "Senior dog, moves slower than he used to. Keep sessions low-impact. Brilliant recall and loose-leash walking. Barks at skateboards and bikes — working on it in private lessons."
+  }
+]

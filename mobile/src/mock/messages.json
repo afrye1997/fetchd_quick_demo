@@ -1,0 +1,58 @@
+[
+  {
+    "id": "msg-001", "thread_id": "thread-001", "sender_id": "owner-allison", "text": "Hey Shanthi! Quick question — Waffles has been pulling really hard on her morning walks. Is there anything I should be doing differently between sessions?", "sent_at": "2026-04-30T08:15:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-002", "thread_id": "thread-001", "sender_id": "staff-shanthi", "text": "Hey! Great timing — we've actually been working on loose-leash walking in her sessions. The biggest thing is consistency: every single time she pulls, stop completely. Don't take another step until there's slack in the leash. It feels slow but it works fast 🐾", "sent_at": "2026-04-30T09:02:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-003", "thread_id": "thread-001", "sender_id": "owner-allison", "text": "Ok that makes sense. She just gets SO excited when she sees other dogs on walks lol", "sent_at": "2026-04-30T09:10:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-004", "thread_id": "thread-001", "sender_id": "staff-shanthi", "text": "Ha, classic Waffles! Try turning around and walking the other direction when she spots a dog. It interrupts the excitement spiral before it starts. She'll figure out that pulling makes the fun dog go away 😄", "sent_at": "2026-04-30T09:18:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-005", "thread_id": "thread-001", "sender_id": "owner-allison", "text": "That's genius. I'll try it tonight. Also — she's coming in Friday, right?", "sent_at": "2026-04-30T09:20:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-006", "thread_id": "thread-001", "sender_id": "staff-shanthi", "text": "Yes, Friday with Ashe! They work really well together ❤️", "sent_at": "2026-04-30T09:22:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-007", "thread_id": "thread-001", "sender_id": "owner-allison", "text": "Perfect. Can't wait to see the report card 🐶", "sent_at": "2026-05-01T15:30:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-008", "thread_id": "thread-001", "sender_id": "staff-shanthi", "text": "She did amazing today, you're going to love the report card 🐾", "sent_at": "2026-05-01T16:42:00.000Z", "is_read": false
+  },
+
+  {
+    "id": "msg-009", "thread_id": "thread-002", "sender_id": "staff-rachel", "text": "Hi Allison! Just wanted to follow up on Brodie's reactivity session last week. How has he been on walks since?", "sent_at": "2026-04-28T10:00:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-010", "thread_id": "thread-002", "sender_id": "owner-allison", "text": "Actually really good! He barked at one bike but I used the U-turn and he refocused on me within about 5 seconds. Huge improvement from before.", "sent_at": "2026-04-28T10:45:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-011", "thread_id": "thread-002", "sender_id": "staff-rachel", "text": "That's amazing progress!! 5 seconds of recovery is genuinely impressive for a dog with his history. Keep doing exactly that — the U-turn plus treat when he refocuses. You're rewarding the recovery, not the bark.", "sent_at": "2026-04-28T11:02:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-012", "thread_id": "thread-002", "sender_id": "owner-allison", "text": "Got it. Can we book another session Thursday? I want to work on the moving bike thing.", "sent_at": "2026-04-29T08:30:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-013", "thread_id": "thread-002", "sender_id": "staff-rachel", "text": "Sounds good, I'll have everything set up for Brodie's session Thursday.", "sent_at": "2026-04-30T11:15:00.000Z", "is_read": true
+  },
+
+  {
+    "id": "msg-014", "thread_id": "thread-003", "sender_id": "staff-donovan", "text": "Hey Allison — quick note from today's session. Waffles is doing great overall but she was a little slow to respond to her name when there were other dogs nearby. Worth practicing \"name game\" at home: say her name, when she looks at you, party! Even just 5 minutes a day makes a big difference.", "sent_at": "2026-04-20T17:00:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-015", "thread_id": "thread-003", "sender_id": "owner-allison", "text": "Oh interesting, she's usually really good with her name at home. Is it just the distraction level?", "sent_at": "2026-04-20T17:45:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-016", "thread_id": "thread-003", "sender_id": "staff-donovan", "text": "Exactly — her name recognition is great in low-distraction settings but falls apart when she's excited. That's normal! We just need to build the value of her name in distracting environments. Also tried her on a slow feeder bowl during lunch today — she seemed to enjoy the puzzle element of it!", "sent_at": "2026-04-20T18:10:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-017", "thread_id": "thread-003", "sender_id": "owner-allison", "text": "Ha, she would love that. She inhales her food so fast. Does the school have one I can borrow to try?", "sent_at": "2026-04-21T08:00:00.000Z", "is_read": true
+  },
+  {
+    "id": "msg-018", "thread_id": "thread-003", "sender_id": "staff-donovan", "text": "The slow feeder is definitely helping — Waffles didn't gulp her lunch today at all.", "sent_at": "2026-04-22T13:08:00.000Z", "is_read": true
+  }
+]

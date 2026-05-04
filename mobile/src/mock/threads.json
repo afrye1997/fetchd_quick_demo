@@ -1,0 +1,35 @@
+[
+  {
+    "id": "thread-001",
+    "participant": {
+      "id": "staff-shanthi",
+      "name": "Shanthi",
+      "role": "staff"
+    },
+    "last_message": "She did amazing today, you're going to love the report card 🐾",
+    "last_message_at": "2026-05-01T16:42:00.000Z",
+    "unread_count": 1
+  },
+  {
+    "id": "thread-002",
+    "participant": {
+      "id": "staff-rachel",
+      "name": "Rachel",
+      "role": "trainer"
+    },
+    "last_message": "Sounds good, I'll have everything set up for Brodie's session Thursday.",
+    "last_message_at": "2026-04-30T11:15:00.000Z",
+    "unread_count": 0
+  },
+  {
+    "id": "thread-003",
+    "participant": {
+      "id": "staff-donovan",
+      "name": "Donovan",
+      "role": "trainer"
+    },
+    "last_message": "The slow feeder is definitely helping — Waffles didn't gulp her lunch today at all.",
+    "last_message_at": "2026-04-22T13:08:00.000Z",
+    "unread_count": 0
+  }
+]
