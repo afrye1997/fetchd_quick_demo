@@ -230,6 +230,17 @@ The project has **four documentation files** at the repo root. Read them in this
 
 Then any skill files relevant to the immediate task (`<available_skills>` in your environment).
 
+### End of every session
+
+Before the session ends, update any MD files that reflect work completed or decisions made:
+
+- **PHASE-PLAN.md** — mark completed screens, update scope if anything changed
+- **ARCHITECTURE.md** — record any new technical decisions or locked patterns introduced this session
+- **nwa-design-system-v2.md** — add any new component patterns or visual specs that were locked in
+- **CLAUDE.md** — only if a working principle or process rule changed
+
+Don't update for the sake of updating. Only touch a doc if something in it is now stale or missing. Then commit the doc changes with the session's code.
+
 ### Conflict resolution order
 
 When two docs conflict:
